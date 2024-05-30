@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\SeminarManagement_PRN221.props" />
-</Project>

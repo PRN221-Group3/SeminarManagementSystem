@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\SeminarManagement_PRN221.props" />
-</Project>
