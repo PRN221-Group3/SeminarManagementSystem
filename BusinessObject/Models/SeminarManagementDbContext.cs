@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace BusinessObject.Models;
 
@@ -41,15 +42,11 @@ public partial class SeminarManagementDbContext : DbContext
 
     public virtual DbSet<Wallet> Wallets { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=MSI\\SQLEXPRESS;Initial Catalog=SeminarManagementDB;Persist Security Info=True;User ID=sa;Password=12345;TrustServerCertificate=true");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.BookingId).HasName("PK__Booking__5DE3A5B116D6706C");
+            entity.HasKey(e => e.BookingId).HasName("PK__Booking__5DE3A5B1F679850A");
 
             entity.ToTable("Booking");
 
@@ -59,9 +56,9 @@ public partial class SeminarManagementDbContext : DbContext
             entity.Property(e => e.CreatedDate)
                 .HasColumnType("datetime")
                 .HasColumnName("createdDate");
-            entity.Property(e => e.UpdateDate)
+            entity.Property(e => e.UpdatedDate)
                 .HasColumnType("datetime")
-                .HasColumnName("updateDate");
+                .HasColumnName("updatedDate");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.Bookings)
@@ -89,7 +86,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B4F181D988");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B44D1C105C");
 
             entity.ToTable("Category");
 
@@ -111,7 +108,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Event>(entity =>
         {
-            entity.HasKey(e => e.EventId).HasName("PK__Event__2370F727C3D3026A");
+            entity.HasKey(e => e.EventId).HasName("PK__Event__2370F727FDB8DB5C");
 
             entity.ToTable("Event");
 
@@ -172,7 +169,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Hall>(entity =>
         {
-            entity.HasKey(e => e.HallId).HasName("PK__Hall__A63DE8CFC058B6F4");
+            entity.HasKey(e => e.HallId).HasName("PK__Hall__A63DE8CF4C56E00F");
 
             entity.ToTable("Hall");
 
@@ -191,7 +188,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__760965CC4063F414");
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__760965CC856D5294");
 
             entity.ToTable("Role");
 
@@ -205,7 +202,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Sponsor>(entity =>
         {
-            entity.HasKey(e => e.SponsorId).HasName("PK__Sponsor__BE37D454566C4833");
+            entity.HasKey(e => e.SponsorId).HasName("PK__Sponsor__BE37D4541F73B342");
 
             entity.ToTable("Sponsor");
 
@@ -223,7 +220,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Survey>(entity =>
         {
-            entity.HasKey(e => e.SurveyId).HasName("PK__Survey__9DC31A07D8368222");
+            entity.HasKey(e => e.SurveyId).HasName("PK__Survey__9DC31A078A3851A1");
 
             entity.ToTable("Survey");
 
@@ -246,7 +243,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Ticket>(entity =>
         {
-            entity.HasKey(e => e.TicketId).HasName("PK__Ticket__D596F96BFC87BB88");
+            entity.HasKey(e => e.TicketId).HasName("PK__Ticket__D596F96BE01F5C92");
 
             entity.ToTable("Ticket");
 
@@ -276,7 +273,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Transaction>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__85C600AFBF0C584A");
+            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__85C600AFC606D1F5");
 
             entity.ToTable("Transaction");
 
@@ -309,11 +306,11 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__User__B9BE370FA024A78C");
+            entity.HasKey(e => e.UserId).HasName("PK__User__B9BE370F758F8BDA");
 
             entity.ToTable("User");
 
-            entity.HasIndex(e => e.Username, "UQ__User__F3DBC572644FABFE").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__User__F3DBC572EC4CE77A").IsUnique();
 
             entity.Property(e => e.UserId)
                 .ValueGeneratedNever()
@@ -331,6 +328,9 @@ public partial class SeminarManagementDbContext : DbContext
             entity.Property(e => e.LastName)
                 .HasMaxLength(255)
                 .HasColumnName("lastName");
+            entity.Property(e => e.Password)
+                .HasMaxLength(255)
+                .HasColumnName("password");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(255)
                 .HasColumnName("phone_number");
@@ -350,7 +350,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Wallet>(entity =>
         {
-            entity.HasKey(e => e.WalletId).HasName("PK__Wallet__0EE6F041FF7C1DA9");
+            entity.HasKey(e => e.WalletId).HasName("PK__Wallet__0EE6F041EBF4A982");
 
             entity.ToTable("Wallet");
 

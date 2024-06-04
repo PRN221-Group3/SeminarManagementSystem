@@ -17,6 +17,8 @@ public partial class User
 
     public string? Username { get; set; }
 
+    public string? Password { get; set; }
+
     public Guid? RoleId { get; set; }
 
     public bool? IsDeleted { get; set; }
