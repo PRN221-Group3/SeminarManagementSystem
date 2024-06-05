@@ -21,6 +21,11 @@ namespace Repositories
             _userDAO.Create(user);
         }
 
+        public void Delete(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<User> GetAll() => _userDAO.GetAll();
 
         public User GetByEmail(string email) => _userDAO.GetByEmail(email);
@@ -28,6 +33,11 @@ namespace Repositories
         public User GetById(Guid id)
         {
             return _userDAO.Get(id);
+        }
+
+        public void Update(User user)
+        {
+            _userDAO.Update(user);
         }
     }
 }

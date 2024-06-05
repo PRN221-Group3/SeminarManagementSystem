@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessObject.DTO;
 using BusinessObject.Models;
+using BusinessObject.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MimeKit;
@@ -8,6 +9,7 @@ using QRCoder;
 using Repositories.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
+using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 
@@ -27,21 +29,8 @@ namespace SeminarManagement_PRN221.Pages
         }
         public IActionResult OnPost()
         {
-            User.CreatedDate = DateTime.Now;
-            User.UpdatedDate = DateTime.Now;
-            User.Username = User.Email.Split("@")[0];
-            User.IsDeleted = true;
-
-            // QR Generator
-            QRCodeGenerator qrGen = new QRCodeGenerator();
-            QRCodeData info = qrGen.CreateQrCode(
-                $"Full Name: {User.FirstName} {User.LastName}, Email: {User.Email}",
-                QRCodeGenerator.ECCLevel.Q
-            );
-            using var qrCode = new PngByteQRCode(info);
-            var qrCodeImage = qrCode.GetGraphic(20);
-
-            User.QrCode = $"data:image/png;base64,{Convert.ToBase64String(qrCodeImage)}";
+            UserGenToken();
+            GenerateQRCode();
 
             var userToCreate = _mapper.Map<User>(User);
             userToCreate.UserId = Guid.NewGuid();
@@ -67,10 +56,38 @@ namespace SeminarManagement_PRN221.Pages
             }
         }
 
+        private void UserGenToken()
+        {
+            User.CreatedDate = DateTime.Now;
+            User.UpdatedDate = DateTime.Now;
+            User.Username = User.Email.Split("@")[0];
+            User.IsDeleted = false;
+            User.IsActivated = false;
+            User.VerifyToken = KeyGenerator.GetUniqueKey(2);
+            DateTime now = DateTime.Now;
+            DateTime issueTokenDate = now.AddMinutes(5); // 5 minutes expiration
+
+            User.IssueTokenDate = issueTokenDate;
+        }
+
+        private void GenerateQRCode()
+        {
+            // QR Generator
+            QRCodeGenerator qrGen = new QRCodeGenerator();
+            QRCodeData info = qrGen.CreateQrCode(
+                $"Full Name: {User.FirstName} {User.LastName}, Email: {User.Email}",
+                QRCodeGenerator.ECCLevel.Q
+            );
+            using var qrCode = new PngByteQRCode(info);
+            var qrCodeImage = qrCode.GetGraphic(20);
+
+            User.QrCode = $"data:image/png;base64,{Convert.ToBase64String(qrCodeImage)}";
+        }
+
         private void SendVerificationEmail(string email)
         {
-            string myEmail = "hailtse172908@fpt.edu.vn";
-            string myPassword = "qnqukqrgfphtaqch";
+            string myEmail = "seminarwebapp@gmail.com";
+            string myPassword = "mbyghvpzorxaihmp";
 
             var message = new MailMessage();
             message.From = new MailAddress(myEmail);
@@ -82,7 +99,7 @@ namespace SeminarManagement_PRN221.Pages
                 <body>
                     <h2>Welcome to Seminar Web</h2>
                     <p>Thank you for registering. Please verify your email by clicking the button below:</p>
-                    <a href='https://localhost:7271/Verify?email=" + email + @"' style='display: inline-block; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #007bff; text-decoration: none; border-radius: 5px;'>Verify Email</a>
+                    <a href='https://localhost:7271/Verify?email=" + email + "&token=" + User.VerifyToken + @"' style='display: inline-block; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #007bff; text-decoration: none; border-radius: 5px;'>Verify Email</a>
                     <br><br>
                     <p>If you did not request this email, please ignore it.</p>
                     <p>Best regards,<br>PRN221 Team</p>

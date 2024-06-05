@@ -13,5 +13,6 @@ namespace Repositories.Interfaces
         public User GetById(Guid id);
         public void Add(User user);
         public User GetByEmail(string email);
+        public void Update(User user);
     }
 }

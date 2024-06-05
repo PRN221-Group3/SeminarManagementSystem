@@ -21,8 +21,9 @@ namespace DataAccess.DAO
         {
             try
             {
-                return _context.Users.ToList(); 
-            } catch (Exception ex)
+                return _context.Users.ToList();
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -34,7 +35,8 @@ namespace DataAccess.DAO
             {
                 _context.Users.Add(user);
                 _context.SaveChanges();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -45,7 +47,8 @@ namespace DataAccess.DAO
             try
             {
                 return _context.Users.FirstOrDefault(s => s.UserId == id);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -56,6 +59,18 @@ namespace DataAccess.DAO
             try
             {
                 return (_context.Users.FirstOrDefault(u => u.Email == email));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public void Update(User user) { 
+            try
+            {
+                _context.Users.Update(user);
+                _context.SaveChanges();
             } catch (Exception ex)
             {
                 throw new Exception(ex.Message);
