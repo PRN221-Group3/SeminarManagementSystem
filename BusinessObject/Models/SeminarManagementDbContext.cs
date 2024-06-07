@@ -43,13 +43,17 @@ public partial class SeminarManagementDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=MSI\\SQLEXPRESS;Initial Catalog=SeminarManagementDB;Persist Security Info=True;User ID=sa;Password=12345;TrustServerCertificate=true");
+        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-JNCKUFJ;Initial Catalog=SeminarManagementDB;User ID=sa;Password=12345;Trusted_Connection=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Booking>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.BookingId).HasName("PK__Booking__5DE3A5B1535A2D19");
+=======
+            entity.HasKey(e => e.BookingId).HasName("PK__Booking__5DE3A5B151102E64");
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.ToTable("Booking");
 
@@ -89,7 +93,11 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B4FA0BF6DD");
+=======
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B4F75CFBA0");
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.ToTable("Category");
 
@@ -111,7 +119,11 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Event>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.EventId).HasName("PK__Event__2370F72756ED00E2");
+=======
+            entity.HasKey(e => e.EventId).HasName("PK__Event__2370F7274C73B244");
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.ToTable("Event");
 
@@ -172,7 +184,11 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Hall>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.HallId).HasName("PK__Hall__A63DE8CF12F0E5D0");
+=======
+            entity.HasKey(e => e.HallId).HasName("PK__Hall__A63DE8CF6837BDA8");
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.ToTable("Hall");
 
@@ -191,7 +207,11 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.RoleId).HasName("PK__Role__760965CC96C16277");
+=======
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__760965CC88B83B11");
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.ToTable("Role");
 
@@ -205,7 +225,11 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Sponsor>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.SponsorId).HasName("PK__Sponsor__BE37D4548853A0CA");
+=======
+            entity.HasKey(e => e.SponsorId).HasName("PK__Sponsor__BE37D4547421CA11");
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.ToTable("Sponsor");
 
@@ -223,7 +247,11 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Survey>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.SurveyId).HasName("PK__Survey__9DC31A0720194EAB");
+=======
+            entity.HasKey(e => e.SurveyId).HasName("PK__Survey__9DC31A07298A8680");
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.ToTable("Survey");
 
@@ -246,7 +274,11 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Ticket>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.TicketId).HasName("PK__Ticket__D596F96B8DC54AA2");
+=======
+            entity.HasKey(e => e.TicketId).HasName("PK__Ticket__D596F96BDE59DA78");
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.ToTable("Ticket");
 
@@ -276,7 +308,11 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Transaction>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.TransactionId).HasName("PK__Transact__85C600AF59A951B2");
+=======
+            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__85C600AFF38B9A5C");
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.ToTable("Transaction");
 
@@ -309,11 +345,19 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.UserId).HasName("PK__User__B9BE370F28BB8E6C");
 
             entity.ToTable("User");
 
             entity.HasIndex(e => e.Username, "UQ__User__F3DBC572ADA8BC76").IsUnique();
+=======
+            entity.HasKey(e => e.UserId).HasName("PK__User__B9BE370FADC8C173");
+
+            entity.ToTable("User");
+
+            entity.HasIndex(e => e.Username, "UQ__User__F3DBC572B07629FE").IsUnique();
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.Property(e => e.UserId)
                 .ValueGeneratedNever()
@@ -358,7 +402,11 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Wallet>(entity =>
         {
+<<<<<<< HEAD
             entity.HasKey(e => e.WalletId).HasName("PK__Wallet__0EE6F0418AFFC74B");
+=======
+            entity.HasKey(e => e.WalletId).HasName("PK__Wallet__0EE6F041FCCD7334");
+>>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 
             entity.ToTable("Wallet");
 
