@@ -45,6 +45,8 @@ builder.Services.AddDbContext<SeminarManagementDbContext>(
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<RoleRepository>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<RoleService>();
+
 
 var app = builder.Build();
 

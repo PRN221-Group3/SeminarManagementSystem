@@ -1217,6 +1217,16 @@
           "bin/placeholder/BusinessObject.dll": {}
         }
       },
+      "DataAccess/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/DataAccess.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DataAccess.dll": {}
+        }
+      },
       "Repositories/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
@@ -3292,6 +3302,11 @@
       "path": "../BusinessObject/BusinessObject.csproj",
       "msbuildProject": "../BusinessObject/BusinessObject.csproj"
     },
+    "DataAccess/1.0.0": {
+      "type": "project",
+      "path": "../DataAccess/DataAccess.csproj",
+      "msbuildProject": "../DataAccess/DataAccess.csproj"
+    },
     "Repositories/1.0.0": {
       "type": "project",
       "path": "../Repositories/Repositories.csproj",
@@ -3305,6 +3320,7 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
+      "DataAccess >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 7.0.19",
       "Microsoft.EntityFrameworkCore.Design >= 7.0.19",
       "Microsoft.EntityFrameworkCore.SqlServer >= 7.0.19",
@@ -3315,23 +3331,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Vien Minh\\.nuget\\packages\\": {},
+    "C:\\Users\\Asus\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj",
+      "projectUniqueName": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj",
       "projectName": "SeminarManagement_PRN221",
-      "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj",
-      "packagesPath": "C:\\Users\\Vien Minh\\.nuget\\packages\\",
-      "outputPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\SeminarManagement_PRN221\\obj\\",
+      "projectPath": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj",
+      "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
+      "outputPath": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\SeminarManagement_PRN221\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Vien Minh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3340,15 +3356,17 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj": {
-              "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj"
+            "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\DataAccess\\DataAccess.csproj": {
+              "projectPath": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\DataAccess\\DataAccess.csproj"
+            },
+            "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\Services\\Services.csproj": {
+              "projectPath": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\Services\\Services.csproj"
             }
           }
         }
@@ -3416,7 +3434,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205\\RuntimeIdentifierGraph.json"
       }
     }
   }

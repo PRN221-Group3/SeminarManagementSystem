@@ -1,0 +1,15 @@
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\bin\Debug\net7.0\BusinessObject.deps.json
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\bin\Debug\net7.0\BusinessObject.runtimeconfig.json
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\bin\Debug\net7.0\BusinessObject.dll
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\bin\Debug\net7.0\BusinessObject.pdb
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\BusinessObject.csproj.AssemblyReference.cache
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\BusinessObject.GeneratedMSBuildEditorConfig.editorconfig
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\BusinessObject.AssemblyInfoInputs.cache
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\BusinessObject.AssemblyInfo.cs
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\BusinessObject.csproj.CoreCompileInputs.cache
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\BusinessObject.sourcelink.json
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\BusinessObject.dll
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\refint\BusinessObject.dll
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\BusinessObject.pdb
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\BusinessObject.genruntimeconfig.cache
+C:\Ky 7\PRN221\SeminarManagementSystem\BusinessObject\obj\Debug\net7.0\ref\BusinessObject.dll

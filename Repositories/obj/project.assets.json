@@ -3063,23 +3063,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Vien Minh\\.nuget\\packages\\": {},
+    "C:\\Users\\Asus\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj",
+      "projectUniqueName": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\Repositories\\Repositories.csproj",
       "projectName": "Repositories",
-      "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj",
-      "packagesPath": "C:\\Users\\Vien Minh\\.nuget\\packages\\",
-      "outputPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\obj\\",
+      "projectPath": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\Repositories\\Repositories.csproj",
+      "packagesPath": "C:\\Users\\Asus\\.nuget\\packages\\",
+      "outputPath": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\Repositories\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Vien Minh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Asus\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3088,15 +3088,14 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj": {
-              "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj"
+            "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj": {
+              "projectPath": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj"
             }
           }
         }
@@ -3131,7 +3130,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205\\RuntimeIdentifierGraph.json"
       }
     }
   }

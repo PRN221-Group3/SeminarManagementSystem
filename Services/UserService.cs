@@ -40,5 +40,19 @@ namespace Services
         {
             return inputPassword == storedPasswordHash;
         }
+        public async Task<string> GetRoleNameById(Guid? roleId)
+        {
+            if (roleId == null)
+                return string.Empty;
+
+            var role = await _roleRepository.GetRoleById(roleId.Value);
+            return role?.RoleName ?? string.Empty;
+        }
+
+        public async Task<bool> IsEmailTakenAsync(string email)
+        {
+            return await _userRepository.GetUserByEmail(email) != null;
+        }
+
     }
 }

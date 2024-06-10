@@ -1,0 +1,66 @@
+﻿@page
+@using Services
+@model SeminarManagement_PRN221.Pages.Admin.Manage_Account.IndexModel
+@inject UserService UserService
+
+<h2 class="text-center mb-5">List of Accounts</h2>
+
+<div class="row mb-4">
+    <div class="col">
+        <a class='btn btn-primary' href='/Admin/Manage-Account/Create'>New Account</a>
+    </div>
+</div>
+
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Deleted</th>
+            <th>Activated</th>
+            <th>Created Date</th>
+            <th>Updated Date</th>
+            <th>QR Code</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            var rowClass = user.IsDeleted == true ? "table-danger" : string.Empty;
+            <tr class="@rowClass">
+                <td>@user.UserId</td>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>@user.Username</td>
+                <td>@await GetRoleName(user.RoleId)</td>
+                <td>@user.IsDeleted</td>
+                <td>@user.IsActivated</td>
+                <td>@user.CreatedDate?.ToString("MM/dd/yyyy")</td>
+                <td>@user.UpdatedDate?.ToString("MM/dd/yyyy")</td>
+                <td>@user.QrCode</td>
+                <td class="text-center">
+                    <a class="btn btn-primary btn-sm" asp-page="/Admin/Manage-Account/Update" asp-route-id="@user.UserId">Update</a>
+                    <a class="btn btn-danger btn-sm" asp-page="/Admin/Manage-Account/Delete" asp-route-id="@user.UserId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@functions {
+    private async Task<string> GetRoleName(Guid? roleId)
+    {
+        if (roleId == null)
+            return string.Empty;
+        var role = await UserService.GetRoleNameById(roleId);
+        return role;
+    }
+}
