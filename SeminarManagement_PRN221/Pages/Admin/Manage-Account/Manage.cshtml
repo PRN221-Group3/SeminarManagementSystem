@@ -1,13 +1,24 @@
 ﻿@page
-@using Services
+@using Repositories
 @model SeminarManagement_PRN221.Pages.Admin.Manage_Account.IndexModel
-@inject UserService UserService
 
 <h2 class="text-center mb-5">List of Accounts</h2>
 
 <div class="row mb-4">
     <div class="col">
         <a class='btn btn-primary' href='/Admin/Manage-Account/Create'>New Account</a>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col">
+        <form method="get">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search..." name="searchQuery">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -40,7 +51,7 @@
                 <td>@user.Email</td>
                 <td>@user.PhoneNumber</td>
                 <td>@user.Username</td>
-                <td>@await GetRoleName(user.RoleId)</td>
+                <td>@GetRoleName(user.RoleId)</td>
                 <td>@user.IsDeleted</td>
                 <td>@user.IsActivated</td>
                 <td>@user.CreatedDate?.ToString("MM/dd/yyyy")</td>
@@ -56,11 +67,16 @@
 </table>
 
 @functions {
-    private async Task<string> GetRoleName(Guid? roleId)
+    private string GetRoleName(Guid? roleId)
     {
-        if (roleId == null)
-            return string.Empty;
-        var role = await UserService.GetRoleNameById(roleId);
-        return role;
+        if (roleId == null || roleId == Guid.Empty)
+            return "Role not assigned";
+
+        if (Model.RoleNames.TryGetValue(roleId.Value, out var roleName))
+        {
+            return roleName;
+        }
+
+        return "Role not found";
     }
 }

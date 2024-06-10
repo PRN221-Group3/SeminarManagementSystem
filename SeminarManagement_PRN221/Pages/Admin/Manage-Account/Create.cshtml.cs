@@ -2,7 +2,9 @@ using BusinessObject.Models;
 using DataAccess.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services;
+using Repositories;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
@@ -10,8 +12,8 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
     public class CreateModel : PageModel
     {
         private readonly SeminarManagementDbContext _context;
-        private readonly RoleService _roleService;
-        private readonly UserService _userService;
+        private readonly UserRepository _userRepository;
+        private readonly RoleRepository _roleRepository;
 
         [BindProperty]
         public UserDto UserDto { get; set; } = new UserDto();
@@ -21,24 +23,30 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
         public string ErrorMessage { get; set; } = "";
         public string SuccessMessage { get; set; } = "";
 
-        public CreateModel(SeminarManagementDbContext context, RoleService roleService, UserService userService)
+        public CreateModel(SeminarManagementDbContext context, UserRepository userRepository, RoleRepository roleRepository)
         {
             _context = context;
-            _roleService = roleService;
-            _userService = userService;
+            _userRepository = userRepository;
+            _roleRepository = roleRepository;
         }
 
         public async Task OnGetAsync()
         {
-            Roles = await _roleService.GetAllRolesAsync();
+            Roles = await _roleRepository.GetAllRolesAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (await _userService.IsEmailTakenAsync(UserDto.Email))
+            if (await _userRepository.IsEmailTakenAsync(UserDto.Email))
             {
                 ModelState.AddModelError("UserDto.Email", "This email is already taken.");
                 ErrorMessage = "This email is already taken.";
+                return Page();
+            }
+            if (await _userRepository.IsUsernameTakenAsync(UserDto.Username))
+            {
+                ModelState.AddModelError("UserDto.Username", "This username is already taken.");
+                ErrorMessage = "This username is already taken.";
                 return Page();
             }
 
@@ -48,8 +56,9 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
                 return Page();
             }
 
-            User user = new User()
+            var newUser = new User
             {
+                UserId = Guid.NewGuid(),
                 FirstName = UserDto.FirstName,
                 LastName = UserDto.LastName,
                 Email = UserDto.Email,
@@ -63,7 +72,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
                 IsDeleted = false,
             };
 
-            _context.Users.Add(user);
+            _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
 
             SuccessMessage = "User created successfully";

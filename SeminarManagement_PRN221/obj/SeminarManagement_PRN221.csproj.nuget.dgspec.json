@@ -258,6 +258,9 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
+              "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj": {
+                "projectPath": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj"
+              },
               "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\DataAccess\\DataAccess.csproj": {
                 "projectPath": "C:\\Ky 7\\PRN221\\SeminarManagementSystem\\DataAccess\\DataAccess.csproj"
               },

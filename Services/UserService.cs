@@ -1,4 +1,4 @@
-﻿using BusinessObject.Models;
+﻿/* using BusinessObject.Models;
 using Repositories;
 using System.Threading.Tasks;
 
@@ -22,7 +22,7 @@ namespace Services
             if (user != null && VerifyPassword(password, user.Password))
             {
                 return user;
-            }
+           }
             return null;
         }
 
@@ -32,7 +32,7 @@ namespace Services
         }
 
         public async Task<Role> GetRoleByName(string roleName)
-        {
+       {
             return await _roleRepository.GetRoleByName(roleName);
         }
 
@@ -54,5 +54,7 @@ namespace Services
             return await _userRepository.GetUserByEmail(email) != null;
         }
 
+
     }
 }
+*/

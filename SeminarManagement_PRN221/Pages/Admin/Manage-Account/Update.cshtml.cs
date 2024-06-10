@@ -2,7 +2,7 @@ using BusinessObject.Models;
 using DataAccess.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services;
+using Repositories;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,8 +12,8 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
     public class UpdateModel : PageModel
     {
         private readonly SeminarManagementDbContext _context;
-        private readonly RoleService _roleService;
-        private readonly UserService _userService;
+        private readonly RoleRepository _roleRepository;
+        private readonly UserRepository _userRepository;
 
         [BindProperty]
         public UserDto UserDto { get; set; } = new UserDto();
@@ -25,11 +25,11 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
         public string ErrorMessage { get; set; } = "";
         public string SuccessMessage { get; set; } = "";
 
-        public UpdateModel(SeminarManagementDbContext context, RoleService roleService, UserService userService)
+        public UpdateModel(SeminarManagementDbContext context, RoleRepository roleRepository, UserRepository userRepository)
         {
             _context = context;
-            _roleService = roleService;
-            _userService = userService;
+            _roleRepository = roleRepository;
+            _userRepository = userRepository;
         }
 
        public async Task<IActionResult> OnGetAsync(Guid? id)
@@ -58,7 +58,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
         UserDto.RoleId = user.RoleId;
         UserDto.QrCode = user.QrCode;
 
-        Roles = await _roleService.GetAllRolesAsync();
+        Roles = await _roleRepository.GetAllRolesAsync();
         User = user;
 
         return Page();

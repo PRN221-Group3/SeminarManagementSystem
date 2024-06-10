@@ -1,7 +1,5 @@
 ﻿@page
-@using Services
 @model SeminarManagement_PRN221.Pages.Admin.Manage_Account.UpdateModel
-@inject UserService UserService
 
 <h2 class="text-center mb-5">Update User</h2>
 
@@ -26,7 +24,7 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
             <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">ID</label>
                 <div class="col-sm-8">
-                    <input readonly="form-control-plaintext" value="@Model.User.UserId">
+                    <input readonly class="form-control-plaintext" value="@Model.User.UserId">
                 </div>
             </div>
 
