@@ -7,17 +7,19 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Services;
+using Repositories;
 
 namespace SeminarManagement_PRN221.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly UserService _userService;
+        private readonly UserRepository _userRepo;
+        private readonly RoleRepository _roleRepo;
 
-        public LoginModel(UserService userService)
+        public LoginModel(UserRepository userRepo,RoleRepository roleRepo)
         {
-            _userService = userService;
+            _userRepo = userRepo;
+            _roleRepo = roleRepo;
         }
 
         [BindProperty]
@@ -50,16 +52,16 @@ namespace SeminarManagement_PRN221.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var user = await _userService.AuthenticateUser(Input.Username, Input.Password);
+                var user = await _userRepo.AuthenticateUser(Input.Username, Input.Password);
                 if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "Username or password is invalid.");
                     return Page();
                 }
 
-                var role = await _userService.GetRoleById(user.RoleId);
+                var role = await _roleRepo.GetRoleById(user.RoleId);
 
-                var userRole = await _userService.GetRoleByName(user.Role.RoleName);
+                var userRole = await _roleRepo.GetRoleByName(user.Role.RoleName);
 
                 var claims = new List<Claim>
                 {
