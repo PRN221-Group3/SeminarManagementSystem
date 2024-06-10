@@ -3087,11 +3087,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj",
+      "projectUniqueName": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\Services\\Services.csproj",
       "projectName": "Services",
-      "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj",
+      "projectPath": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\Services\\Services.csproj",
       "packagesPath": "C:\\Users\\Vien Minh\\.nuget\\packages\\",
-      "outputPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\obj\\",
+      "outputPath": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\Services\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -3113,8 +3113,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj": {
-              "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj"
+            "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\Repositories\\Repositories.csproj": {
+              "projectPath": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\Repositories\\Repositories.csproj"
             }
           }
         }

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Repositories;
-using Services;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,7 +43,6 @@ builder.Services.AddDbContext<SeminarManagementDbContext>(
 
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<RoleRepository>();
-builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();
 

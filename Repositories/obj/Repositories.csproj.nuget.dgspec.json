@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj": {}
+    "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\Repositories\\Repositories.csproj": {}
   },
   "projects": {
-    "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj": {
+    "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj",
+        "projectUniqueName": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj",
         "projectName": "BusinessObject",
-        "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj",
+        "projectPath": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj",
         "packagesPath": "C:\\Users\\Vien Minh\\.nuget\\packages\\",
-        "outputPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\obj\\",
+        "outputPath": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\BusinessObject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -99,14 +99,14 @@
         }
       }
     },
-    "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj": {
+    "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\Repositories\\Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj",
+        "projectUniqueName": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\Repositories\\Repositories.csproj",
         "projectName": "Repositories",
-        "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj",
+        "projectPath": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\Repositories\\Repositories.csproj",
         "packagesPath": "C:\\Users\\Vien Minh\\.nuget\\packages\\",
-        "outputPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\obj\\",
+        "outputPath": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\Repositories\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -128,8 +128,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj": {
-                "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj"
+              "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj": {
+                "projectPath": "D:\\PRN221_SeminarProject_Main\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj"
               }
             }
           }
