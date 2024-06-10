@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj": {}
+    "E:\\project\\NET1709_GroupProject_G3\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj": {}
   },
   "projects": {
-    "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj": {
+    "E:\\project\\NET1709_GroupProject_G3\\BusinessObject\\BusinessObject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj",
+        "projectUniqueName": "E:\\project\\NET1709_GroupProject_G3\\BusinessObject\\BusinessObject.csproj",
         "projectName": "BusinessObject",
-        "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj",
-        "packagesPath": "C:\\Users\\Vien Minh\\.nuget\\packages\\",
-        "outputPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\obj\\",
+        "projectPath": "E:\\project\\NET1709_GroupProject_G3\\BusinessObject\\BusinessObject.csproj",
+        "packagesPath": "C:\\Users\\lehai\\.nuget\\packages\\",
+        "outputPath": "E:\\project\\NET1709_GroupProject_G3\\BusinessObject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Vien Minh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lehai\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -39,11 +39,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -95,24 +90,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj": {
+    "E:\\project\\NET1709_GroupProject_G3\\Repositories\\Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj",
+        "projectUniqueName": "E:\\project\\NET1709_GroupProject_G3\\Repositories\\Repositories.csproj",
         "projectName": "Repositories",
-        "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj",
-        "packagesPath": "C:\\Users\\Vien Minh\\.nuget\\packages\\",
-        "outputPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\obj\\",
+        "projectPath": "E:\\project\\NET1709_GroupProject_G3\\Repositories\\Repositories.csproj",
+        "packagesPath": "C:\\Users\\lehai\\.nuget\\packages\\",
+        "outputPath": "E:\\project\\NET1709_GroupProject_G3\\Repositories\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Vien Minh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lehai\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -128,8 +123,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj": {
-                "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\BusinessObject\\BusinessObject.csproj"
+              "E:\\project\\NET1709_GroupProject_G3\\BusinessObject\\BusinessObject.csproj": {
+                "projectPath": "E:\\project\\NET1709_GroupProject_G3\\BusinessObject\\BusinessObject.csproj"
               }
             }
           }
@@ -138,11 +133,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -164,24 +154,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj": {
+    "E:\\project\\NET1709_GroupProject_G3\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj",
+        "projectUniqueName": "E:\\project\\NET1709_GroupProject_G3\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj",
         "projectName": "SeminarManagement_PRN221",
-        "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj",
-        "packagesPath": "C:\\Users\\Vien Minh\\.nuget\\packages\\",
-        "outputPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\SeminarManagement_PRN221\\obj\\",
+        "projectPath": "E:\\project\\NET1709_GroupProject_G3\\SeminarManagement_PRN221\\SeminarManagement_PRN221.csproj",
+        "packagesPath": "C:\\Users\\lehai\\.nuget\\packages\\",
+        "outputPath": "E:\\project\\NET1709_GroupProject_G3\\SeminarManagement_PRN221\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Vien Minh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lehai\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -197,8 +187,11 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj": {
-                "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj"
+              "E:\\project\\NET1709_GroupProject_G3\\BusinessObject\\BusinessObject.csproj": {
+                "projectPath": "E:\\project\\NET1709_GroupProject_G3\\BusinessObject\\BusinessObject.csproj"
+              },
+              "E:\\project\\NET1709_GroupProject_G3\\Services\\Services.csproj": {
+                "projectPath": "E:\\project\\NET1709_GroupProject_G3\\Services\\Services.csproj"
               }
             }
           }
@@ -207,11 +200,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -266,24 +254,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj": {
+    "E:\\project\\NET1709_GroupProject_G3\\Services\\Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj",
+        "projectUniqueName": "E:\\project\\NET1709_GroupProject_G3\\Services\\Services.csproj",
         "projectName": "Services",
-        "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj",
-        "packagesPath": "C:\\Users\\Vien Minh\\.nuget\\packages\\",
-        "outputPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\obj\\",
+        "projectPath": "E:\\project\\NET1709_GroupProject_G3\\Services\\Services.csproj",
+        "packagesPath": "C:\\Users\\lehai\\.nuget\\packages\\",
+        "outputPath": "E:\\project\\NET1709_GroupProject_G3\\Services\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Vien Minh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\lehai\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -299,8 +287,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj": {
-                "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj"
+              "E:\\project\\NET1709_GroupProject_G3\\Repositories\\Repositories.csproj": {
+                "projectPath": "E:\\project\\NET1709_GroupProject_G3\\Repositories\\Repositories.csproj"
               }
             }
           }
@@ -309,11 +297,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -335,7 +318,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -3081,23 +3081,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Vien Minh\\.nuget\\packages\\": {},
+    "C:\\Users\\lehai\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj",
+      "projectUniqueName": "E:\\project\\NET1709_GroupProject_G3\\Services\\Services.csproj",
       "projectName": "Services",
-      "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\Services.csproj",
-      "packagesPath": "C:\\Users\\Vien Minh\\.nuget\\packages\\",
-      "outputPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Services\\obj\\",
+      "projectPath": "E:\\project\\NET1709_GroupProject_G3\\Services\\Services.csproj",
+      "packagesPath": "C:\\Users\\lehai\\.nuget\\packages\\",
+      "outputPath": "E:\\project\\NET1709_GroupProject_G3\\Services\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Vien Minh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\lehai\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -3113,8 +3113,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj": {
-              "projectPath": "D:\\PRN221_SeminarProject\\SeminarManagementSystem\\Repositories\\Repositories.csproj"
+            "E:\\project\\NET1709_GroupProject_G3\\Repositories\\Repositories.csproj": {
+              "projectPath": "E:\\project\\NET1709_GroupProject_G3\\Repositories\\Repositories.csproj"
             }
           }
         }
@@ -3123,11 +3123,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -3149,7 +3144,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
