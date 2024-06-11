@@ -13,7 +13,7 @@ using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 
-namespace SeminarManagement_PRN221.Pages
+namespace SeminarManagement_PRN221.Pages.Account
 {
     public class RegisterModel : PageModel
     {
@@ -29,6 +29,11 @@ namespace SeminarManagement_PRN221.Pages
         }
         public IActionResult OnPost()
         {
+            if (!User.Password.Equals(ConfirmPassword))
+            {
+                ModelState.AddModelError("ConfirmPassword", "Confirm Password Does not Match");
+                return Page();
+            }
             UserGenToken();
             GenerateQRCode();
 

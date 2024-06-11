@@ -1,37 +1,13 @@
-<<<<<<< HEAD
 using AutoMapper;
 using BusinessObject.Mapper;
 using BusinessObject.Models;
 using DataAccess.DAO;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Repositories;
-using Repositories.Interfaces;
-
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<SeminarManagementDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddScoped<UserDAO>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-var mapperConfig = new MapperConfiguration(mc =>
-{
-    mc.AddProfile(new AutoMapperProfile());
-});
-IMapper mapper = mapperConfig.CreateMapper();
-builder.Services.AddSingleton(mapper);
-=======
-using BusinessObject.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Repositories;
-using Services;
+using Repositories.Interfaces;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -69,10 +45,16 @@ builder.Services.AddDbContext<SeminarManagementDbContext>(
     options => options.UseSqlServer(connectionString)
 );
 
-builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<RoleRepository>();
-builder.Services.AddScoped<UserService>();
->>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
+builder.Services.AddScoped<UserDAO>();
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new AutoMapperProfile());
+});
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 
 var app = builder.Build();
 

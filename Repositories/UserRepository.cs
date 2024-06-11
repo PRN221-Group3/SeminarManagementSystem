@@ -1,25 +1,23 @@
 ﻿using BusinessObject.Models;
-<<<<<<< HEAD
 using DataAccess.DAO;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-=======
-using Microsoft.EntityFrameworkCore;
->>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
 using System.Threading.Tasks;
 
 namespace Repositories
 {
-<<<<<<< HEAD
     public class UserRepository : IUserRepository
     {
         private readonly UserDAO _userDAO;
-        public UserRepository(UserDAO userDAO)
+        private readonly SeminarManagementDbContext _context;
+        public UserRepository(UserDAO userDAO, SeminarManagementDbContext context)
         {
             _userDAO = userDAO;
+            _context = context;
         }
         public void Add(User user)
         {
@@ -43,21 +41,28 @@ namespace Repositories
         public void Update(User user)
         {
             _userDAO.Update(user);
-=======
-    public class UserRepository
-    {
-        private readonly SeminarManagementDbContext _context;
-
-        public UserRepository(SeminarManagementDbContext context)
-        {
-            _context = context;
         }
 
         public async Task<User> GetUserByUsernameOrEmail(string usernameOrEmail)
         {
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.Username == usernameOrEmail || u.Email == usernameOrEmail);
->>>>>>> 07dcc6797aaaec9cdb249d30b160cf8ade886f0c
+        }
+
+        public async Task<User> AuthenticateUser(string usernameOrEmail, string password)
+        {
+            var user = await GetUserByUsernameOrEmail(usernameOrEmail);
+
+            if (user != null && VerifyPassword(password, user.Password))
+            {
+                return user;
+            }
+            return null;
+        }
+
+        private bool VerifyPassword(string inputPassword, string storedPasswordHash)
+        {
+            return inputPassword == storedPasswordHash;
         }
     }
 }
