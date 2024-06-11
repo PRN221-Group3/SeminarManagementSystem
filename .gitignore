@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-# Created by https://www.toptal.com/developers/gitignore/api/csharp,dotnetcore,visualstudio
-# Edit at https://www.toptal.com/developers/gitignore?templates=csharp,dotnetcore,visualstudio
-=======
-# Created by https://www.toptal.com/developers/gitignore/api/csharp,dotnetcore,aspnetcore
-# Edit at https://www.toptal.com/developers/gitignore?templates=csharp,dotnetcore,aspnetcore
->>>>>>> ba9f51e3eaa78c841687979ede3502f05da047c3
+# Created by https://www.toptal.com/developers/gitignore/api/csharp,visualstudio,aspnetcore,dotnetcore
+# Edit at https://www.toptal.com/developers/gitignore?templates=csharp,visualstudio,aspnetcore,dotnetcore
 
 ### ASPNETCore ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -532,21 +527,15 @@ FodyWeavers.xsd
 # .NET Core build folders
 bin/
 obj/
-<<<<<<< HEAD
 
 # Common node modules locations
 /node_modules
 /wwwroot/node_modules
 
 ### VisualStudio ###
-=======
->>>>>>> ba9f51e3eaa78c841687979ede3502f05da047c3
 
-# Common node modules locations
-/node_modules
-/wwwroot/node_modules
+# User-specific files
 
-<<<<<<< HEAD
 # User-specific files (MonoDevelop/Xamarin Studio)
 
 # Mono auto generated files
@@ -724,7 +713,4 @@ obj/
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
-# End of https://www.toptal.com/developers/gitignore/api/csharp,dotnetcore,visualstudio
-=======
-# End of https://www.toptal.com/developers/gitignore/api/csharp,dotnetcore,aspnetcore
->>>>>>> ba9f51e3eaa78c841687979ede3502f05da047c3
+# End of https://www.toptal.com/developers/gitignore/api/csharp,visualstudio,aspnetcore,dotnetcore
