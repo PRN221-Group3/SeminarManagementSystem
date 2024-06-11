@@ -1,7 +1,13 @@
+using BusinessObject.Models;
+using SeminarManagement_PRN221.Common;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<SeminarManagementDbContext>();
+
 builder.Services.AddRazorPages();
+builder.Services.AddServices();
 
 var app = builder.Build();
 
