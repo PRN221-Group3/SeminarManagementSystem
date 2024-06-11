@@ -5,17 +5,17 @@
 
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
 {
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <strong>@Model.ErrorMessage</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>@Model.ErrorMessage</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
 else if (!string.IsNullOrEmpty(Model.SuccessMessage))
 {
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    <strong>@Model.SuccessMessage</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>@Model.SuccessMessage</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
 
 <div class="row">
@@ -59,7 +59,7 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                     <span asp-validation-for="UserDto.PhoneNumber" class="text-danger"></span>
                 </div>
             </div>
-            
+
             <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">Username</label>
                 <div class="col-sm-8">
@@ -83,7 +83,7 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                         <option value="">Select Role</option>
                         @foreach (var role in Model.Roles)
                         {
-                        <option value="@role.RoleId">@role.RoleName</option>
+                            <option value="@role.RoleId">@role.RoleName</option>
                         }
                     </select>
                     <span asp-validation-for="UserDto.RoleId" class="text-danger"></span>

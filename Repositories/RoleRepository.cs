@@ -1,10 +1,11 @@
 ﻿using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
+using Repositories.Interfaces;
 using System.Threading.Tasks;
 
 namespace Repositories
 {
-    public class RoleRepository
+    public class RoleRepository : IRoleRepository
     {
         private readonly SeminarManagementDbContext _context;
 

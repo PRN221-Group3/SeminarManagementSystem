@@ -2,7 +2,7 @@ using BusinessObject.Models;
 using DataAccess.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Repositories;
+using Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,9 +11,8 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
 {
     public class UpdateModel : PageModel
     {
-        private readonly SeminarManagementDbContext _context;
-        private readonly RoleRepository _roleRepository;
-        private readonly UserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
+        private readonly IUserRepository _userRepository;
 
         [BindProperty]
         public UserDto UserDto { get; set; } = new UserDto();
@@ -25,86 +24,78 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
         public string ErrorMessage { get; set; } = "";
         public string SuccessMessage { get; set; } = "";
 
-        public UpdateModel(SeminarManagementDbContext context, RoleRepository roleRepository, UserRepository userRepository)
+        public UpdateModel(IRoleRepository roleRepository, IUserRepository userRepository)
         {
-            _context = context;
             _roleRepository = roleRepository;
             _userRepository = userRepository;
         }
 
-       public async Task<IActionResult> OnGetAsync(Guid? id)
-{
-    if (id == null)
-    {
-        ErrorMessage = "1";
-                return Page();
-    }
-
-    using (var context = new SeminarManagementDbContext())
-    {
-        var user = await context.Users.FindAsync(id);
-        if (user == null)
+        public async Task<IActionResult> OnGetAsync(Guid? id)
         {
-                    ErrorMessage = "2";
-                    return Page();
-                }
+            if (id == null)
+            {
+                ErrorMessage = "ID null ";
+                return RedirectToPage("/Admin/Manage-Account/Manage");
+            }
 
-        UserDto.FirstName = user.FirstName;
-        UserDto.LastName = user.LastName;
-        UserDto.Email = user.Email;
-        UserDto.PhoneNumber = user.PhoneNumber;
-        UserDto.Username = user.Username;
-        UserDto.Password = user.Password;
-        UserDto.RoleId = user.RoleId;
-        UserDto.QrCode = user.QrCode;
+            User = await _userRepository.GetByIdAsync(id.Value);
+            if (User == null || User.IsDeleted == true)
+            {
+                ErrorMessage = "Account deleted can't update ";
+                return RedirectToPage("/Admin/Manage-Account/Manage");
+            }
 
-        Roles = await _roleRepository.GetAllRolesAsync();
-        User = user;
 
-        return Page();
-    }
-}
+            UserDto.FirstName = User.FirstName;
+            UserDto.LastName = User.LastName;
+            UserDto.Email = User.Email;
+            UserDto.PhoneNumber = User.PhoneNumber;
+            UserDto.Username = User.Username;
+            UserDto.Password = User.Password;
+            UserDto.RoleId = User.RoleId;
+            UserDto.QrCode = User.QrCode;
 
-public async Task<IActionResult> OnPostAsync(Guid? id)
-{
-    if (id == null)
-    {
-                ErrorMessage = "3";
+            Roles = await _roleRepository.GetAllRolesAsync();
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(Guid? id)
+        {
+            if (id == null)
+            {
+                ErrorMessage = "ID null ";
+                return RedirectToPage("/Admin/Manage-Account/Manage");
+            }
+
+            User = await _userRepository.GetByIdAsync(id.Value);
+            if (User == null || User.IsDeleted == true)
+            {
+                ErrorMessage = "Account deleted can't update ";
+                return RedirectToPage("/Admin/Manage-Account/Manage");
+            }
+
+
+            if (!ModelState.IsValid)
+            {
+                Roles = await _roleRepository.GetAllRolesAsync(); // Re-populate roles on validation error
+                ErrorMessage = "Invalid user data";
                 return Page();
             }
 
-    using (var context = new SeminarManagementDbContext())
-    {
-        var user = await context.Users.FindAsync(id);
-        if (user == null)
-        {
-                    ErrorMessage = "Ngu";
-            return Page();
+            User.FirstName = UserDto.FirstName;
+            User.LastName = UserDto.LastName;
+            User.Email = UserDto.Email;
+            User.PhoneNumber = UserDto.PhoneNumber;
+            User.Username = UserDto.Username;
+            User.Password = UserDto.Password;
+            User.RoleId = UserDto.RoleId;
+            User.QrCode = UserDto.QrCode;
+            User.UpdatedDate = DateTime.Now;
+
+            await _userRepository.UpdateAsync(User);
+
+            SuccessMessage = "User updated successfully";
+            return RedirectToPage("/Admin/Manage-Account/Manage");
         }
-
-        if (!ModelState.IsValid)
-        {
-            ErrorMessage = "Invalid user data";
-            return Page();
-        }
-
-        user.FirstName = UserDto.FirstName;
-        user.LastName = UserDto.LastName;
-        user.Email = UserDto.Email;
-        user.PhoneNumber = UserDto.PhoneNumber;
-        user.Username = UserDto.Username;
-        user.Password = UserDto.Password;
-        user.RoleId = UserDto.RoleId;
-        user.QrCode = UserDto.QrCode;
-        user.UpdatedDate = DateTime.Now;
-
-
-        await context.SaveChangesAsync();
-
-        User = user;
-        SuccessMessage = "User updated successfully";
-        return RedirectToPage("/Admin/Manage-Account/Manage");
-    }
-}
     }
 }

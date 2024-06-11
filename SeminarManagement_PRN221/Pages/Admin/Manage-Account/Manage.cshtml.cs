@@ -1,6 +1,7 @@
 using BusinessObject.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories;
+using Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,9 +10,9 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
 {
     public class IndexModel : PageModel
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public IndexModel(UserRepository userRepository)
+        public IndexModel(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
