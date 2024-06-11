@@ -1,9 +1,13 @@
+using AutoMapper;
+using BusinessObject.Mapper;
 using BusinessObject.Models;
+using DataAccess.DAO;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Repositories;
+using Repositories.Interfaces;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -41,8 +45,16 @@ builder.Services.AddDbContext<SeminarManagementDbContext>(
     options => options.UseSqlServer(connectionString)
 );
 
-builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<RoleRepository>();
+builder.Services.AddScoped<UserDAO>();
+var mapperConfig = new MapperConfiguration(mc =>
+{
+    mc.AddProfile(new AutoMapperProfile());
+});
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 
 var app = builder.Build();
 

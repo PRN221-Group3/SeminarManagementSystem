@@ -2,5 +2,14 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ActiveDebugProfile>https</ActiveDebugProfile>
+    <RazorPage_SelectedScaffolderID>RazorViewEmptyScaffolder</RazorPage_SelectedScaffolderID>
+    <RazorPage_SelectedScaffolderCategoryPath>root/Common</RazorPage_SelectedScaffolderCategoryPath>
+    <WebStackScaffolding_ViewDialogWidth>650,4</WebStackScaffolding_ViewDialogWidth>
+    <WebStackScaffolding_IsLayoutPageSelected>True</WebStackScaffolding_IsLayoutPageSelected>
+    <WebStackScaffolding_IsPartialViewSelected>False</WebStackScaffolding_IsPartialViewSelected>
+    <WebStackScaffolding_IsReferencingScriptLibrariesSelected>False</WebStackScaffolding_IsReferencingScriptLibrariesSelected>
+    <WebStackScaffolding_LayoutPageFile>_Temp</WebStackScaffolding_LayoutPageFile>
+    <WebStackScaffolding_DbContextTypeFullName>BusinessObject.Models.SeminarManagementDbContext</WebStackScaffolding_DbContextTypeFullName>
+    <WebStackScaffolding_EnablerDialogWidth>650,4</WebStackScaffolding_EnablerDialogWidth>
   </PropertyGroup>
 </Project>
