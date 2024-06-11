@@ -17,9 +17,17 @@ public partial class User
 
     public string? Username { get; set; }
 
+    public string? Password { get; set; }
+
     public Guid? RoleId { get; set; }
 
     public bool? IsDeleted { get; set; }
+
+    public bool? IsActivated { get; set; }
+
+    public string? VerifyToken { get; set; }
+
+    public DateTime? IssueTokenDate { get; set; }
 
     public string? QrCode { get; set; }
 

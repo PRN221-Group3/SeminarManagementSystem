@@ -1,0 +1,47 @@
+﻿@page
+@model SeminarManagement_PRN221.Pages.VerifyModel
+@{
+    ViewData["Title"] = "Email Verification";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 100px;
+            text-align: center;
+        }
+
+        .alert {
+            display: inline-block;
+            width: auto;
+        }
+    </style>
+    <script>
+        setTimeout(function () {
+            window.location.href = '/Index';
+        }, 5000);
+    </script>
+</head>
+<body>
+    <div class="container">
+        @if (Model.VerificationResult == "success")
+        {
+            <div class="alert alert-success" role="alert">
+                Your email has been successfully verified. You will be redirected to the homepage shortly.
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-danger" role="alert">
+                Email verification failed. Please try again or contact support. You will be redirected to the homepage shortly.
+            </div>
+        }
+    </div>
+</body>
+</html>
