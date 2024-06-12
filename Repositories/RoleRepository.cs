@@ -1,10 +1,11 @@
 ﻿using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
+using Repositories.Interfaces;
 using System.Threading.Tasks;
 
 namespace Repositories
 {
-    public class RoleRepository
+    public class RoleRepository : IRoleRepository
     {
         private readonly SeminarManagementDbContext _context;
 
@@ -22,5 +23,10 @@ namespace Repositories
         {
             return await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == roleName);
         }
+        public async Task<List<Role>> GetAllRolesAsync()
+        {
+            return await _context.Roles.ToListAsync();
+        }
+
     }
 }
