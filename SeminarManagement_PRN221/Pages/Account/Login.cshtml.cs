@@ -13,9 +13,9 @@ namespace SeminarManagement_PRN221.Pages.Account
     public class LoginModel : PageModel
     {
         private readonly IUserRepository _userRepo;
-        private readonly Repositories.Interfaces.IRoleRepository _roleRepo;
+        private readonly IRoleRepository _roleRepo;
 
-        public LoginModel(IUserRepository userRepo, Repositories.Interfaces.IRoleRepository roleRepo)
+        public LoginModel(IUserRepository userRepo, IRoleRepository roleRepo)
         {
             _userRepo = userRepo;
             _roleRepo = roleRepo;

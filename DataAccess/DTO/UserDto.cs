@@ -18,13 +18,9 @@ public class UserDto
     public string? Password { get; set; }
     [Required]
     public Guid? RoleId { get; set; }
-    
     public string? QrCode { get; set; }
-
     public DateTime? CreatedDate { get; set; }
-
     public DateTime? UpdatedDate { get; set; }
-
     public bool? IsDeleted { get; set; }
     public bool? IsActived { get; set;}
 }
