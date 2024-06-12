@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "Repositorie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{7FEAEB18-DBE3-4A61-9BA3-F13A7F692338}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeminarManagement_PRN221", "SeminarManagement_PRN221\SeminarManagement_PRN221.csproj", "{59071498-ACD1-48AD-9986-ACE23C66F535}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeminarManagement_PRN221", "SeminarManagement_PRN221\SeminarManagement_PRN221.csproj", "{59071498-ACD1-48AD-9986-ACE23C66F535}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
