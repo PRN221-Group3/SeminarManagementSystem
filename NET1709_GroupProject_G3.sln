@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeminarManagement_PRN221", "SeminarManagement_PRN221\SeminarManagement_PRN221.csproj", "{9442E2DD-9FD9-4BE1-8891-A6299B5A4E2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeminarManagement_PRN221", "SeminarManagement_PRN221\SeminarManagement_PRN221.csproj", "{9442E2DD-9FD9-4BE1-8891-A6299B5A4E2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{C5ADD8D2-1877-492A-A060-1024F2445F5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{C5ADD8D2-1877-492A-A060-1024F2445F5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{9C78ABDA-419B-4DBB-B05B-46915B3F169E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{9C78ABDA-419B-4DBB-B05B-46915B3F169E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repositories", "Repositories\Repositories.csproj", "{89BA7A67-F3D0-489E-B444-919A6AD3059F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "Repositories\Repositories.csproj", "{89BA7A67-F3D0-489E-B444-919A6AD3059F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{7FEAEB18-DBE3-4A61-9BA3-F13A7F692338}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{7FEAEB18-DBE3-4A61-9BA3-F13A7F692338}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
