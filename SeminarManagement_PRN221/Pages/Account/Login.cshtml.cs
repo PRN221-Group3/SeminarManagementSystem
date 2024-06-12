@@ -3,20 +3,19 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
 using Repositories;
+using Repositories.Interfaces;
 
 namespace SeminarManagement_PRN221.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly UserRepository _userRepo;
-        private readonly RoleRepository _roleRepo;
+        private readonly IUserRepository _userRepo;
+        private readonly IRoleRepository _roleRepo;
 
-        public LoginModel(UserRepository userRepo,RoleRepository roleRepo)
+        public LoginModel(IUserRepository userRepo, IRoleRepository roleRepo)
         {
             _userRepo = userRepo;
             _roleRepo = roleRepo;
