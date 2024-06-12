@@ -18,16 +18,19 @@ namespace SeminarManagement_PRN221.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IMapper _mapper;
         [BindProperty]
         public UserDto User { get; set; }
+        [BindProperty]
         public string ConfirmPassword { get; set; }
-        public RegisterModel(IUserRepository userRepository, IMapper mapper)
+        public RegisterModel(IUserRepository userRepository, IMapper mapper, IRoleRepository roleRepository)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _roleRepository = roleRepository;  
         }
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (!User.Password.Equals(ConfirmPassword))
             {
@@ -37,8 +40,10 @@ namespace SeminarManagement_PRN221.Pages.Account
             UserGenToken();
             GenerateQRCode();
 
+            var role = await _roleRepository.GetRoleByName("User");
             var userToCreate = _mapper.Map<User>(User);
             userToCreate.UserId = Guid.NewGuid();
+            userToCreate.Role = role;
 
             var existingUser = _userRepository.GetByEmail(User.Email);
             if (existingUser != null)
@@ -52,7 +57,7 @@ namespace SeminarManagement_PRN221.Pages.Account
                 _userRepository.Add(userToCreate);
 
                 SendVerificationEmail(userToCreate.Email);
-                return RedirectToPage("VerifyEmail");
+                return RedirectToPage("/VerifyEmail");
             }
             catch (Exception ex)
             {
@@ -68,7 +73,7 @@ namespace SeminarManagement_PRN221.Pages.Account
             User.Username = User.Email.Split("@")[0];
             User.IsDeleted = false;
             User.IsActivated = false;
-            User.VerifyToken = KeyGenerator.GetUniqueKey(2);
+            User.VerifyToken = KeyGenerator.GetUniqueKey(16);
             DateTime now = DateTime.Now;
             DateTime issueTokenDate = now.AddMinutes(5); // 5 minutes expiration
 

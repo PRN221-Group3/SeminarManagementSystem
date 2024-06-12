@@ -9,7 +9,7 @@ namespace Repositories.Interfaces
 {
     public interface IRoleRepository
     {
-        public Task<Role> GetRoleById(Guid? id);
+        public  Task<Role> GetRoleById(Guid? id);
 
         public Task<Role> GetRoleByName(string roleName);
 
