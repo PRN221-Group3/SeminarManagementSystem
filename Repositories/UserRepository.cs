@@ -48,7 +48,7 @@ namespace Repositories
         }
         public async Task<User> GetUserByUsernameOrEmail(string usernameOrEmail)
         {
-            return await _context.Users
+            return await _context.Users.Include(u => u.Role)
                 .FirstOrDefaultAsync(u => u.Username == usernameOrEmail || u.Email == usernameOrEmail);
         }
         public async Task<User> GetUserByEmail(string email)
