@@ -37,7 +37,7 @@ namespace BusinessObject.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var connectionString = _configuration.GetConnectionString("SeminarManagementDB");
+                var connectionString = _configuration.GetConnectionString("LocalDB");
                 optionsBuilder.UseSqlServer(connectionString);
             }
         }
