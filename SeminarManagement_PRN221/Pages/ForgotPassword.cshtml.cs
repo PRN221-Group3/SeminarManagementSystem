@@ -1,9 +1,9 @@
 using BusinessObject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Services.Interfaces;
 using System.Net.Mail;
 using System.Net;
+using Repositories.Interfaces;
 
 namespace SeminarManagement_PRN221.Pages
 {
@@ -12,10 +12,10 @@ namespace SeminarManagement_PRN221.Pages
         [BindProperty]
         public string Email { get; set; }
 
-        private readonly IUserService _userService;
-        public ForgotPasswordModel(IUserService userService)
+        private readonly IUserRepository _userRepository;
+        public ForgotPasswordModel(IUserRepository userRepository)
         {
-            _userService = userService;
+            _userRepository = userRepository;
         }
         public IActionResult OnGet()
         {
@@ -32,7 +32,7 @@ namespace SeminarManagement_PRN221.Pages
         }
         private string GenerateToken(string email)
         {
-            User user = _userService.GetByEmail(email);
+            User user = _userRepository.GetByEmail(email);
             if (string.IsNullOrWhiteSpace(email))
             {
                 ViewData["msg"] = "Email invalid";

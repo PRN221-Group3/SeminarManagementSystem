@@ -1,8 +1,8 @@
 using BusinessObject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Repositories.Interfaces;
 using SeminarManagement_PRN221.Token;
-using Services.Interfaces;
 
 namespace SeminarManagement_PRN221.Pages
 {
@@ -16,10 +16,10 @@ namespace SeminarManagement_PRN221.Pages
         public string NewPassword { get; set; }
         [BindProperty]
         public string ConfirmPassword { get; set; }
-        private readonly IUserService _userService;
-        public ResetPasswordModel(IUserService userService)
+        private readonly IUserRepository _userRepository;
+        public ResetPasswordModel(IUserRepository userRepository)
         {
-            _userService = userService;
+            _userRepository = userRepository;
         }
 
         public IActionResult OnGet()
@@ -48,9 +48,9 @@ namespace SeminarManagement_PRN221.Pages
                 ViewData["msg"] = "Confirm Password must match Password";
                 return Page();
             }
-            User user = _userService.GetByEmail(Email);
+            User user = _userRepository.GetByEmail(Email);
             user.Password = NewPassword;
-            _userService.Update(user);
+            _userRepository.Update(user);
             return RedirectToPage("Index");
         }
 
