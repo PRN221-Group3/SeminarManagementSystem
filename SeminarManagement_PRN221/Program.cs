@@ -45,7 +45,6 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddDbContext<SeminarManagementDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
-builder.Services.AddServices();
 
 // Add Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();

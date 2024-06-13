@@ -1,8 +1,6 @@
 ﻿using DataAccess.DAO;
 using Repositories;
 using Repositories.Interfaces;
-using Services;
-using Services.Interfaces;
 
 namespace SeminarManagement_PRN221.Common
 {
@@ -11,7 +9,6 @@ namespace SeminarManagement_PRN221.Common
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             AddRepositories(services);
-            services.AddScoped<IUserService, UserService>();
             return services;
         }
 
