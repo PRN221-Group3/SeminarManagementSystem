@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Interfaces;
 using SeminarManagement_PRN221.Token;
+using Services.Interfaces;
 
 namespace SeminarManagement_PRN221.Pages
 {
