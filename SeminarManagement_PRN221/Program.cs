@@ -49,7 +49,27 @@ builder.Services.AddDbContext<SeminarManagementDbContext>(options =>
 // Add Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IHallRepository, HallRepository>();
+builder.Services.AddScoped<ISponsorRepository, SponsorRepository>();
+builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
+builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<ISponsorRepository, SponsorRepository>();
+builder.Services.AddScoped<RoleDAO>();
 builder.Services.AddScoped<UserDAO>();
+builder.Services.AddScoped<BookingDAO>();
+builder.Services.AddScoped<CategoryDAO>();
+builder.Services.AddScoped<EventDAO>();
+builder.Services.AddScoped<HallDAO>();
+builder.Services.AddScoped<SurveyDAO>();
+builder.Services.AddScoped<TicketDAO>();
+builder.Services.AddScoped<TransactionDAO>();
+builder.Services.AddScoped<WalletDAO>();
+builder.Services.AddScoped<SponsorDAO>();
 
 // Configure AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>

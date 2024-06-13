@@ -6,104 +6,110 @@ using BusinessObject.Models;
 using BusinessObject.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Build.Framework;
 using QRCoder;
 using Repositories.Interfaces;
 
-namespace SeminarManagement_PRN221.Pages.Account;
-
-public class RegisterModel : PageModel
+namespace SeminarManagement_PRN221.Pages.Account
 {
-    private readonly IMapper _mapper;
-    private readonly IRoleRepository _roleRepository;
-    private readonly IUserRepository _userRepository;
-
-    public RegisterModel(IUserRepository userRepository, IMapper mapper, IRoleRepository roleRepository)
+    public class RegisterModel : PageModel
     {
-        _userRepository = userRepository;
-        _mapper = mapper;
-        _roleRepository = roleRepository;
-    }
+        private readonly IMapper _mapper;
+        private readonly IRoleRepository _roleRepository;
+        private readonly IUserRepository _userRepository;
 
-    [BindProperty] public UserDto User { get; set; }
-
-    [BindProperty] public string ConfirmPassword { get; set; }
-
-    public async Task<IActionResult> OnPost()
-    {
-        if (!User.Password.Equals(ConfirmPassword))
+        public RegisterModel(IUserRepository userRepository, IMapper mapper, IRoleRepository roleRepository)
         {
-            ModelState.AddModelError("ConfirmPassword", "Confirm Password Does not Match");
-            return Page();
+            _userRepository = userRepository;
+            _mapper = mapper;
+            _roleRepository = roleRepository;
         }
 
-        UserGenToken();
-        GenerateQRCode();
+        [BindProperty] public UserDto User { get; set; }
 
-        var role = await _roleRepository.GetRoleByName("User");
-        var userToCreate = _mapper.Map<User>(User);
-        userToCreate.UserId = Guid.NewGuid();
-        userToCreate.Role = role;
+        [BindProperty] public string ConfirmPassword { get; set; }
 
-        var existingUser = _userRepository.GetByEmail(User.Email);
-        if (existingUser != null)
+        public async Task<IActionResult> OnPost()
         {
-            ModelState.AddModelError("User.Email", "Email already exists.");
-            return Page();
+            if (ConfirmPassword == null)
+            {
+                ModelState.AddModelError("ConfirmPassword", "Confirm Password is required");
+                return Page();
+            }
+            if (!User.Password.Equals(ConfirmPassword))
+            {
+                ModelState.AddModelError("ConfirmPassword", "Confirm Password Does not Match");
+                return Page();
+            }
+
+            UserGenToken();
+            GenerateQRCode();
+
+            var role = await _roleRepository.GetRoleByName("User");
+            var userToCreate = _mapper.Map<User>(User);
+            userToCreate.UserId = Guid.NewGuid();
+            userToCreate.Role = role;
+
+            var existingUser = _userRepository.GetByEmail(User.Email);
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("User.Email", "Email already exists.");
+                return Page();
+            }
+
+            try
+            {
+                _userRepository.Add(userToCreate);
+
+                SendVerificationEmail(userToCreate.Email);
+                return RedirectToPage("/VerifyEmail");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while creating the user.");
+                return Page();
+            }
         }
 
-        try
+        private void UserGenToken()
         {
-            _userRepository.Add(userToCreate);
+            User.CreatedDate = DateTime.Now;
+            User.UpdatedDate = DateTime.Now;
+            User.Username = User.Email.Split("@")[0];
+            User.IsDeleted = false;
+            User.IsActivated = false;
+            User.VerifyToken = KeyGenerator.GetUniqueKey(16);
+            var now = DateTime.Now;
+            var issueTokenDate = now.AddMinutes(5); // 5 minutes expiration
 
-            SendVerificationEmail(userToCreate.Email);
-            return RedirectToPage("/VerifyEmail");
+            User.IssueTokenDate = issueTokenDate;
         }
-        catch (Exception ex)
+
+        private void GenerateQRCode()
         {
-            ModelState.AddModelError(string.Empty, "An error occurred while creating the user.");
-            return Page();
+            // QR Generator
+            var qrGen = new QRCodeGenerator();
+            var info = qrGen.CreateQrCode(
+                $"Full Name: {User.FirstName} {User.LastName}, Email: {User.Email}",
+                QRCodeGenerator.ECCLevel.Q
+            );
+            using var qrCode = new PngByteQRCode(info);
+            var qrCodeImage = qrCode.GetGraphic(20);
+
+            User.QrCode = $"data:image/png;base64,{Convert.ToBase64String(qrCodeImage)}";
         }
-    }
 
-    private void UserGenToken()
-    {
-        User.CreatedDate = DateTime.Now;
-        User.UpdatedDate = DateTime.Now;
-        User.Username = User.Email.Split("@")[0];
-        User.IsDeleted = false;
-        User.IsActivated = false;
-        User.VerifyToken = KeyGenerator.GetUniqueKey(16);
-        var now = DateTime.Now;
-        var issueTokenDate = now.AddMinutes(5); // 5 minutes expiration
+        private void SendVerificationEmail(string email)
+        {
+            var myEmail = "seminarwebapp@gmail.com";
+            var myPassword = "mbyghvpzorxaihmp";
 
-        User.IssueTokenDate = issueTokenDate;
-    }
+            var message = new MailMessage();
+            message.From = new MailAddress(myEmail);
+            message.To.Add(new MailAddress(email));
+            message.Subject = "[PRN221] Email Verification";
 
-    private void GenerateQRCode()
-    {
-        // QR Generator
-        var qrGen = new QRCodeGenerator();
-        var info = qrGen.CreateQrCode(
-            $"Full Name: {User.FirstName} {User.LastName}, Email: {User.Email}",
-            QRCodeGenerator.ECCLevel.Q
-        );
-        using var qrCode = new PngByteQRCode(info);
-        var qrCodeImage = qrCode.GetGraphic(20);
-
-        User.QrCode = $"data:image/png;base64,{Convert.ToBase64String(qrCodeImage)}";
-    }
-
-    private void SendVerificationEmail(string email)
-    {
-        var myEmail = "seminarwebapp@gmail.com";
-        var myPassword = "mbyghvpzorxaihmp";
-
-        var message = new MailMessage();
-        message.From = new MailAddress(myEmail);
-        message.To.Add(new MailAddress(email));
-        message.Subject = "[PRN221] Email Verification";
-
-        message.Body = @"
+            message.Body = @"
                 <html>
                 <body>
                     <h2>Welcome to Seminar Web</h2>
@@ -116,15 +122,16 @@ public class RegisterModel : PageModel
                 </body>
                 </html>";
 
-        message.IsBodyHtml = true;
+            message.IsBodyHtml = true;
 
-        var smtpClient = new SmtpClient("smtp.gmail.com")
-        {
-            Port = 587,
-            Credentials = new NetworkCredential(myEmail, myPassword),
-            EnableSsl = true
-        };
+            var smtpClient = new SmtpClient("smtp.gmail.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential(myEmail, myPassword),
+                EnableSsl = true
+            };
 
-        smtpClient.Send(message);
+            smtpClient.Send(message);
+        }
     }
 }

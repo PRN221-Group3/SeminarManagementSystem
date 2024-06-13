@@ -2,15 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
 using System.Threading.Tasks;
+using DataAccess.DAO;
+using Repositories.BaseRepo;
 
 namespace Repositories
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepository : BaseRepository<Role>, IRoleRepository
     {
         private readonly SeminarManagementDbContext _context;
+        private readonly RoleDAO _roleDAO;
 
-        public RoleRepository(SeminarManagementDbContext context)
+        public RoleRepository(SeminarManagementDbContext context, RoleDAO roleDao) : base(roleDao)
         {
+            _roleDAO = roleDao;
             _context = context;
         }
 
