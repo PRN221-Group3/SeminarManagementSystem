@@ -1,5 +1,8 @@
 ﻿@page
 @model SeminarManagement_PRN221.Pages.Admin.Manage_Account.CreateModel
+@{
+    Layout = "_AdminLayout";
+}
 
 <h2 class="text-center mb-5">New User</h2>
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
