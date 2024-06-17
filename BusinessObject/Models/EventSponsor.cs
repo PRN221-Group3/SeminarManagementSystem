@@ -9,6 +9,8 @@ public partial class EventSponsor
 
     public Guid? EventId { get; set; }
 
+    public string? Status { get; set; }
+
     public virtual Event? Event { get; set; }
 
     public virtual Sponsor? Sponsor { get; set; }
