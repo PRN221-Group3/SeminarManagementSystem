@@ -1,5 +1,5 @@
 ﻿@page
-@model IndexModel
+@model SeminarManagement_PRN221.Pages.IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
@@ -10,13 +10,13 @@
             <div class="col-xl-6">
                 <div class="text-center text-white">
                     <h1 class="mb-5">Welcome to Seminar Organization</h1>
-                    <h4 class="mb-5">Let's get started by registering our page</h4>
+                    <h4 class="mb-5">Let's get started by registering on our page</h4>
                     <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN" method="post">
                         <div class="row">
                             <div class="col">
                                 <input class="form-control form-control-lg" id="emailAddress" name="email" type="email" placeholder="Email Address" data-sb-validations="required,email" />
                                 <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
-                                <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address Email is not valid.</div>
+                                <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address is not valid.</div>
                             </div>
                             <div class="col-auto">
                                 <button class="btn btn-primary btn-lg" id="submitButton" type="button" onclick="redirectToRegister()">Submit</button>
@@ -30,30 +30,51 @@
 </header>
 
 <section class="features-icons bg-light text-center">
+    <h1 class="pb-5">Upcoming Events</h1>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-                    <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary"></i></div>
-                    <h3>Fully Responsive</h3>
-                    <p class="lead mb-0">This theme will look great on any device, no matter the size!</p>
+        @if (Model.FutureEvents.Count == 0)
+        {
+            <div class="row">
+                <div class="col">
+                    <h3>Currently we don't have any events</h3>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-                    <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary"></i></div>
-                    <h3>Bootstrap 5 Ready</h3>
-                    <p class="lead mb-0">Featuring the latest build of the new Bootstrap 5 framework!</p>
-                </div>
+        }
+        else
+        {
+            <div class="row">
+                @foreach (var eventItem in Model.FutureEvents.Take(3))
+                {
+                    <div class="col-lg-4">
+                        <div class="card mb-4 shadow-sm">
+                            <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="card-img-top" alt="Event IMG">
+                            <div class="card-header">
+                                <h4 class="my-0 font-weight-normal">@eventItem.EventName</h4>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title pricing-card-title">
+                                    @if (eventItem.Fee > 0)
+                                    {
+                                        <span class="badge bg-primary">$@eventItem.Fee</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">FREE</span>
+                                    }
+                                </h5>
+                                <ul class="list-unstyled mt-3 mb-4">
+                                    <li>Start Date: @eventItem.StartDate?.ToString("g")</li>
+                                    <li>End Date: @eventItem.EndDate?.ToString("g")</li>
+                                    <li>Location: @eventItem.Hall?.HallName</li>
+                                </ul>
+                                <a href="/EventDetails?EventId=@eventItem.EventId" class="btn btn-lg btn-block btn-outline-primary">View Details</a>
+                                <a href="/Events/Join/@eventItem.EventId" class="btn btn-lg btn-block btn-primary">Join now!</a>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
-            <div class="col-lg-4">
-                <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-                    <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div>
-                    <h3>Easy to Use</h3>
-                    <p class="lead mb-0">Ready to use with your own content, or customize the source files!</p>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </section>
 
@@ -112,7 +133,6 @@
     </div>
 </section>
 
-<!-- Other sections omitted for brevity -->
 @section Scripts {
     <script>
         function redirectToRegister() {

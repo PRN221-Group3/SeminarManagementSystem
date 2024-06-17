@@ -1,21 +1,28 @@
-﻿using System;
+﻿using BusinessObject.Models;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using BusinessObject.Models;
 
 namespace SeminarManagement_PRN221.Pages
 {
     public class IndexModel : PageModel
     {
+        private readonly IEventRepository _eventRepo;
 
-        public IList<User> User { get;set; } = default!;
+        public IndexModel(IEventRepository eventRepo)
+        {
+            _eventRepo = eventRepo;
+        }
+
+        public List<Event> FutureEvents { get; set; }
 
         public async Task OnGetAsync()
         {
+            var allEvents = await _eventRepo.GetAllQueryableAsync();
+            FutureEvents = allEvents.Include(e => e.Hall).Where(e => e.Status == "Future" || e.Status == "Open").Take(3).ToList();
         }
     }
 }

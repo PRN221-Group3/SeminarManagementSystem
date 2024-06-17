@@ -8,6 +8,7 @@ namespace Repositories.BaseRepo
 {
     public interface IBaseRepository<T> where T : class
     {
+        Task<IQueryable<T>> GetAllQueryableAsync();
         Task<List<T>> GetAllAsync();
         Task<T> GetByIdAsync(Guid id);
         T GetById(Guid id);
