@@ -1,4 +1,5 @@
 ﻿using DataAccess.DAO.Base;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,11 @@ namespace Repositories.BaseRepo
         public BaseRepository(IBaseDAO<T> dao)
         {
             _dao = dao;
+        }
+
+        public async Task<IQueryable<T>> GetAllQueryableAsync()
+        {
+            return await Task.Run(() => _dao.GetAllQueryable());
         }
 
         public async Task<List<T>> GetAllAsync()

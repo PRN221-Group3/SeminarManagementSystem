@@ -10,6 +10,7 @@ namespace DataAccess.DAO.Base
         where T : class
     {
         List<T> GetAll();
+        IQueryable<T> GetAllQueryable();
         T GetById(Guid id);
         Task<T> GetByIdAsync(Guid id);
         void Create(T entity);

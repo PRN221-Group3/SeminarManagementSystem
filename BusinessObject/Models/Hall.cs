@@ -11,7 +11,7 @@ public partial class Hall
 
     public string? Status { get; set; }
 
-    public Guid? Capacity { get; set; }
+    public int? Capacity { get; set; }
 
     public string? HallDescription { get; set; }
 

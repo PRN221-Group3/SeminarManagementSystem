@@ -26,6 +26,18 @@ namespace DataAccess.DAO.Base
             }
         }
 
+        public IQueryable<T> GetAllQueryable()
+        {
+            try
+            {
+                return _dbSet.AsQueryable();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public T GetById(Guid id)
         {
             try
