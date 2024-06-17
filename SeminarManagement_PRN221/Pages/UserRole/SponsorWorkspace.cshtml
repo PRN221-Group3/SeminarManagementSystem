@@ -4,5 +4,51 @@
     ViewData["Title"] = "Sponsor";
 }
 
-<h1>Sponsor Workspace</h1>
-<h5>You must be signed in to access this resource.</h5>
+<div class="container">
+    <h2>Event Sponsoring</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordereless">
+            <thead class="bg-light">
+                <tr>
+                    <th scope="col" style="width: 20%">Event ID</th>
+                    <th scope="col" style="width: 20%">Event Code</th>
+                    <th scope="col" style="width: 20%">Event Name</th>
+                    <th scope="col" style="width: 10%">Created Date</th>
+                    <th scope="col" style="width: 10%">Updated Date</th>
+                    <th scope="col" style="width: 5%">Start Date</th>
+                    <th scope="col" style="width: 5%">End Date</th>
+                    <th scope="col" style="width: 5%">Fee</th>
+                    <th scope="col" style="width: 5%">Status</th>
+                    <th scope="col" style="width: auto"></th>
+                    <th scope="col" style="width: auto"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var eventSponsored in Model.Events)
+                {
+                    var rowClass = eventSponsored.IsDeleted == true ? "table-danger" : string.Empty;
+                    <tr class="@rowClass">
+                        <td>@eventSponsored.EventId</td>
+                        <td>@eventSponsored.EventCode</td>
+                        <td>@eventSponsored.EventName</td>
+                        <td>@(eventSponsored.CreationDate?.ToString("MM/dd/yyyy") ?? "")</td>
+                        <td>@(eventSponsored.UpdateDate?.ToString("MM/dd/yyyy") ?? "")</td>
+                        <td>@(eventSponsored.StartDate?.ToString("MM/dd/yyyy") ?? "")</td>
+                        <td>@(eventSponsored.EndDate?.ToString("MM/dd/yyyy") ?? "")</td>
+                        <td>@eventSponsored.Fee</td>
+                        <td>@Model.EventSponsor.Status</td>
+                        <td class="text-center">
+                            <a class="btn btn-primary btn-sm" href="/UserRole/EventDetails">Details</a>
+                        </td>
+                        <td class="text-center">
+                            <a class="btn btn-primary btn-sm" href="/Admin/Manage-Account/Delete">Visitors</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+</div>
