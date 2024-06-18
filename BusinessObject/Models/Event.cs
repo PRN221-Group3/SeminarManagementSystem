@@ -23,8 +23,6 @@ public partial class Event
 
     public string? QrCode { get; set; }
 
-    public string? Status { get; set; }
-
     public bool? IsDeleted { get; set; }
 
     public decimal? Fee { get; set; }
