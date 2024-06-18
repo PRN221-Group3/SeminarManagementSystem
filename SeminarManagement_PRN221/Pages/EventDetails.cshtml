@@ -56,11 +56,11 @@
                                         <strong>Status:</strong>
                                         @if (DateTime.Now < Model.Event.StartDate)
                                         {
-                                            <span class="badge bg-secondary">Future</span>
+                                            <span class="badge bg-primary">Future</span>
                                         }
                                         else if (DateTime.Now >= Model.Event.StartDate && DateTime.Now <= Model.Event.EndDate)
                                         {
-                                            <span class="badge bg-secondary">Open</span>
+                                            <span class="badge bg-success">Open</span>
                                         }
                                         else
                                         {
