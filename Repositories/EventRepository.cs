@@ -19,11 +19,6 @@ namespace Repositories
             _eventDAO = eventDAO;
         }
 
-        public async Task<EventSponsor?> GetEventSponsor(Guid sponsorId)
-        {
-            return await Task.Run(() => _eventDAO.GetEventSponsor(sponsorId));
-        }
-
         public async Task<IEnumerable<Event>> GetEventsSponsored(Guid sponsorId)
         {
             return await Task.Run(() =>  _eventDAO.GetEventsSponsored(sponsorId));

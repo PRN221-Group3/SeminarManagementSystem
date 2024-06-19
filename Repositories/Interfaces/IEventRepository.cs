@@ -11,6 +11,5 @@ namespace Repositories.Interfaces
     public interface IEventRepository : IBaseRepository<Event>
     {
         Task<IEnumerable<Event>> GetEventsSponsored(Guid sponsorId);
-        Task<EventSponsor?> GetEventSponsor(Guid sponsorId);
     }
 }

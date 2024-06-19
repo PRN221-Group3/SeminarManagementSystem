@@ -25,10 +25,5 @@ namespace DataAccess.DAO
             
             return eventsSponsor.ToList();
         }
-
-        public async Task<EventSponsor?> GetEventSponsor(Guid sponsorId)
-        {
-            return await _context.EventSponsors.FirstOrDefaultAsync(x => x.SponsorId == sponsorId);
-        }
     }
 }
