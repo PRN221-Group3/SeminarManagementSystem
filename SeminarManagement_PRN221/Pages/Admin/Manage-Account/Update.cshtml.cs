@@ -1,5 +1,5 @@
 using BusinessObject.Models;
-using DataAccess.DTO;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Interfaces;
