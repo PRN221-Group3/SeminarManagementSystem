@@ -16,6 +16,7 @@ namespace Repositories
     public class EventSponsorRepository : BaseRepository<EventSponsor>, IEventSponsorRepository
     {
         private readonly EventSponsorDAO _eventSponsorDAO;
+
         public EventSponsorRepository(EventSponsorDAO eventSponsorDAO) : base(eventSponsorDAO)
         {
             _eventSponsorDAO = eventSponsorDAO;

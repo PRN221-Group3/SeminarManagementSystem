@@ -1,5 +1,6 @@
 ﻿using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DataAccess.DAO.Base
 {
@@ -103,6 +104,11 @@ namespace DataAccess.DAO.Base
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public T GetFirstOrDefault(Expression<Func<T, bool>> predicate)
+        {
+            return _dbSet.FirstOrDefault(predicate);
         }
     }
 }
