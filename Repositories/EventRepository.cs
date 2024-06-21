@@ -53,11 +53,10 @@ namespace Repositories
         {
             await _eventDAO.UpdateEventSponsorStatusRejectAsync(eventId, sponsorId, sponsorProduct);
         }
-	}
 
         public async Task<IEnumerable<Event>> GetEventsSponsored(Guid sponsorId)
         {
-            return await Task.Run(() =>  _eventDAO.GetEventsSponsored(sponsorId));
+            return await Task.Run(() => _eventDAO.GetEventsSponsored(sponsorId));
         }
     }
 }

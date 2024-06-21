@@ -82,5 +82,16 @@ namespace DataAccess.DAO
 				throw new InvalidOperationException("EventSponsor not found");
 			}
 		}
-	}
+
+        public async Task<IEnumerable<Event>> GetEventsSponsored(Guid sponsorId)
+        {
+            var eventsSponsor = from e in _context.Events
+                join es in _context.EventSponsors
+                    on e.EventId equals es.EventId
+                where es.SponsorId == sponsorId && es.Status.Equals("Accepted") && e.IsDeleted == false
+                select e;
+
+            return await eventsSponsor.ToListAsync();
+        }
+    }
 }
