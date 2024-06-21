@@ -9,7 +9,6 @@ namespace BusinessObject.DTO
     public class RoleDto
     {
         public Guid RoleId { get; set; }
-
         public string? RoleName { get; set; }
         public ICollection<UserDto> Users { get; set; }
     }

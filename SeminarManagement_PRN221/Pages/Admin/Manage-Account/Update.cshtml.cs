@@ -1,5 +1,5 @@
 using BusinessObject.Models;
-using DataAccess.DTO;
+using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Interfaces;
@@ -13,6 +13,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
     {
         private readonly IRoleRepository _roleRepository;
         private readonly IUserRepository _userRepository;
+        private readonly ISponsorRepository _sponsorRepository;
 
         [BindProperty]
         public UserDto UserDto { get; set; } = new UserDto();
@@ -21,30 +22,35 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
 
         public List<Role> Roles { get; set; } = new List<Role>();
 
+        public Guid SponsorRoleId { get; private set; }
+
         public string ErrorMessage { get; set; } = "";
         public string SuccessMessage { get; set; } = "";
 
-        public UpdateModel(IRoleRepository roleRepository, IUserRepository userRepository)
+        public UpdateModel(IRoleRepository roleRepository, IUserRepository userRepository, ISponsorRepository sponsorRepository)
         {
             _roleRepository = roleRepository;
             _userRepository = userRepository;
+            _sponsorRepository = sponsorRepository;
         }
 
         public async Task<IActionResult> OnGetAsync(Guid? id)
         {
             if (id == null)
             {
-                ErrorMessage = "ID null ";
+                ErrorMessage = "ID null";
                 return RedirectToPage("/Admin/Manage-Account/Manage");
             }
 
             User = await _userRepository.GetByIdAsync(id.Value);
             if (User == null || User.IsDeleted == true)
             {
-                ErrorMessage = "Account deleted can't update ";
+                ErrorMessage = "Account deleted can't update";
                 return RedirectToPage("/Admin/Manage-Account/Manage");
             }
 
+            Roles = await _roleRepository.GetAllRolesAsync();
+            SponsorRoleId = await _roleRepository.GetSponsorRoleIdAsync();
 
             UserDto.FirstName = User.FirstName;
             UserDto.LastName = User.LastName;
@@ -55,7 +61,16 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
             UserDto.RoleId = User.RoleId;
             UserDto.QrCode = User.QrCode;
 
-            Roles = await _roleRepository.GetAllRolesAsync();
+            if (User.RoleId == SponsorRoleId)
+            {
+                var sponsor = await _sponsorRepository.GetByIdAsync(User.UserId);
+                if (sponsor != null)
+                {
+                    UserDto.SponsorName = sponsor.SponsorName;
+                    UserDto.SponsorType = sponsor.SponsorType;
+                }
+            }
+
             return Page();
         }
 
@@ -63,21 +78,21 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
         {
             if (id == null)
             {
-                ErrorMessage = "ID null ";
+                ErrorMessage = "ID null";
                 return RedirectToPage("/Admin/Manage-Account/Manage");
             }
 
             User = await _userRepository.GetByIdAsync(id.Value);
             if (User == null || User.IsDeleted == true)
             {
-                ErrorMessage = "Account deleted can't update ";
+                ErrorMessage = "Account deleted can't update";
                 return RedirectToPage("/Admin/Manage-Account/Manage");
             }
-
 
             if (!ModelState.IsValid)
             {
                 Roles = await _roleRepository.GetAllRolesAsync(); // Re-populate roles on validation error
+                SponsorRoleId = await _roleRepository.GetSponsorRoleIdAsync(); // Ensure SponsorRoleId is populated
                 ErrorMessage = "Invalid user data";
                 return Page();
             }
@@ -91,6 +106,28 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
             User.RoleId = UserDto.RoleId;
             User.QrCode = UserDto.QrCode;
             User.UpdatedDate = DateTime.Now;
+
+            if (UserDto.RoleId == SponsorRoleId)
+            {
+                var sponsor = await _sponsorRepository.GetByIdAsync(User.UserId);
+                if (sponsor == null)
+                {
+                    sponsor = new Sponsor
+                    {
+                        SponsorId = User.UserId,
+                        SponsorName = UserDto.SponsorName,
+                        SponsorType = UserDto.SponsorType,
+                        IsDeleted = false
+                    };
+                    await _sponsorRepository.AddAsync(sponsor);
+                }
+                else
+                {
+                    sponsor.SponsorName = UserDto.SponsorName;
+                    sponsor.SponsorType = UserDto.SponsorType;
+                    await _sponsorRepository.UpdateAsync(sponsor);
+                }
+            }
 
             await _userRepository.UpdateAsync(User);
 
