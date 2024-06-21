@@ -41,7 +41,7 @@ namespace SeminarManagement_PRN221.Pages.Events
         public Transaction? TransactionExist { get; set; }
         public int Quantity { get; set; }
         [BindProperty]
-        public decimal ActualBalance {  get; set; }
+        public decimal Balance { get; set; }
         public async Task<IActionResult> OnGet(Guid eventId, Guid walletId, decimal total, decimal balance, int quantity)
         {
             EventId = eventId;
@@ -62,10 +62,7 @@ namespace SeminarManagement_PRN221.Pages.Events
             {
                 ViewData["msg$Not"] = "Not afforadble. Please cash in to your wallet to proceed payment";
             }
-            else
-            {
-                ActualBalance = balance;
-            }
+
             //QrCodeGenerator.GenerateQRCode(Event);
 
             return Page();
@@ -102,7 +99,7 @@ namespace SeminarManagement_PRN221.Pages.Events
             };
 
             var wallet = _walletRepository.GetById(Wallet.WalletId);
-            wallet.Balance = ActualBalance;
+            wallet.Balance = Balance - TotalMoney;
 
             BookingTicket bookingTicket = new()
             {
