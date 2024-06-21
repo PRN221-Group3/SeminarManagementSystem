@@ -15,7 +15,7 @@ namespace DataAccess.DAO
         {
         }
 
-        public IEnumerable<Event> GetEventsSponsored(Guid sponsorId)
+        public async Task<IEnumerable<Event>> GetEventsSponsored(Guid sponsorId)
         {
             var eventsSponsor = from e in _context.Events
                                 join es in _context.EventSponsors
@@ -23,7 +23,7 @@ namespace DataAccess.DAO
                                 where es.SponsorId == sponsorId && es.Status.Equals("Accepted") && e.IsDeleted == false
                                 select e;
             
-            return eventsSponsor.ToList();
+            return await eventsSponsor.ToListAsync();
         }
     }
 }

@@ -137,5 +137,10 @@ namespace Repositories
         {
             return inputPassword == storedPasswordHash;
         }
+
+        public Task<IEnumerable<User>> GetVisitorsOfEvent(Guid eventId)
+        {
+            return Task.Run(async () => await _userDAO.GetVisitorsOfEvent(eventId));
+        }
     }
 }

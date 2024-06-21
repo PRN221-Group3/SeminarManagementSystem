@@ -10,5 +10,6 @@ namespace Repositories.Interfaces
 {
     public interface ITransactionRepository : IBaseRepository<Transaction>
     {
+        Task<Transaction?> GetByWalletId(Guid walletId, Guid eventId);
     }
 }

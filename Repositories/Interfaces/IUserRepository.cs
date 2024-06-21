@@ -29,6 +29,7 @@ namespace Repositories.Interfaces
         public Task AddAsync(User user);
         public Task<User> GetByIdAsync(Guid id);
         public Task UpdateAsync(User user);
+        Task<IEnumerable<User>> GetVisitorsOfEvent(Guid eventId);
 
     }
 }

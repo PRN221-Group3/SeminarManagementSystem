@@ -15,11 +15,11 @@ public partial class Transaction
 
     public string? TransactionStatus { get; set; }
 
-    public Guid? UserId { get; set; }
-
     public Guid? WalletId { get; set; }
 
-    public virtual User? User { get; set; }
+    public Guid? EventId { get; set; }
+
+    public virtual Event? Event { get; set; }
 
     public virtual Wallet? Wallet { get; set; }
 }
