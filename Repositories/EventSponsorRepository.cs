@@ -8,9 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repositories
 {
+    // Fix lai
     public class EventSponsorRepository : BaseRepository<EventSponsor>, IEventSponsorRepository
     {
         private readonly EventSponsorDAO _eventSponsorDAO;
@@ -25,11 +27,6 @@ namespace Repositories
             return Task.Run(() => _eventSponsorDAO.GetEventSponsor(sponsorId, eventId));
         }
         private readonly SeminarManagementDbContext _context;
-
-        public EventSponsorRepository(SeminarManagementDbContext context)
-        {
-            _context = context;
-        }
 
         public async Task<IQueryable<EventSponsor>> GetAllQueryableAsync()
         {

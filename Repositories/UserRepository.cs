@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
+    // Fix lai
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
         private readonly SeminarManagementDbContext _context;
