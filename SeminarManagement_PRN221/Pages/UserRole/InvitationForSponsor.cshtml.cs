@@ -1,6 +1,7 @@
 using BusinessObject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
 using Repositories.Interfaces;
 using System.Security.Claims;
 
@@ -48,23 +49,25 @@ namespace SeminarManagement_PRN221.Pages.UserRole
 			}
 		}
 
-		public async Task<IActionResult> OnPostRejectAsync(Guid eventId, Guid sponsorId)
-		{
-			try
-			{
-				await _eventRepository.UpdateEventSponsorStatusRejectAsync(eventId, sponsorId, null);
+        public async Task<IActionResult> OnPostRejectAsync()
+        {
+            try
+            {
+                var eventId = Guid.Parse(Request.Form["eventId"]);
+                var sponsorId = Guid.Parse(Request.Form["sponsorId"]);
 
-				return new JsonResult(new { success = true, status = "Declined successfully." });
-			}
-			catch (Exception ex)
-			{
-				return new JsonResult(new { success = false, error = ex.Message });
-			}
-		}
+                await _eventRepository.UpdateEventSponsorStatusRejectAsync(eventId, sponsorId);
+                return new JsonResult(new { success = true, status = "Declined successfully." });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { success = false, error = ex.Message });
+            }
+        }
 
-		public IActionResult OnGetDetails(Guid eventId)
+        public IActionResult OnGetDetails(Guid eventId)
 		{
-			return RedirectToPage("/EventDetails", new { id = eventId });
+			return RedirectToPage("/Index", new { id = eventId });
 		}
 	}
 }
