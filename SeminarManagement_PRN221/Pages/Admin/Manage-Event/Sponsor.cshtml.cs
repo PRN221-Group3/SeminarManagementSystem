@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
@@ -38,11 +37,10 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
         public Guid EventId { get; set; }
         public IEnumerable<Sponsor> Sponsors { get; set; }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task OnGetAsync()
         {
-            var sponsorsQueryable = await _sponsorRepository.GetAllQueryableAsync();
-            Sponsors = sponsorsQueryable.Where(s => (bool)!s.IsDeleted).ToList();
-            return Page();
+            // Fetching sponsors with user details
+            Sponsors = await _sponsorRepository.GetSponsorsWithUserAsync();
         }
 
         public async Task<IActionResult> OnPostInviteSponsorAsync(Guid SponsorId, Guid EventId)
@@ -67,7 +65,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 {
                     EventId = EventId,
                     SponsorId = SponsorId,
-                    Status = null,
+                    Status = "Invited",
                     SponsorProduct = null,
                 };
 

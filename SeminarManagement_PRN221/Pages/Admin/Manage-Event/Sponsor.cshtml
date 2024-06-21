@@ -68,6 +68,7 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Email</th>
                 <th>Type</th>
                 <th>Action</th>
             </tr>
@@ -77,6 +78,7 @@
             {
                 <tr>
                     <td>@sponsor.SponsorName</td>
+                    <td>@sponsor.SponsorNavigation.Email</td>
                     <td>@sponsor.SponsorType</td>
                     <td class="text-center">
                         <form method="post" asp-page-handler="InviteSponsor">
