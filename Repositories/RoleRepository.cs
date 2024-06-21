@@ -7,6 +7,7 @@ using Repositories.BaseRepo;
 
 namespace Repositories
 {
+    // Fix lai
     public class RoleRepository : BaseRepository<Role>, IRoleRepository
     {
         private readonly SeminarManagementDbContext _context;
