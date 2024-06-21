@@ -18,5 +18,6 @@ namespace Repositories.Interfaces
 		Task<EventSponsor> GetEventSponsorAsync(Guid eventId, Guid sponsorId, string sponsorProduct);
 		Task<List<Event>> GetAllEventsAsync();
 
+        Task<IEnumerable<Event>> GetEventsSponsored(Guid sponsorId);
     }
 }

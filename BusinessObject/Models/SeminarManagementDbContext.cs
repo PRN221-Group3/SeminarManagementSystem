@@ -66,7 +66,7 @@ public partial class SeminarManagementDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Booking__user_id__4D94879B");
+                .HasConstraintName("FK__Booking__user_id__4BAC3F29");
         });
 
         modelBuilder.Entity<BookingTicket>(entity =>
@@ -80,11 +80,11 @@ public partial class SeminarManagementDbContext : DbContext
 
             entity.HasOne(d => d.Booking).WithMany()
                 .HasForeignKey(d => d.BookingId)
-                .HasConstraintName("FK__BookingTi__booki__4E88ABD4");
+                .HasConstraintName("FK__BookingTi__booki__4CA06362");
 
             entity.HasOne(d => d.Ticket).WithMany()
                 .HasForeignKey(d => d.TicketId)
-                .HasConstraintName("FK__BookingTi__ticke__4F7CD00D");
+                .HasConstraintName("FK__BookingTi__ticke__4D94879B");
         });
 
         modelBuilder.Entity<Category>(entity =>

@@ -39,7 +39,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" asp-area="" asp-page="/Admin/Manage-Account/Manage">Manage Account</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="/Index">Home</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-page="/Admin/Manage-Event/Manage">Manage Event</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" asp-area="" asp-page="/Index">Home</a></li>
                             </ul>
@@ -51,9 +51,10 @@
                     }
                     else if (User.IsInRole("Sponsor"))
                     {
-                        <a class="nav-link text-dark" asp-page="/SponsorWorkspace/Index">Sponsor</a>
+                        <a class="nav-link text-dark" asp-page="/UserRole/SponsorWorkspace">Sponsor</a>
                     }
                     <a class="btn btn-primary ms-3" asp-area="Identity" asp-page="/Account/Manage/Index">Hello, @User.Identity.Name!</a>
+                    <a class="btn btn-primary ms-3" asp-page="/Account/Wallet" asp-route-username="@User.Identity.Name">Wallet</a>
                     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post" class="d-inline ms-2">
                         <button type="submit" class="btn btn-secondary">Logout</button>
                     </form>
