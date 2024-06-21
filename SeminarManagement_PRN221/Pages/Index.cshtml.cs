@@ -22,7 +22,9 @@ namespace SeminarManagement_PRN221.Pages
         public async Task OnGetAsync()
         {
             var allEvents = await _eventRepo.GetAllQueryableAsync();
-            FutureEvents = allEvents.Include(e => e.Hall).Where(e => e.Status == "Future" || e.Status == "Open").Take(3).ToList();
+            FutureEvents = allEvents.Include(e => e.Hall)
+                .Where(e => e.StartDate > DateTime.Now || (e.StartDate < DateTime.Now && e.EndDate > DateTime.Now)).Take(3)
+                .ToList();
         }
     }
 }

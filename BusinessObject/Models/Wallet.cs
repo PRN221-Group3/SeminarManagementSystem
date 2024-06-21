@@ -10,4 +10,6 @@ public partial class Wallet
     public decimal? Balance { get; set; }
 
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+
+    public virtual User WalletNavigation { get; set; } = null!;
 }

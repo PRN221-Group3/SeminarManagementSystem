@@ -1,0 +1,134 @@
+﻿@page
+@model SeminarManagement_PRN221.Pages.UserRole.InvitationSponsorModel
+@{
+    ViewData["Title"] = "InvitationForSponsor";
+}
+
+<h1>All Events</h1>
+
+@if (Model.InvitedEvents != null && Model.InvitedEvents.Any())
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Event Name</th>
+				<th>Start Date</th>
+				<th>End Date</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var eventItem in Model.InvitedEvents)
+			{
+				<tr>
+					<td>@eventItem.EventName</td>
+					<td>@(eventItem.StartDate.HasValue ? eventItem.StartDate.Value.ToShortDateString() : "-")</td>
+					<td>@(eventItem.EndDate.HasValue ? eventItem.EndDate.Value.ToShortDateString() : "-")</td>
+					<td>
+						<a asp-page-handler="Details" asp-route-eventId="@eventItem.EventId" class="btn btn-info">Details</a>
+						<button type="button" class="btn btn-success" data-toggle="modal" data-target="#sponsorshipModal"
+								data-event-id="@eventItem.EventId" data-sponsor-id="@Model.SponsorId">
+							Accept
+						</button>
+						<form id="rejectForm-@eventItem.EventId" asp-page-handler="RejectAsync" asp-route-eventId="@eventItem.EventId" asp-route-sponsorId="@Model.SponsorId" method="post" class="d-inline">
+							<button type="button" class="btn btn-danger" onclick="confirmReject('@eventItem.EventId')">Reject</button>
+						</form>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>No events found.</p>
+}
+
+<!-- Sponsorship Modal -->
+<div class="modal fade" id="sponsorshipModal" tabindex="-1" role="dialog" aria-labelledby="sponsorshipModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="sponsorshipModalLabel">Sponsorship Details</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="sponsorshipForm" method="post">
+					@Html.AntiForgeryToken()
+					<div class="form-group">
+						<label for="sponsorshipProduct">Sponsorship Product</label>
+						<textarea class="form-control" id="sponsorshipProduct" name="sponsorshipProduct" rows="3" required></textarea>
+					</div>
+					<input type="hidden" id="eventId" name="eventId">
+					<input type="hidden" id="sponsorId" name="sponsorId" value="@Model.SponsorId">
+					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		function confirmReject(eventId) {
+			if (confirm('Are you sure you want to reject this Event?')) {
+				document.getElementById('eventIdReject').value = eventId;
+				document.getElementById('rejectForm-' + eventId).submit();
+			}
+		}
+
+		$(document).ready(function () {
+			$('#sponsorshipModal').on('show.bs.modal', function (event) {
+				var button = $(event.relatedTarget);
+				var eventId = button.data('event-id');
+				var sponsorId = button.data('sponsor-id');
+				var modal = $(this);
+				modal.find('#eventId').val(eventId);
+				modal.find('#sponsorId').val(sponsorId);
+			});
+
+			document.getElementById('sponsorshipForm').addEventListener('submit', function (event) {
+				event.preventDefault();
+
+				var antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+				var formData = new FormData();
+				formData.append('eventId', document.getElementById('eventId').value);
+				formData.append('sponsorId', document.getElementById('sponsorId').value);
+				formData.append('sponsorshipProduct', document.getElementById('sponsorshipProduct').value.trim());
+
+				formData.append('__RequestVerificationToken', antiForgeryToken);
+
+				// Perform fetch request
+				fetch('/UserRole/SponsorWorkspace?handler=Accept', {
+					method: 'POST',
+					body: formData,
+					headers: {
+						'X-Requested-With': 'XMLHttpRequest'
+					}
+				})
+					.then(response => {
+						if (!response.ok) {
+							throw new Error('Network response was not ok');
+						}
+						return response.json();
+					})
+					.then(data => {
+						if (data.success) {
+							$('#sponsorshipModal').modal('hide');
+							alert(data.message);
+						} else {
+							throw new Error(data.error || 'Unknown error');
+						}
+					})
+					.catch(error => {
+						console.error('Error submitting sponsorship details:', error);
+						alert('Error submitting sponsorship details: ' + error.message);
+					});
+			});
+		});
+	</script>
+}

@@ -9,6 +9,9 @@ using Microsoft.Extensions.Options;
 using Repositories;
 using Repositories.Interfaces;
 using System.Security.Claims;
+using BusinessObject.Models;
+using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +20,21 @@ var connectionString = builder.Configuration.GetConnectionString("LocalDB");
 
 // Add services to the container
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages(options =>
+
+builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
-    options.Conventions.AuthorizeFolder("/Index");
+	options.Conventions.AuthorizeFolder("/Index");
+	options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute()); 
+});
+
+builder.Services.AddCors(options =>
+{
+	options.AddDefaultPolicy(builder =>
+	{
+		builder.AllowAnyOrigin()
+			   .AllowAnyMethod()
+			   .AllowAnyHeader();
+	});
 });
 
 // Add Authentication
@@ -49,6 +64,7 @@ builder.Services.AddDbContext<SeminarManagementDbContext>(options =>
 // Add Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IEventSponsorRepository, EventSponsorRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
@@ -58,7 +74,6 @@ builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
-builder.Services.AddScoped<ISponsorRepository, SponsorRepository>();
 builder.Services.AddScoped<RoleDAO>();
 builder.Services.AddScoped<UserDAO>();
 builder.Services.AddScoped<BookingDAO>();
@@ -70,6 +85,7 @@ builder.Services.AddScoped<TicketDAO>();
 builder.Services.AddScoped<TransactionDAO>();
 builder.Services.AddScoped<WalletDAO>();
 builder.Services.AddScoped<SponsorDAO>();
+builder.Services.AddScoped<EventSponsorDAO>();
 
 // Configure AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
@@ -97,10 +113,13 @@ app.UseStaticFiles();
 
 app.UseCookiePolicy(new CookiePolicyOptions()
 {
-    MinimumSameSitePolicy = SameSiteMode.Strict
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+	HttpOnly = HttpOnlyPolicy.Always
 });
 
 app.UseRouting();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
