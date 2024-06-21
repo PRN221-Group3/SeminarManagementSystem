@@ -61,6 +61,8 @@ builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 builder.Services.AddScoped<ISponsorRepository, SponsorRepository>();
 builder.Services.AddScoped<IEventSponsorRepository, EventSponsorRepository>();
 builder.Services.AddScoped<IBookingTicketRepository, BookingTicketRepository>();
+builder.Services.AddScoped<IEmailRepository, EmailRepository>();
+builder.Services.AddScoped<IEventSponsorRepository, EventSponsorRepository>();
 builder.Services.AddScoped<RoleDAO>();
 builder.Services.AddScoped<UserDAO>();
 builder.Services.AddScoped<BookingDAO>();

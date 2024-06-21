@@ -45,7 +45,7 @@ namespace SeminarManagement_PRN221.Pages.Account
 
                 var role = await _roleRepo.GetRoleById(user.RoleId);
 
-                var userRole = await _roleRepo.GetRoleByName(user.Role.RoleName);
+                    var userRole = await _roleRepo.GetRoleByName(user.Role.RoleName);
 
             var claims = new List<Claim>
             {
