@@ -47,12 +47,13 @@ namespace SeminarManagement_PRN221.Pages.Account
 
                     var userRole = await _roleRepo.GetRoleByName(user.Role.RoleName);
 
-                var claims = new List<Claim>
-                {
-                    new(ClaimTypes.Name, user.Username),
-                    new(ClaimTypes.Email, user.Email),
-                    new(ClaimTypes.Role, role.RoleName)
-                };
+            var claims = new List<Claim>
+            {
+                new(ClaimTypes.Name, user.Username),
+                new(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new(ClaimTypes.Email, user.Email),
+                new(ClaimTypes.Role, role.RoleName)
+            };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
