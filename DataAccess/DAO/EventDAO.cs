@@ -65,23 +65,23 @@ namespace DataAccess.DAO
 				throw new InvalidOperationException("EventSponsor not found");
 			}
 		}
-		
-		public async Task UpdateEventSponsorStatusRejectAsync(Guid eventId, Guid sponsorId, string sponsorProduct)
-		{
-			var eventSponsor = await _context.EventSponsors
-				.FirstOrDefaultAsync(es => es.EventId == eventId && es.SponsorId == sponsorId);
 
-			if (eventSponsor != null)
-			{
-				eventSponsor.Status = "Decline";
-				eventSponsor.SponsorProduct = sponsorProduct;
-				await _context.SaveChangesAsync();
-			}
-			else
-			{
-				throw new InvalidOperationException("EventSponsor not found");
-			}
-		}
+        public async Task UpdateEventSponsorStatusRejectAsync(Guid eventId, Guid sponsorId)
+        {
+            var eventSponsor = await _context.EventSponsors
+                .FirstOrDefaultAsync(es => es.EventId == eventId && es.SponsorId == sponsorId);
+
+            if (eventSponsor != null)
+            {
+                eventSponsor.Status = "Reject";
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                Console.WriteLine($"EventSponsor not found for eventId: {eventId}, sponsorId: {sponsorId}");
+                throw new InvalidOperationException("EventSponsor not found");
+            }
+        }
 
         public async Task<IEnumerable<Event>> GetEventsSponsored(Guid sponsorId)
         {
