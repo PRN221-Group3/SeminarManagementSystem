@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace BusinessObject.Models;
+namespace SeminarManagement_PRN221.Models;
 
 public partial class SeminarManagementDbContext : DbContext
 {

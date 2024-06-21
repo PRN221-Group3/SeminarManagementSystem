@@ -78,7 +78,6 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 EndDate = EventDto.EndDate,
                 Fee = EventDto.Fee,
                 HallId = EventDto.HallId,
-                Status = EventDto.Status,
                 CreationDate = DateTime.Now,
                 UpdateDate = DateTime.Now,
                 IsDeleted = false,

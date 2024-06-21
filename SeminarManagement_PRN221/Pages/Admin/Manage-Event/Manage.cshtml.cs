@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using BusinessObject.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
 {
@@ -14,11 +16,15 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
     {
         private readonly IEventRepository _eventRepository;
         private readonly IHallRepository _hallRepository;
+        private readonly ISponsorRepository _sponsorRepository;
+        private readonly IEventSponsorRepository _eventSponsorRepository;
 
-        public ManageModel(IEventRepository eventRepository, IHallRepository hallRepository)
+        public ManageModel(IEventRepository eventRepository, IHallRepository hallRepository, ISponsorRepository sponsorRepository, IEventSponsorRepository eventSponsorRepository)
         {
             _eventRepository = eventRepository;
             _hallRepository = hallRepository;
+            _sponsorRepository = sponsorRepository;
+            _eventSponsorRepository = eventSponsorRepository;
         }
 
         public IList<Event> Events { get; private set; }
@@ -35,8 +41,8 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             }
             Events = await eventsQueryable.ToListAsync();
 
-            HallNames = await (await _hallRepository.GetAllQueryableAsync())
-                .ToDictionaryAsync(h => h.HallId, h => h.HallName);
+            var hallsQueryable = await _hallRepository.GetAllQueryableAsync();
+            HallNames = await hallsQueryable.ToDictionaryAsync(h => h.HallId, h => h.HallName);
         }
 
         public async Task<IActionResult> OnPostDeleteAsync(Guid eventId)
@@ -59,7 +65,31 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             await OnGetAsync(null); // Refresh the data after deletion
             return Page();
         }
+        public async Task<IActionResult> OnGetSponsorDetailsAsync(Guid eventId)
+        {
+            try
+            {
+                var sponsors = await _eventSponsorRepository.GetByEventIdAsync(eventId);
 
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve,
+                    WriteIndented = true
+                };
+
+                var json = JsonSerializer.Serialize(sponsors, options);
+
+                return new JsonResult(json);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework here)
+                Console.WriteLine($"Error fetching sponsor details: {ex.Message}");
+
+                // Return a 500 status code with the error message
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
         public string GetHallName(Guid? hallId)
         {
             if (hallId == null || hallId == Guid.Empty)
@@ -71,6 +101,19 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             }
 
             return "Hall not found";
+        }
+
+        public string GetEventStatus(Event evt)
+        {
+            if (evt.StartDate == null || evt.EndDate == null)
+                return "No Dates";
+
+            var currentDate = DateTime.Now;
+            if (currentDate < evt.StartDate)
+                return "Future";
+            if (currentDate >= evt.StartDate && currentDate <= evt.EndDate)
+                return "Open";
+            return "Closed";
         }
     }
 }

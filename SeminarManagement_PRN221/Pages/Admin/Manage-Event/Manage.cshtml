@@ -122,7 +122,7 @@
         <tbody>
             @foreach (var evt in Model.Events.Where(e => e.IsDeleted != true))
             {
-                var statusClass = evt.Status switch
+                var statusClass = Model.GetEventStatus(evt) switch
                 {
                     "Open" => "status-open",
                     "Closed" => "status-closed",
@@ -130,7 +130,7 @@
                     _ => string.Empty
                 };
 
-                var rowClass = evt.Status == "Closed" ? "table-danger" : string.Empty;
+                var rowClass = Model.GetEventStatus(evt) == "Closed" ? "table-danger" : string.Empty;
 
                 <tr class="@rowClass">
                     <td>@evt.EventId</td>
@@ -139,7 +139,7 @@
                     <td>@evt.Description</td>
                     <td>@evt.StartDate?.ToString("MM/dd/yyyy")</td>
                     <td>@evt.EndDate?.ToString("MM/dd/yyyy")</td>
-                    <td class="@statusClass">@evt.Status</td>
+                    <td class="@statusClass">@Model.GetEventStatus(evt)</td>
                     <td>@evt.Fee?.ToString("C")</td>
                     <td>@evt.CreationDate?.ToString("MM/dd/yyyy")</td>
                     <td>@evt.UpdateDate?.ToString("MM/dd/yyyy")</td>
@@ -151,28 +151,48 @@
                         <button class="btn btn-danger btn-sm" onclick="confirmDelete('@evt.EventId')" data-bs-toggle="tooltip" title="Delete Event">
                             <i class="fas fa-trash-alt"></i>
                         </button>
+                        <a class="btn btn-warning btn-sm" asp-page="/Admin/Manage-Event/Sponsor" asp-route-EventId="@evt.EventId" data-bs-toggle="tooltip" title="Get Sponsor of Event">
+                            <i class="fas fa-users"></i>
+                        </a>
+                        <button class="btn btn-info btn-sm" onclick="showSponsorDetails('@evt.EventId')" data-bs-toggle="tooltip" title="View Sponsor Details">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="sponsorDetailsModal" tabindex="-1" aria-labelledby="sponsorDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                    <h5 class="modal-title" id="sponsorDetailsModalLabel">Sponsor has been invited to participate in the event </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this event?</p>
+                    <div id="sponsorDetailsContent"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <form method="post" asp-page-handler="Delete">
-                        <input type="hidden" id="eventIdToDelete" name="EventId" />
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add a modal to display sponsor details -->
+    <div class="modal fade" id="sponsorDetailsModal" tabindex="-1" aria-labelledby="sponsorDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sponsorDetailsModalLabel">Sponsor Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <pre id="sponsorDetailsContent"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -186,7 +206,37 @@
             var deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
             deleteModal.show();
         }
-
+        async function showSponsorDetails(eventId) {
+            try {
+                const response = await fetch(`/Admin/Manage-Event/Manage?handler=SponsorDetails&eventId=${eventId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                const sponsors = JSON.parse(data).$values;  // Parse the JSON data correctly
+                const sponsorDetails = formatSponsorDetails(sponsors);
+                document.getElementById('sponsorDetailsContent').innerHTML = sponsorDetails;
+                var sponsorModal = new bootstrap.Modal(document.getElementById('sponsorDetailsModal'));
+                sponsorModal.show();
+            } catch (error) {
+                console.error('Error fetching sponsor details:', error);
+            }
+        }
+        function formatSponsorDetails(sponsors) {
+            let html = '<ul>';
+            if (sponsors && Array.isArray(sponsors)) {
+                sponsors.forEach(sponsor => {
+                    html += `<li><strong>Sponsor Name:</strong> ${sponsor.Sponsor ? sponsor.Sponsor.SponsorName : 'N/A'}</li>`;
+                    html += `<li><strong>Status:</strong> ${sponsor.Status ?? 'N/A'}</li>`;
+                    html += `<li><strong>Sponsor Product:</strong> ${sponsor.SponsorProduct ?? 'N/A'}</li>`;
+                    html += '<hr>';
+                });
+            } else {
+                html += '<li>No sponsors found</li>';
+            }
+            html += '</ul>';
+            return html;
+        }
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
@@ -194,17 +244,4 @@
     </script>
 }
 
-@functions {
-    private string GetHallName(Guid? hallId)
-    {
-        if (hallId == null || hallId == Guid.Empty)
-            return "Hall not assigned";
 
-        if (Model.HallNames.TryGetValue(hallId.Value, out var hallName))
-        {
-            return hallName;
-        }
-
-        return "Hall not found";
-    }
-}

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusinessObject.DTO
 {
-    public   class EventDto
+    public class EventDto
     {
         [Required(ErrorMessage = "Event Name is required")]
         public string EventName { get; set; }
@@ -19,8 +19,6 @@ namespace BusinessObject.DTO
         [Required(ErrorMessage = "Fee is required")]
         public decimal Fee { get; set; }
         public Guid? HallId { get; set; }
-        [Required(ErrorMessage = "Status is required")]
-        public string Status { get; set; }
         public bool IsDeleted { get; set; }
     }
 }

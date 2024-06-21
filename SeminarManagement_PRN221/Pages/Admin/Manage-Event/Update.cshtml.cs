@@ -46,7 +46,6 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 EndDate = Event.EndDate ?? DateTime.Now,
                 Fee = Event.Fee ?? 0,
                 HallId = Event.HallId,
-                Status = Event.Status,
             };
 
             Halls = await _hallRepository.GetAllAsync();
@@ -90,8 +89,8 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 }
             }
 
-            // Check for hall availability
-            if (await IsHallBooked(EventDto.HallId.Value, EventDto.StartDate, EventDto.EndDate))
+            // Check for hall availability, excluding the current event being updated
+            if (await IsHallBooked(eventToUpdate.EventId, EventDto.HallId.Value, EventDto.StartDate, EventDto.EndDate))
             {
                 ModelState.AddModelError(string.Empty, "The selected hall is already booked for the chosen dates.");
                 Halls = await _hallRepository.GetAllAsync();
@@ -105,7 +104,6 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             eventToUpdate.EndDate = EventDto.EndDate;
             eventToUpdate.Fee = EventDto.Fee;
             eventToUpdate.HallId = EventDto.HallId;
-            eventToUpdate.Status = EventDto.Status;
             eventToUpdate.UpdateDate = DateTime.Now;
 
             try
@@ -122,11 +120,12 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             }
         }
 
-        private async Task<bool> IsHallBooked(Guid hallId, DateTime startDate, DateTime endDate)
+        private async Task<bool> IsHallBooked(Guid currentEventId, Guid hallId, DateTime startDate, DateTime endDate)
         {
             var eventQueryable = await _eventRepository.GetAllQueryableAsync();
             return await eventQueryable.AnyAsync(e =>
                 e.HallId == hallId &&
+                e.EventId != currentEventId && // Exclude the current event being updated
                 e.StartDate < endDate &&
                 e.EndDate > startDate &&
                 (e.IsDeleted == false || e.IsDeleted == null));

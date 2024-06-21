@@ -13,30 +13,35 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
     {
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly ISponsorRepository _sponsorRepository;
 
         [BindProperty]
         public UserDto UserDto { get; set; } = new UserDto();
 
         public List<Role> Roles { get; set; } = new List<Role>();
 
+        public Guid SponsorRoleId { get; private set; }
+
         public string ErrorMessage { get; set; } = "";
         public string SuccessMessage { get; set; } = "";
 
-        public CreateModel(IUserRepository userRepository, IRoleRepository roleRepository)
+        public CreateModel(IUserRepository userRepository, IRoleRepository roleRepository, ISponsorRepository sponsorRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _sponsorRepository = sponsorRepository;
         }
 
         public async Task OnGetAsync()
         {
             Roles = await _roleRepository.GetAllRolesAsync();
+            SponsorRoleId = await _roleRepository.GetSponsorRoleIdAsync(); // Assume this method gets the Sponsor Role Id
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            // Re-populate the Roles list
             Roles = await _roleRepository.GetAllRolesAsync();
+            SponsorRoleId = await _roleRepository.GetSponsorRoleIdAsync(); // Assume this method gets the Sponsor Role Id
 
             if (!ModelState.IsValid)
             {
@@ -72,6 +77,17 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
                 IsActivated = true,
                 IsDeleted = false,
             };
+
+            if (UserDto.RoleId == SponsorRoleId)
+            {
+                newUser.Sponsor = new Sponsor
+                {
+                    SponsorId = newUser.UserId,
+                    SponsorName = UserDto.SponsorName,
+                    SponsorType = UserDto.SponsorType,
+                    IsDeleted = false
+                };
+            }
 
             await _userRepository.AddAsync(newUser);
 
