@@ -2,6 +2,7 @@ using BusinessObject.Models;
 using BusinessObject.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using QRCoder;
 using Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -72,11 +73,12 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
                 Username = UserDto.Username,
                 Password = UserDto.Password,
                 RoleId = UserDto.RoleId,
-                QrCode = UserDto.QrCode,
                 CreatedDate = DateTime.Now,
                 IsActivated = true,
                 IsDeleted = false,
             };
+
+            GenerateQRCode(newUser);
 
             if (UserDto.RoleId == SponsorRoleId)
             {
@@ -93,6 +95,20 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
 
             SuccessMessage = "User created successfully";
             return RedirectToPage("/Admin/Manage-Account/Manage");
+        }
+
+        private void GenerateQRCode(User user)
+        {
+            // QR Generator
+            var qrGen = new QRCodeGenerator();
+            var info = qrGen.CreateQrCode(
+                $"Full Name: {user.FirstName} {user.LastName}, Email: {user.Email}",
+                QRCodeGenerator.ECCLevel.Q
+            );
+            using var qrCode = new PngByteQRCode(info);
+            var qrCodeImage = qrCode.GetGraphic(20);
+
+            user.QrCode = Convert.ToBase64String(qrCodeImage);
         }
     }
 }
