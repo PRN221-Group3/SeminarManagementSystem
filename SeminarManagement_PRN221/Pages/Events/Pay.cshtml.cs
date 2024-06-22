@@ -36,6 +36,7 @@ namespace SeminarManagement_PRN221.Pages.Events
         public Event Event { get; set; }
         [BindProperty]
         public Wallet Wallet { get; set; }
+        [BindProperty]
         public decimal? TotalMoney { get; set; }
         [BindProperty]
         public Transaction? TransactionExist { get; set; }
@@ -46,7 +47,8 @@ namespace SeminarManagement_PRN221.Pages.Events
         {
             EventId = eventId;
             Quantity = quantity;
-
+            TotalMoney = total;  
+            Balance = balance;
 
             var allEvents = await _eventRepository.GetAllQueryableAsync();
             Event = allEvents.Include(s => s.Hall).FirstOrDefault(s => s.EventId == EventId);
@@ -54,19 +56,17 @@ namespace SeminarManagement_PRN221.Pages.Events
             {
                 return NotFound();
             }
-            TotalMoney = total;
 
             Wallet = _walletRepository.GetById(walletId);
 
             if (Wallet.Balance < TotalMoney)
             {
-                ViewData["msg$Not"] = "Not afforadble. Please cash in to your wallet to proceed payment";
+                ViewData["msg$Not"] = "Not affordable. Please cash in to your wallet to proceed with payment";
             }
-
-            //QrCodeGenerator.GenerateQRCode(Event);
 
             return Page();
         }
+
 
         public async Task<IActionResult> OnPost()
         {

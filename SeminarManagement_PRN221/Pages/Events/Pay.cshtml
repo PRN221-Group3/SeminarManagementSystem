@@ -60,7 +60,7 @@
                             <div class="mb-3 d-flex justify-content-between">
                                 <label>Quantity</label>
                                 <span>@Model.Quantity</span>
-                                <input type="hidden" name="quantity" value="@Model.Quantity" />
+                                <input type="hidden" name="Quantity" value="@Model.Quantity" />
                             </div>
                             <div class="mb-3 d-flex justify-content-between">
                                 <span>&#215;</span>
@@ -74,7 +74,7 @@
                             <div class="mb-3 d-flex justify-content-between">
                                 <label for="total" class="form-label fw-bold">Total</label>
                                 <span class="fw-bold">$@Model.TotalMoney</span>
-                                <input type="hidden" id="total" name="total" value="@Model.TotalMoney">
+                                <input type="hidden" id="total" name="TotalMoney" value="@Model.TotalMoney">
                             </div>
                             <div class="mb-3 d-flex justify-content-between">
                                 <label for="balance" class="form-label">Your Balance</label>
@@ -84,8 +84,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Optional: Add submit button or additional form elements as needed -->
                     @if (Model.TransactionExist == null)
                     {
                         @if (ViewData["msg$Not"] != null)
