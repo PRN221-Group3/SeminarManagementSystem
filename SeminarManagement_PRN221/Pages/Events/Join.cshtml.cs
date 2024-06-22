@@ -46,19 +46,27 @@ namespace SeminarManagement_PRN221.Pages.Events
             {
                 return NotFound();
             }
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Wallet = _walletRepository.GetById(userId);
-
-            if(Event.Fee <= 0)
+            var nameIdentifierClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (nameIdentifierClaim == null)
             {
-                TransactionExist = await _transactionRepository.GetByWalletId(Wallet.WalletId, EventId);
+                return Page();
             }
+            else
+            {
+                var userId = Guid.Parse(nameIdentifierClaim.Value);
+                Wallet = _walletRepository.GetById(userId);
 
-            TotalMoney = Event.Fee * Quantity;
+                if (Event.Fee <= 0)
+                {
+                    TransactionExist = await _transactionRepository.GetByWalletId(Wallet.WalletId, EventId);
+                }
 
-            QrCodeGenerator.GenerateQRCode(Event);
-            
-            return Page();
+                TotalMoney = Event.Fee * Quantity;
+
+                QrCodeGenerator.GenerateQRCode(Event);
+
+                return Page();
+            }
         }
 
         public IActionResult OnPost()
