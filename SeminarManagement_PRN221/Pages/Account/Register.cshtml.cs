@@ -96,7 +96,8 @@ namespace SeminarManagement_PRN221.Pages.Account
             using var qrCode = new PngByteQRCode(info);
             var qrCodeImage = qrCode.GetGraphic(20);
 
-            User.QrCode = $"data:image/png;base64,{Convert.ToBase64String(qrCodeImage)}";
+            // Store only the Base64 string
+            User.QrCode = Convert.ToBase64String(qrCodeImage);
         }
 
         private void SendVerificationEmail(string email)

@@ -14,7 +14,7 @@ namespace Repositories.Interfaces
 		Task<List<Sponsor>> GetSponsorsByEventIdAsync(Guid eventId);
         Task<List<Event>> GetInvitedEventSponsorsAsync(Guid sponsorId);
         Task UpdateEventSponsorStatusAsync(Guid eventId, Guid sponsorId, string sponsorProduct);
-		Task UpdateEventSponsorStatusRejectAsync(Guid eventId, Guid sponsorId, string sponsorProduct);
+		Task UpdateEventSponsorStatusRejectAsync(Guid eventId, Guid sponsorId);
 		Task<EventSponsor> GetEventSponsorAsync(Guid eventId, Guid sponsorId, string sponsorProduct);
 		Task<List<Event>> GetAllEventsAsync();
         Task<IEnumerable<Event>> GetEventsSponsored(Guid sponsorId);

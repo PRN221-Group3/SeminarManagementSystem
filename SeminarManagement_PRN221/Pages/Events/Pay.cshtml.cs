@@ -36,17 +36,19 @@ namespace SeminarManagement_PRN221.Pages.Events
         public Event Event { get; set; }
         [BindProperty]
         public Wallet Wallet { get; set; }
+        [BindProperty]
         public decimal? TotalMoney { get; set; }
         [BindProperty]
         public Transaction? TransactionExist { get; set; }
         public int Quantity { get; set; }
         [BindProperty]
-        public decimal ActualBalance {  get; set; }
+        public decimal Balance { get; set; }
         public async Task<IActionResult> OnGet(Guid eventId, Guid walletId, decimal total, decimal balance, int quantity)
         {
             EventId = eventId;
             Quantity = quantity;
-
+            TotalMoney = total;  
+            Balance = balance;
 
             var allEvents = await _eventRepository.GetAllQueryableAsync();
             Event = allEvents.Include(s => s.Hall).FirstOrDefault(s => s.EventId == EventId);
@@ -54,22 +56,17 @@ namespace SeminarManagement_PRN221.Pages.Events
             {
                 return NotFound();
             }
-            TotalMoney = total;
 
             Wallet = _walletRepository.GetById(walletId);
 
             if (Wallet.Balance < TotalMoney)
             {
-                ViewData["msg$Not"] = "Not afforadble. Please cash in to your wallet to proceed payment";
+                ViewData["msg$Not"] = "Not affordable. Please cash in to your wallet to proceed with payment";
             }
-            else
-            {
-                ActualBalance = balance;
-            }
-            //QrCodeGenerator.GenerateQRCode(Event);
 
             return Page();
         }
+
 
         public async Task<IActionResult> OnPost()
         {
@@ -102,7 +99,7 @@ namespace SeminarManagement_PRN221.Pages.Events
             };
 
             var wallet = _walletRepository.GetById(Wallet.WalletId);
-            wallet.Balance = ActualBalance;
+            wallet.Balance = Balance - TotalMoney;
 
             BookingTicket bookingTicket = new()
             {

@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace BusinessObject.Models;
 
 public partial class SeminarManagementDbContext : DbContext
 {
-    public SeminarManagementDbContext()
+    private readonly IConfiguration _configuration;
+    public SeminarManagementDbContext(IConfiguration configuration)
     {
+        _configuration = configuration;
     }
 
-    public SeminarManagementDbContext(DbContextOptions<SeminarManagementDbContext> options)
+    public SeminarManagementDbContext(DbContextOptions<SeminarManagementDbContext> options, IConfiguration configuration)
         : base(options)
     {
+        _configuration = configuration;
     }
 
     public virtual DbSet<Booking> Bookings { get; set; }
@@ -42,8 +46,13 @@ public partial class SeminarManagementDbContext : DbContext
     public virtual DbSet<Wallet> Wallets { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=SeminarManagementDB;User ID=sa;Password=12345;Connect Timeout=30;Encrypt=True;Trust Server Certificate=True;Application Intent=ReadWrite;Multi Subnet Failover=False");
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            var connectionString = _configuration.GetConnectionString("LocalDB");
+            optionsBuilder.UseSqlServer(connectionString);
+        }
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

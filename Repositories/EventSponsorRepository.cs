@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repositories
 {
-    // Fix lai
     public class EventSponsorRepository : BaseRepository<EventSponsor>, IEventSponsorRepository
     {
         private readonly EventSponsorDAO _eventSponsorDAO;
@@ -26,21 +25,9 @@ namespace Repositories
         {
             return Task.Run(() => _eventSponsorDAO.GetEventSponsor(sponsorId, eventId));
         }
-        private readonly SeminarManagementDbContext _context;
-
-        public async Task<IQueryable<EventSponsor>> GetAllQueryableAsync()
-        {
-            return await Task.FromResult(_context.EventSponsors.AsQueryable());
-        }
-
-        public async Task AddAsync(EventSponsor eventSponsor)
-        {
-            _context.EventSponsors.Add(eventSponsor);
-            await _context.SaveChangesAsync();
-        }
         public async Task<IEnumerable<EventSponsor>> GetByEventIdAsync(Guid eventId)
         {
-            return await _context.EventSponsors
+            return await _eventSponsorDAO.GetAllQueryable()
                 .Include(es => es.Sponsor)
                 .Where(es => es.EventId == eventId)
                 .ToListAsync();

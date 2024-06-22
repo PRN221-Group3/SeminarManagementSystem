@@ -49,9 +49,9 @@ namespace Repositories
 			return await _eventDAO.GetEventSponsorAsync(eventId, sponsorId, sponsorProduct);
 		}
 
-        public async Task UpdateEventSponsorStatusRejectAsync(Guid eventId, Guid sponsorId, string sponsorProduct)
+        public async Task UpdateEventSponsorStatusRejectAsync(Guid eventId, Guid sponsorId)
         {
-            await _eventDAO.UpdateEventSponsorStatusRejectAsync(eventId, sponsorId, sponsorProduct);
+            await _eventDAO.UpdateEventSponsorStatusRejectAsync(eventId, sponsorId);
         }
 
         public async Task<IEnumerable<Event>> GetEventsSponsored(Guid sponsorId)

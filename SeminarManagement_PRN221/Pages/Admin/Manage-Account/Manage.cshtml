@@ -1,5 +1,4 @@
 ﻿@page
-@using Repositories
 @model SeminarManagement_PRN221.Pages.Admin.Manage_Account.IndexModel
 @{
     Layout = "_AdminLayout";
@@ -43,6 +42,11 @@
         top: 0;
         right: 0;
         padding: 1rem 1rem;
+    }
+
+    .qr-code {
+        width: 100px;
+        height: 100px;
     }
 </style>
 
@@ -102,7 +106,16 @@
                     <td>@user.IsActivated</td>
                     <td>@user.CreatedDate?.ToString("MM/dd/yyyy")</td>
                     <td>@user.UpdatedDate?.ToString("MM/dd/yyyy")</td>
-                    <td>@user.QrCode</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(user.QrCode))
+                        {
+                            <img src="data:image/png;base64,@user.QrCode" alt="QR Code" class="qr-code" />
+                        }
+                        else
+                        {
+                            <span>No QR Code</span>
+                        }
+                    </td>
                     <td class="text-center">
                         <a class="btn btn-primary btn-sm" asp-page="/Admin/Manage-Account/Update" asp-route-id="@user.UserId">
                             <i class="fas fa-edit"></i> Update
