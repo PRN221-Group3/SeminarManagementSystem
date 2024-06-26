@@ -1,7 +1,7 @@
 ﻿@page
 @model SeminarManagement_PRN221.Pages.IndexModel
 @{
-ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home - Seminar Organization";
 }
 
 <header class="masthead">
@@ -9,17 +9,17 @@ ViewData["Title"] = "Home page";
         <div class="row justify-content-center">
             <div class="col-xl-6">
                 <div class="text-center text-white">
-                    <h1 class="mb-5">Welcome to Seminar Organization</h1>
-                    <h4 class="mb-5">Let's get started by registering on our page</h4>
+                    <h1 class="mb-5">Welcome to Our Seminar Organization</h1>
+                    <h4 class="mb-5">Join our events and expand your knowledge!</h4>
                     <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN" method="post">
                         <div class="row">
                             <div class="col">
-                                <input class="form-control form-control-lg" id="emailAddress" name="email" type="email" placeholder="Email Address" data-sb-validations="required,email" />
+                                <input class="form-control form-control-lg" id="emailAddress" name="email" type="email" placeholder="Enter your email to register" data-sb-validations="required,email" />
                                 <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
                                 <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address is not valid.</div>
                             </div>
                             <div class="col-auto">
-                                <button class="btn btn-primary btn-lg" id="submitButton" type="button" onclick="redirectToRegister()">Submit</button>
+                                <button class="btn btn-primary btn-lg" id="submitButton" type="button" onclick="redirectToRegister()">Register</button>
                             </div>
                         </div>
                     </form>
@@ -30,13 +30,13 @@ ViewData["Title"] = "Home page";
 </header>
 
 <section class="features-icons bg-light text-center">
-    <h1 class="pb-5">Upcoming Events</h1>
+    <h1 class="pb-5">Upcoming Seminars</h1>
     <div class="container">
         @if (Model.FutureEvents.Count == 0)
         {
             <div class="row">
                 <div class="col">
-                    <h3>Currently we don't have any events</h3>
+                    <h3>Currently, there are no upcoming events.</h3>
                 </div>
             </div>
         }
@@ -47,7 +47,7 @@ ViewData["Title"] = "Home page";
                 {
                     <div class="col-lg-4">
                         <div class="card mb-4 shadow-sm">
-                            <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="card-img-top" alt="Event IMG">
+                            <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="card-img-top" alt="Event Image">
                             <div class="card-header">
                                 <h4 class="my-0 font-weight-normal">@eventItem.EventName</h4>
                             </div>
@@ -68,7 +68,7 @@ ViewData["Title"] = "Home page";
                                     <li>Location: @eventItem.Hall?.HallName</li>
                                 </ul>
                                 <a href="/EventDetails?EventId=@eventItem.EventId" class="btn btn-lg btn-block btn-outline-primary">View Details</a>
-                                <a href="/Events/Join?EventId=@eventItem.EventId" class="btn btn-lg btn-block btn-primary">Join now!</a>
+                                <a href="/Events/Join?EventId=@eventItem.EventId" class="btn btn-lg btn-block btn-primary">Join Now!</a>
                             </div>
                         </div>
                     </div>
@@ -83,22 +83,22 @@ ViewData["Title"] = "Home page";
         <div class="row g-0">
             <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('./assets/img/bg-showcase-1.jpg')"></div>
             <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-                <h2>Fully Responsive Design</h2>
-                <p class="lead mb-0">When you use a theme created by Start Bootstrap, you know that the theme will look great on any device, whether it's a phone, tablet, or desktop the page will behave responsively!</p>
+                <h2>Engaging Speakers</h2>
+                <p class="lead mb-0">Our seminars feature industry leaders who share their valuable insights and experiences.</p>
             </div>
         </div>
         <div class="row g-0">
             <div class="col-lg-6 text-white showcase-img" style="background-image: url('./assets/img/bg-showcase-2.jpg')"></div>
             <div class="col-lg-6 my-auto showcase-text">
-                <h2>Updated For Bootstrap 5</h2>
-                <p class="lead mb-0">Newly improved, and full of great utility classes, Bootstrap 5 is leading the way in mobile responsive web development! All of the themes on Start Bootstrap are now using Bootstrap 5!</p>
+                <h2>Interactive Sessions</h2>
+                <p class="lead mb-0">Participate in interactive Q&A sessions and network with professionals.</p>
             </div>
         </div>
         <div class="row g-0">
             <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('./assets/img/bg-showcase-3.jpg')"></div>
             <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-                <h2>Easy to Use & Customize</h2>
-                <p class="lead mb-0">Landing Page is just HTML and CSS with a splash of SCSS for users who demand some deeper customization options. Out of the box, just add your content and images, and your new landing page will be ready to go!</p>
+                <h2>Networking Opportunities</h2>
+                <p class="lead mb-0">Expand your professional network and connect with peers in your field.</p>
             </div>
         </div>
     </div>
@@ -106,27 +106,27 @@ ViewData["Title"] = "Home page";
 
 <section class="testimonials text-center bg-light">
     <div class="container">
-        <h2 class="mb-5">What people are saying...</h2>
+        <h2 class="mb-5">What Our Attendees Say...</h2>
         <div class="row">
             <div class="col-lg-4">
                 <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                    <img class="img-fluid rounded-circle mb-3" src="~/assets/img/testimonials-1.jpg" alt="..." />
+                    <img class="img-fluid rounded-circle mb-3" src="~/assets/img/testimonials-1.jpg" alt="Attendee 1" />
                     <h5>Margaret E.</h5>
-                    <p class="font-weight-light mb-0">"This is fantastic! Thanks so much guys!"</p>
+                    <p class="font-weight-light mb-0">"This seminar was enlightening! Highly recommend."</p>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                    <img class="img-fluid rounded-circle mb-3" src="~/assets/img/testimonials-2.jpg" alt="..." />
+                    <img class="img-fluid rounded-circle mb-3" src="~/assets/img/testimonials-2.jpg" alt="Attendee 2" />
                     <h5>Fred S.</h5>
-                    <p class="font-weight-light mb-0">"Bootstrap is amazing. I've been using it to create lots of super nice landing pages."</p>
+                    <p class="font-weight-light mb-0">"The speakers were amazing and the content was very relevant."</p>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                    <img class="img-fluid rounded-circle mb-3" src="~/assets/img/testimonials-3.jpg" alt="..." />
+                    <img class="img-fluid rounded-circle mb-3" src="~/assets/img/testimonials-3.jpg" alt="Attendee 3" />
                     <h5>Sarah W.</h5>
-                    <p class="font-weight-light mb-0">"Thanks so much for making these free resources available to us!"</p>
+                    <p class="font-weight-light mb-0">"Great opportunity to network and learn from the best."</p>
                 </div>
             </div>
         </div>
@@ -134,12 +134,12 @@ ViewData["Title"] = "Home page";
 </section>
 
 @section Scripts {
-<script>
-    function redirectToRegister() {
-        var form = document.getElementById('contactForm');
-        form.action = '/Account/Register';
-        form.method = 'get';
-        form.submit();
-    }
-</script>
+    <script>
+        function redirectToRegister() {
+            var form = document.getElementById('contactForm');
+            form.action = '/Account/Register';
+            form.method = 'get';
+            form.submit();
+        }
+    </script>
 }

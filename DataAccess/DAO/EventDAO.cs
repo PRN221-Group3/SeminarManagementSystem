@@ -56,7 +56,7 @@ namespace DataAccess.DAO
 
 			if (eventSponsor != null)
 			{
-				eventSponsor.Status = "Accept";
+				eventSponsor.Status = "Accepted";
 				eventSponsor.SponsorProduct = sponsorProduct;
 				await _context.SaveChangesAsync();
 			}
@@ -73,7 +73,7 @@ namespace DataAccess.DAO
 
             if (eventSponsor != null)
             {
-                eventSponsor.Status = "Reject";
+                eventSponsor.Status = "Rejected";
                 await _context.SaveChangesAsync();
             }
             else
