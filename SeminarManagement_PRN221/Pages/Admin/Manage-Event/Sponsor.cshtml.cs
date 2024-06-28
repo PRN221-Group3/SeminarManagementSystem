@@ -39,8 +39,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
 
         public async Task OnGetAsync()
         {
-            // Fetching sponsors with user details
-            Sponsors = await _sponsorRepository.GetSponsorsWithUserAsync();
+            Sponsors = await _sponsorRepository.GetAvailableSponsorsForEventAsync(EventId);
         }
 
         public async Task<IActionResult> OnPostInviteSponsorAsync(Guid SponsorId, Guid EventId)
@@ -101,18 +100,18 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
         private async Task<bool> SendInvitationEmail(string email, Sponsor sponsor, Event eventDetails, Hall hallDetails)
         {
             var emailContent = $@"
-                <h1>Event Invitation</h1>
-                <p>You have been invited to sponsor the following event:</p>
-                <p><strong>Event Name:</strong> {eventDetails.EventName}</p>
-                <p><strong>Event Code:</strong> {eventDetails.EventCode}</p>
-                <p><strong>Description:</strong> {eventDetails.Description}</p>
-                <p><strong>Start Date:</strong> {eventDetails.StartDate?.ToString("MM/dd/yyyy")}</p>
-                <p><strong>End Date:</strong> {eventDetails.EndDate?.ToString("MM/dd/yyyy")}</p>
-                <p><strong>Fee:</strong> {eventDetails.Fee:C}</p>
-                <p><strong>Hall Name:</strong> {hallDetails?.HallName}</p>
-                <p><strong>Hall Capacity:</strong> {hallDetails?.Capacity}</p>
-                <p><strong>Hall Description:</strong> {hallDetails?.HallDescription}</p>
-                ";
+            <h1>Event Invitation</h1>
+            <p>You have been invited to sponsor the following event:</p>
+            <p><strong>Event Name:</strong> {eventDetails.EventName}</p>
+            <p><strong>Event Code:</strong> {eventDetails.EventCode}</p>
+            <p><strong>Description:</strong> {eventDetails.Description}</p>
+            <p><strong>Start Date:</strong> {eventDetails.StartDate?.ToString("MM/dd/yyyy")}</p>
+            <p><strong>End Date:</strong> {eventDetails.EndDate?.ToString("MM/dd/yyyy")}</p>
+            <p><strong>Fee:</strong> {eventDetails.Fee:C}</p>
+            <p><strong>Hall Name:</strong> {hallDetails?.HallName}</p>
+            <p><strong>Hall Capacity:</strong> {hallDetails?.Capacity}</p>
+            <p><strong>Hall Description:</strong> {hallDetails?.HallDescription}</p>
+            ";
 
             return await _emailRepository.SendEmailAsync(email, "Event Sponsorship Invitation", emailContent);
         }

@@ -82,6 +82,18 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
             </div>
 
             <div class="row mb-3">
+                <div class="col-sm-6">
+                    <label class="col-form-label">Number of Tickets</label>
+                    <input type="number" class="form-control" asp-for="EventDto.NumberOfTickets" id="numberOfTickets">
+                    <span asp-validation-for="EventDto.NumberOfTickets" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label class="col-form-label">Hall Capacity</label>
+                    <input readonly type="number" class="form-control" id="hallCapacity">
+                </div>
+            </div>
+
+            <div class="row mb-3">
                 <div class="col-sm-6 d-grid">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>

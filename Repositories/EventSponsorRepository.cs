@@ -31,6 +31,6 @@ namespace Repositories
                 .Include(es => es.Sponsor)
                 .Where(es => es.EventId == eventId)
                 .ToListAsync();
-        }
+        }        
     }
 }

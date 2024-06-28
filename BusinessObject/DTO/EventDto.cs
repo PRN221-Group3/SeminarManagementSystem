@@ -1,24 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessObject.DTO
 {
     public class EventDto
     {
-        [Required(ErrorMessage = "Event Name is required")]
+        public Guid EventId { get; set; }
+
+        [Required]
         public string EventName { get; set; }
-        [Required(ErrorMessage = "Event Code is required")]
+
+        [Required]
+        [RegularExpression(@"^E\d{4}$", ErrorMessage = "Event Code must be in the format Exxxx where x is a number.")]
         public string EventCode { get; set; }
-        public string Description { get; set; }
+
+        [Required]
         public DateTime StartDate { get; set; }
+
+        [Required]
         public DateTime EndDate { get; set; }
-        [Required(ErrorMessage = "Fee is required")]
+
+        public string Description { get; set; }
+
+        [Required]
+        [Range(0, 10000, ErrorMessage = "Fee must be between 0 and 10000.")]
         public decimal Fee { get; set; }
-        public Guid? HallId { get; set; }
-        public bool IsDeleted { get; set; }
+
+        [Required]
+        public Guid HallId { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Number of tickets must be at least 1.")]
+        public int NumberOfTickets { get; set; }
     }
 }

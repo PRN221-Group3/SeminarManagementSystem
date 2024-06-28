@@ -27,6 +27,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
         public List<Hall> Halls { get; private set; }
         public string ErrorMessage { get; private set; }
         public string SuccessMessage { get; private set; }
+        public bool IsEventOpen { get; private set; }
 
         public async Task<IActionResult> OnGetAsync(Guid id)
         {
@@ -37,6 +38,8 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 return NotFound();
             }
 
+            IsEventOpen = Event.StartDate <= DateTime.Now && Event.EndDate >= DateTime.Now;
+
             EventDto = new EventDto
             {
                 EventName = Event.EventName,
@@ -45,7 +48,8 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 StartDate = Event.StartDate ?? DateTime.Now,
                 EndDate = Event.EndDate ?? DateTime.Now,
                 Fee = Event.Fee ?? 0,
-                HallId = Event.HallId,
+                HallId = Event.HallId ?? Guid.Empty,
+                NumberOfTickets = Event.NumberOfTickets ?? 0
             };
 
             Halls = await _hallRepository.GetAllAsync();
@@ -67,43 +71,52 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 return NotFound();
             }
 
-            // Server-side validation for Event Code format
-            var eventCodePattern = @"^E\d{4}$";
-            if (!System.Text.RegularExpressions.Regex.IsMatch(EventDto.EventCode, eventCodePattern))
-            {
-                ModelState.AddModelError(string.Empty, "Event Code must be in the format Exxxx where x is a number.");
-                Halls = await _hallRepository.GetAllAsync();
-                return Page();
-            }
+            IsEventOpen = eventToUpdate.StartDate <= DateTime.Now && eventToUpdate.EndDate >= DateTime.Now;
 
-            // Check for duplicate Event Code (if the event code is being changed)
-            if (eventToUpdate.EventCode != EventDto.EventCode)
+            if (IsEventOpen)
             {
-                var eventQueryable = await _eventRepository.GetAllQueryableAsync();
-                var existingEvent = await eventQueryable.FirstOrDefaultAsync(e => e.EventCode == EventDto.EventCode);
-                if (existingEvent != null)
+                eventToUpdate.EndDate = EventDto.EndDate;
+            }
+            else
+            {
+                var eventCodePattern = @"^E\d{4}$";
+                if (!System.Text.RegularExpressions.Regex.IsMatch(EventDto.EventCode, eventCodePattern))
                 {
-                    ModelState.AddModelError(string.Empty, "Event Code already exists. Please use a different code.");
+                    ModelState.AddModelError(string.Empty, "Event Code must be in the format Exxxx where x is a number.");
                     Halls = await _hallRepository.GetAllAsync();
                     return Page();
                 }
+
+                if (eventToUpdate.EventCode != EventDto.EventCode)
+                {
+                    var eventQueryable = await _eventRepository.GetAllQueryableAsync();
+                    var existingEvent = await eventQueryable.FirstOrDefaultAsync(e => e.EventCode == EventDto.EventCode);
+                    if (existingEvent != null)
+                    {
+                        ModelState.AddModelError(string.Empty, "Event Code already exists. Please use a different code.");
+                        Halls = await _hallRepository.GetAllAsync();
+                        return Page();
+                    }
+                }
+
+                var selectedHall = await _hallRepository.GetByIdAsync(EventDto.HallId);
+                if (EventDto.NumberOfTickets > selectedHall.Capacity)
+                {
+                    ModelState.AddModelError(string.Empty, "Number of tickets cannot exceed hall capacity.");
+                    Halls = await _hallRepository.GetAllAsync();
+                    return Page();
+                }
+
+                eventToUpdate.EventName = EventDto.EventName;
+                eventToUpdate.EventCode = EventDto.EventCode;
+                eventToUpdate.Description = EventDto.Description;
+                eventToUpdate.StartDate = EventDto.StartDate;
+                eventToUpdate.EndDate = EventDto.EndDate;
+                eventToUpdate.Fee = EventDto.Fee;
+                eventToUpdate.HallId = EventDto.HallId;
+                eventToUpdate.NumberOfTickets = EventDto.NumberOfTickets;
             }
 
-            // Check for hall availability, excluding the current event being updated
-            if (await IsHallBooked(eventToUpdate.EventId, EventDto.HallId.Value, EventDto.StartDate, EventDto.EndDate))
-            {
-                ModelState.AddModelError(string.Empty, "The selected hall is already booked for the chosen dates.");
-                Halls = await _hallRepository.GetAllAsync();
-                return Page();
-            }
-
-            eventToUpdate.EventName = EventDto.EventName;
-            eventToUpdate.EventCode = EventDto.EventCode;
-            eventToUpdate.Description = EventDto.Description;
-            eventToUpdate.StartDate = EventDto.StartDate;
-            eventToUpdate.EndDate = EventDto.EndDate;
-            eventToUpdate.Fee = EventDto.Fee;
-            eventToUpdate.HallId = EventDto.HallId;
             eventToUpdate.UpdateDate = DateTime.Now;
 
             try
@@ -125,7 +138,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             var eventQueryable = await _eventRepository.GetAllQueryableAsync();
             return await eventQueryable.AnyAsync(e =>
                 e.HallId == hallId &&
-                e.EventId != currentEventId && // Exclude the current event being updated
+                e.EventId != currentEventId &&
                 e.StartDate < endDate &&
                 e.EndDate > startDate &&
                 (e.IsDeleted == false || e.IsDeleted == null));
