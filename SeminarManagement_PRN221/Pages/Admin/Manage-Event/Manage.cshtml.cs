@@ -18,13 +18,17 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
         private readonly IHallRepository _hallRepository;
         private readonly ISponsorRepository _sponsorRepository;
         private readonly IEventSponsorRepository _eventSponsorRepository;
+        private readonly IEmailRepository _emailRepository;
+        private readonly IUserRepository _userRepository;
 
-        public ManageModel(IEventRepository eventRepository, IHallRepository hallRepository, ISponsorRepository sponsorRepository, IEventSponsorRepository eventSponsorRepository)
+        public ManageModel(IEventRepository eventRepository, IHallRepository hallRepository, ISponsorRepository sponsorRepository, IEventSponsorRepository eventSponsorRepository, IEmailRepository emailRepository, IUserRepository userRepository)
         {
             _eventRepository = eventRepository;
             _hallRepository = hallRepository;
             _sponsorRepository = sponsorRepository;
             _eventSponsorRepository = eventSponsorRepository;
+            _emailRepository = emailRepository;
+            _userRepository = userRepository;
         }
 
         public IList<Event> Events { get; private set; }
@@ -50,12 +54,42 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             try
             {
                 var eventToDelete = await _eventRepository.GetByIdAsync(eventId);
-                if (eventToDelete != null)
+
+                if (eventToDelete == null)
                 {
-                    eventToDelete.IsDeleted = true;
-                    await _eventRepository.UpdateAsync(eventToDelete);
-                    SuccessMessage = "Event deleted successfully!";
+                    ErrorMessage = "Event not found.";
+                    await OnGetAsync(null);
+                    return Page();
                 }
+
+                if (eventToDelete.StartDate <= DateTime.Now && eventToDelete.EndDate >= DateTime.Now)
+                {
+                    ErrorMessage = "Cannot delete an event that is currently open.";
+                    await OnGetAsync(null);
+                    return Page();
+                }
+
+                // Retrieve sponsors for the event
+                var sponsors = await _eventSponsorRepository.GetByEventIdAsync(eventId);
+
+                // Send email notifications to sponsors
+                foreach (var sponsor in sponsors)
+                {
+                    var user = await _userRepository.GetByIdAsync(sponsor.SponsorId);
+                    if (user != null)
+                    {
+                        var emailSent = await SendDeletionEmail(user.Email, eventToDelete);
+                        if (!emailSent)
+                        {
+                            ErrorMessage = "Failed to send email notifications.";
+                        }
+                    }
+                }
+
+                eventToDelete.IsDeleted = true;
+                await _eventRepository.UpdateAsync(eventToDelete);
+
+                SuccessMessage = "Event deleted successfully!";
             }
             catch (Exception ex)
             {
@@ -65,6 +99,24 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             await OnGetAsync(null); // Refresh the data after deletion
             return Page();
         }
+
+        private async Task<bool> SendDeletionEmail(string email, Event eventDetails)
+        {
+            var emailContent = $@"
+                <h1>Event Cancellation Notice</h1>
+                <p>We regret to inform you that the following event has been cancelled:</p>
+                <p><strong>Event Name:</strong> {eventDetails.EventName}</p>
+                <p><strong>Event Code:</strong> {eventDetails.EventCode}</p>
+                <p><strong>Description:</strong> {eventDetails.Description}</p>
+                <p><strong>Start Date:</strong> {eventDetails.StartDate?.ToString("MM/dd/yyyy HH:mm")}</p>
+                <p><strong>End Date:</strong> {eventDetails.EndDate?.ToString("MM/dd/yyyy HH:mm")}</p>
+                <p><strong>Fee:</strong> {eventDetails.Fee:C}</p>
+                <p>We apologize for any inconvenience this may cause.</p>
+                ";
+
+            return await _emailRepository.SendEmailAsync(email, "Event Cancellation Notice", emailContent);
+        }
+
         public async Task<IActionResult> OnGetSponsorDetailsAsync(Guid eventId)
         {
             try
@@ -90,6 +142,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
         public string GetHallName(Guid? hallId)
         {
             if (hallId == null || hallId == Guid.Empty)

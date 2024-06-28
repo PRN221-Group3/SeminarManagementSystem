@@ -61,9 +61,26 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             }
 
             // Check for hall availability
-            if (await IsHallBooked(EventDto.HallId.Value, EventDto.StartDate, EventDto.EndDate))
+            if (await IsHallBooked(EventDto.HallId, EventDto.StartDate, EventDto.EndDate))
             {
                 ModelState.AddModelError(string.Empty, "The selected hall is already booked for the chosen dates.");
+                Halls = await _hallRepository.GetAllAsync();
+                return Page();
+            }
+
+            // Check for valid start date
+            if (EventDto.StartDate <= DateTime.Now)
+            {
+                ModelState.AddModelError(string.Empty, "Start Date must be greater than the current date and time.");
+                Halls = await _hallRepository.GetAllAsync();
+                return Page();
+            }
+
+            // Check number of tickets against hall capacity
+            var selectedHall = await _hallRepository.GetByIdAsync(EventDto.HallId);
+            if (EventDto.NumberOfTickets > selectedHall.Capacity)
+            {
+                ModelState.AddModelError(string.Empty, "Number of tickets cannot exceed hall capacity.");
                 Halls = await _hallRepository.GetAllAsync();
                 return Page();
             }
@@ -78,6 +95,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 EndDate = EventDto.EndDate,
                 Fee = EventDto.Fee,
                 HallId = EventDto.HallId,
+                NumberOfTickets = EventDto.NumberOfTickets,
                 CreationDate = DateTime.Now,
                 UpdateDate = DateTime.Now,
                 IsDeleted = false,

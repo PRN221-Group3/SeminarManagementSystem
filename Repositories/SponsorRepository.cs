@@ -22,5 +22,10 @@ namespace Repositories
         {
             return await _sponsorDao.GetAllWithUserAsync();
         }
+        public async Task<IEnumerable<Sponsor>> GetAvailableSponsorsForEventAsync(Guid eventId)
+        {
+            return await _sponsorDao.GetAvailableSponsorsForEventAsync(eventId);
+        }
     }
+
 }

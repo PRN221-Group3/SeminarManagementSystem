@@ -8,15 +8,13 @@ namespace BusinessObject.Models;
 public partial class SeminarManagementDbContext : DbContext
 {
     private readonly IConfiguration _configuration;
-    public SeminarManagementDbContext(IConfiguration configuration)
+    public SeminarManagementDbContext()
     {
-        _configuration = configuration;
     }
 
-    public SeminarManagementDbContext(DbContextOptions<SeminarManagementDbContext> options, IConfiguration configuration)
+    public SeminarManagementDbContext(DbContextOptions<SeminarManagementDbContext> options)
         : base(options)
     {
-        _configuration = configuration;
     }
 
     public virtual DbSet<Booking> Bookings { get; set; }
@@ -51,12 +49,11 @@ public partial class SeminarManagementDbContext : DbContext
             optionsBuilder.UseSqlServer(connectionString);
         }
     }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.BookingId).HasName("PK__Booking__5DE3A5B19E934F4D");
+            entity.HasKey(e => e.BookingId).HasName("PK__Booking__5DE3A5B18DC2DE23");
 
             entity.ToTable("Booking");
 
@@ -73,7 +70,7 @@ public partial class SeminarManagementDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Booking__user_id__4E88ABD4");
+                .HasConstraintName("FK__Booking__user_id__4D94879B");
 
             entity.HasMany(d => d.Tickets).WithMany(p => p.Bookings)
                 .UsingEntity<Dictionary<string, object>>(
@@ -81,14 +78,14 @@ public partial class SeminarManagementDbContext : DbContext
                     r => r.HasOne<Ticket>().WithMany()
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__BookingTi__ticke__5070F446"),
+                        .HasConstraintName("FK__BookingTi__ticke__4F7CD00D"),
                     l => l.HasOne<Booking>().WithMany()
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__BookingTi__booki__4F7CD00D"),
+                        .HasConstraintName("FK__BookingTi__booki__4E88ABD4"),
                     j =>
                     {
-                        j.HasKey("BookingId", "TicketId").HasName("PK__BookingT__F0BACA2776CB5261");
+                        j.HasKey("BookingId", "TicketId").HasName("PK__BookingT__F0BACA27B60D2304");
                         j.ToTable("BookingTicket");
                         j.IndexerProperty<Guid>("BookingId").HasColumnName("booking_id");
                         j.IndexerProperty<Guid>("TicketId").HasColumnName("ticket_id");
@@ -97,7 +94,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B47DFA63F5");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__D54EE9B44E9ED1D2");
 
             entity.ToTable("Category");
 
@@ -119,7 +116,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Event>(entity =>
         {
-            entity.HasKey(e => e.EventId).HasName("PK__Event__2370F72723A5BFF2");
+            entity.HasKey(e => e.EventId).HasName("PK__Event__2370F727702CE1FC");
 
             entity.ToTable("Event");
 
@@ -184,7 +181,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Hall>(entity =>
         {
-            entity.HasKey(e => e.HallId).HasName("PK__Hall__A63DE8CF7CD2F829");
+            entity.HasKey(e => e.HallId).HasName("PK__Hall__A63DE8CF78266562");
 
             entity.ToTable("Hall");
 
@@ -203,7 +200,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__760965CC57F3C900");
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__760965CC3434221E");
 
             entity.ToTable("Role");
 
@@ -217,7 +214,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Sponsor>(entity =>
         {
-            entity.HasKey(e => e.SponsorId).HasName("PK__Sponsor__BE37D45497C990D3");
+            entity.HasKey(e => e.SponsorId).HasName("PK__Sponsor__BE37D45426D94372");
 
             entity.ToTable("Sponsor");
 
@@ -240,7 +237,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<Survey>(entity =>
         {
-            entity.HasKey(e => e.SurveyId).HasName("PK__Survey__9DC31A07E226B538");
+            entity.HasKey(e => e.SurveyId).HasName("PK__Survey__9DC31A0716C111A2");
 
             entity.ToTable("Survey");
 
@@ -258,12 +255,12 @@ public partial class SeminarManagementDbContext : DbContext
 
             entity.HasOne(d => d.Event).WithMany(p => p.Surveys)
                 .HasForeignKey(d => d.EventId)
-                .HasConstraintName("FK__Survey__event_id__5535A963");
+                .HasConstraintName("FK__Survey__event_id__5441852A");
         });
 
         modelBuilder.Entity<Ticket>(entity =>
         {
-            entity.HasKey(e => e.TicketId).HasName("PK__Ticket__D596F96B0C348AAA");
+            entity.HasKey(e => e.TicketId).HasName("PK__Ticket__D596F96B129803ED");
 
             entity.ToTable("Ticket");
 
@@ -284,16 +281,16 @@ public partial class SeminarManagementDbContext : DbContext
 
             entity.HasOne(d => d.Category).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.CategoryId)
-                .HasConstraintName("FK__Ticket__category__5629CD9C");
+                .HasConstraintName("FK__Ticket__category__5535A963");
 
             entity.HasOne(d => d.Event).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.EventId)
-                .HasConstraintName("FK__Ticket__event_id__571DF1D5");
+                .HasConstraintName("FK__Ticket__event_id__5629CD9C");
         });
 
         modelBuilder.Entity<Transaction>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__85C600AF6C678826");
+            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__85C600AF7631EEF6");
 
             entity.ToTable("Transaction");
 
@@ -317,7 +314,7 @@ public partial class SeminarManagementDbContext : DbContext
 
             entity.HasOne(d => d.Event).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.EventId)
-                .HasConstraintName("FK__Transacti__event__5812160E");
+                .HasConstraintName("FK__Transacti__event__571DF1D5");
 
             entity.HasOne(d => d.Wallet).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.WalletId)
@@ -326,7 +323,7 @@ public partial class SeminarManagementDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__User__B9BE370F0D92E5D2");
+            entity.HasKey(e => e.UserId).HasName("PK__User__B9BE370FBBAA604B");
 
             entity.ToTable("User");
 
@@ -368,7 +365,7 @@ public partial class SeminarManagementDbContext : DbContext
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK__User__role_id__59FA5E80");
+                .HasConstraintName("FK__User__role_id__59063A47");
         });
 
         modelBuilder.Entity<Wallet>(entity =>
