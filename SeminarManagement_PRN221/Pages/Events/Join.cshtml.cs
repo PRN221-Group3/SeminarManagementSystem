@@ -31,7 +31,9 @@ namespace SeminarManagement_PRN221.Pages.Events
         [BindProperty]
         public decimal? TotalMoney { get; set; }
         [BindProperty]
-        public int Quantity { get; set; } = 1;
+        public int? Quantity { get; set; } = 1;
+        [BindProperty]
+        public int MaxQuantity { get; set; }
         [BindProperty]
         public decimal? Fee { get; set; }
         [BindProperty]
@@ -41,7 +43,9 @@ namespace SeminarManagement_PRN221.Pages.Events
         public async Task<IActionResult> OnGet()
         {
             var allEvents = await _eventRepository.GetAllQueryableAsync();
+
             Event = allEvents.Include(s => s.Hall).FirstOrDefault(s => s.EventId == EventId);
+
             if (Event == null)
             {
                 return NotFound();
@@ -55,6 +59,18 @@ namespace SeminarManagement_PRN221.Pages.Events
             {
                 var userId = Guid.Parse(nameIdentifierClaim.Value);
                 Wallet = _walletRepository.GetById(userId);
+
+                MaxQuantity = Event.NumberOfTickets ?? 0;
+
+                if(MaxQuantity == 0)
+                {
+                    return RedirectToPage("/Index");
+                }
+
+                if(Quantity > MaxQuantity)
+                {
+                    return Page();
+                }
 
                 if (Event.Fee <= 0)
                 {

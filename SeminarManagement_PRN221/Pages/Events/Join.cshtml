@@ -58,12 +58,13 @@
                 <!-- Form for payment -->
                 <form method="post" class="mt-4">
                     <div class="row">
-
+                        <div id="error-message" class="text-danger" style="display: none;"></div>
                         <div class="col-md-6">
                             <div class="mb-3 d-flex justify-content-between">
                                 <div class="input-group">
                                     <button type="button" class="btn btn-warning" onclick="changeQuantity(-1)">-</button>
-                                    <input id="quantity" type="text" name="quantity" value="@Model.Quantity" min="1" readonly width="80" class="text-md-center" />
+                                    <input id="quantity" type="text" name="quantity" value="@Model.Quantity" min="1" 
+                                    max="@Model.MaxQuantity" width="80" class="text-md-center" onchange="setQuantityText()" />
                                     <button type="button" class="btn btn-warning" onclick="changeQuantity(1)">+</button>
                                 </div>
                             </div>
@@ -87,7 +88,7 @@
                         }
                         else
                         {
-                            <button type="submit" class="btn btn-lg btn-primary">Next</button>
+                            <button type="submit" class="btn btn-lg btn-primary" id="btnNExt">Next</button>
                         }
                     }
                     else
@@ -103,15 +104,39 @@
     <script>
         function changeQuantity(change) {
             var quantityInput = document.getElementById("quantity");
-            console.log(quantityInput);
             var currentQuantity = parseInt(quantityInput.value);
-            console.log(currentQuantity);
+            var maxQuantity = @Model.MaxQuantity;
             var newQuantity = currentQuantity + change;
             if (newQuantity <= 0) {
                 newQuantity = currentQuantity;
             }
+
+            if (newQuantity > maxQuantity) {
+                newQuantity = currentQuantity;
+                document.getElementById("increase-btn").ariaDisabled;
+            }
+
             console.log(newQuantity);
             quantityInput.value = newQuantity;
+        }
+
+        function setQuantityText() {
+            var quantityInput = document.getElementById("quantity");
+            var errorMessage = document.getElementById("error-message");
+            var currentQuantity = parseInt(quantityInput.value);
+            var maxQuantity = @Model.MaxQuantity;
+
+            if (currentQuantity > maxQuantity) {
+                quantityInput.value = maxQuantity; // Set the quantity to maxQuantity
+                errorMessage.textContent = `Quantity cannot exceed ${maxQuantity}.`;
+                errorMessage.style.display = "block";
+            } else if (currentQuantity < 1) {
+                quantityInput.value = 1; // Ensure the quantity does not go below 1
+                errorMessage.textContent = "Quantity cannot be less than 1.";
+                errorMessage.style.display = "block";
+            } else {
+                errorMessage.style.display = "none"; // Hide error message if quantity is within the valid range
+            }
         }
     </script>
 }
