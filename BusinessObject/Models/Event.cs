@@ -29,6 +29,8 @@ public partial class Event
 
     public Guid? HallId { get; set; }
 
+    public int? NumberOfTickets { get; set; }
+
     public virtual ICollection<EventSponsor> EventSponsors { get; set; } = new List<EventSponsor>();
 
     public virtual Hall? Hall { get; set; }

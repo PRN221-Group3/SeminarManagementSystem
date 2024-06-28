@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
-using System.Net.Mail;
 using System.Net;
-using System.Security.Claims;
+using System.Net.Mail;
 
 namespace SeminarManagement_PRN221.Pages.Events
 {
@@ -16,29 +15,28 @@ namespace SeminarManagement_PRN221.Pages.Events
         private readonly ITransactionRepository _transactionRepository;
         private readonly ITicketRepository _ticketRepository;
         private readonly IBookingRepository _bookingRepository;
-        private readonly IBookingTicketRepository _bookingTicketRepository;
         public PayModel(IWalletRepository walletRepository,
             IEventRepository eventRepository,
             ITransactionRepository transactionRepository,
             ITicketRepository ticketRepository,
-            IBookingRepository bookingRepository,
-            IBookingTicketRepository bookingTicketRepository)
+            IBookingRepository bookingRepository)
         {
             _walletRepository = walletRepository;
             _eventRepository = eventRepository;
             _transactionRepository = transactionRepository;
             _ticketRepository = ticketRepository;
             _bookingRepository = bookingRepository;
-            _bookingTicketRepository = bookingTicketRepository;
         }
         public Guid EventId { get; set; }
         [BindProperty]
         public Event Event { get; set; }
         [BindProperty]
         public Wallet Wallet { get; set; }
-        public decimal? TotalMoney { get; set; }
+        [BindProperty]
+        public decimal TotalMoney { get; set; }
         [BindProperty]
         public Transaction? TransactionExist { get; set; }
+        [BindProperty]
         public int Quantity { get; set; }
         [BindProperty]
         public decimal Balance { get; set; }
@@ -70,49 +68,53 @@ namespace SeminarManagement_PRN221.Pages.Events
 
         public async Task<IActionResult> OnPost()
         {
-            Transaction transaction = new()
+            var eventUpdate = _eventRepository.GetById(Event.EventId);
+            if (eventUpdate != null)
             {
-                TransactionId = Guid.NewGuid(),
-                CreationDate = DateTime.Now,
-                UpdateDate = DateTime.Now,
-                TransactionStatus = "Successfull",
-                WalletId = Wallet.WalletId,
-                EventId = Event.EventId,
-                DepositAmount = Event.Fee
-            };
 
-            Ticket ticket = new()
-            {
-                TicketId = Guid.NewGuid(),
-                EventId = Event.EventId,
-                Price = Event.Fee,
-                CreatedDate = transaction.CreationDate,
-                UpdatedDate = transaction.UpdateDate,
-            };
+                eventUpdate.NumberOfTickets -= Quantity;
 
-            Booking booking = new()
-            {
-                BookingId = Guid.NewGuid(),
-                CreatedDate = transaction.CreationDate,
-                UpdatedDate = transaction.UpdateDate,
-                UserId = Wallet.WalletId
-            };
+                Transaction transaction = new()
+                {
+                    TransactionId = Guid.NewGuid(),
+                    CreationDate = DateTime.Now,
+                    UpdateDate = DateTime.Now,
+                    TransactionStatus = "Successfull",
+                    WalletId = Wallet.WalletId,
+                    EventId = Event.EventId,
+                    DepositAmount = Event.Fee
+                };
 
-            var wallet = _walletRepository.GetById(Wallet.WalletId);
-            wallet.Balance = Balance - TotalMoney;
+                Ticket ticket = new()
+                {
+                    TicketId = Guid.NewGuid(),
+                    EventId = Event.EventId,
+                    Price = Event.Fee,
+                    CreatedDate = transaction.CreationDate,
+                    UpdatedDate = transaction.UpdateDate,
+                };
 
-            BookingTicket bookingTicket = new()
-            {
-                TicketId = ticket.TicketId,
-                BookingId = booking.BookingId
-            };
+                Booking booking = new()
+                {
+                    BookingId = Guid.NewGuid(),
+                    CreatedDate = transaction.CreationDate,
+                    UpdatedDate = transaction.UpdateDate,
+                    UserId = Wallet.WalletId
+                };
 
-            await _ticketRepository.AddAsync(ticket);
-            await _bookingRepository.AddAsync(booking);
-            await _walletRepository.UpdateAsync(wallet);
-            //await _bookingTicketRepository.AddBookingTicketAsync(booking.BookingId, booking, ticket.TicketId, ticket);
-            await _transactionRepository.AddAsync(transaction);
-            return RedirectToPage("/Index");
+                var wallet = _walletRepository.GetById(Wallet.WalletId);
+                wallet.Balance = Balance - TotalMoney;
+
+                booking.Tickets.Add(ticket);
+
+                await _ticketRepository.AddAsync(ticket);
+                await _bookingRepository.AddAsync(booking);
+                await _walletRepository.UpdateAsync(wallet);
+                await _transactionRepository.AddAsync(transaction);
+                await _eventRepository.UpdateAsync(eventUpdate);
+                return RedirectToPage("/Index");
+            }
+            return Page();
         }
 
         private void SendVerificationEmail(string email)
