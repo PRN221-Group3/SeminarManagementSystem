@@ -1,0 +1,107 @@
+﻿@page
+@model SeminarManagement_PRN221.Pages.Events.PayModel
+@{
+}
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="img-fluid rounded-start" alt="Event Image">
+        </div>
+        <div class="col-md-8">
+            <div class="px-4">
+                <h2>Event Details</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>
+                            <strong>Event Name:</strong> @Model.Event.EventName
+                        </p>
+                        <p><strong>Date:</strong> @Model.Event.StartDate?.ToString("dd/MM/yyyy HH:mm") - @Model.Event.EndDate?.ToString("dd/MM/yyyy HH:mm")</p>
+                        <p>
+                            <strong>Description:</strong> @Model.Event.Description
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>
+                            <strong>Event Code:</strong> @Model.Event.EventCode
+                        </p>
+                        <p>
+                            <strong>Fee:</strong>
+                            @if (Model.Event.Fee > 0)
+                            {
+                                <text>$@Model.Event.Fee</text>
+                            }
+                            else
+                            {
+                                <text>FREE</text>
+                            }
+                        </p>
+                        <p>
+                            <strong>Status:</strong>
+                            @if (DateTime.Now < Model.Event.StartDate)
+                            {
+                                <span class="badge bg-primary">Future</span>
+                            }
+                            else if (DateTime.Now >= Model.Event.StartDate && DateTime.Now <= Model.Event.EndDate)
+                            {
+                                <span class="badge bg-success">Open</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Closed</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Form for payment -->
+                <form method="post" class="mt-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3 d-flex justify-content-between">
+                                <label>Quantity</label>
+                                <span>@Model.Quantity</span>
+                                <input type="hidden" name="Quantity" value="@Model.Quantity" />
+                            </div>
+                            <div class="mb-3 d-flex justify-content-between">
+                                <span>&#215;</span>
+                            </div>
+                            <div class="mb-3 d-flex justify-content-between">
+                                <label for="fee" class="form-label">Fee</label>
+                                <span>$@Model.Event.Fee</span>
+                                <input type="hidden" id="fee" name="fee" value="@Model.Event.Fee">
+                            </div>
+                            <hr class="my-4">
+                            <div class="mb-3 d-flex justify-content-between">
+                                <label for="total" class="form-label fw-bold">Total</label>
+                                <span class="fw-bold">$@Model.TotalMoney</span>
+                                <input type="hidden" id="total" name="totalMoney" value="@Model.TotalMoney">
+                            </div>
+                            <div class="mb-3 d-flex justify-content-between">
+                                <label for="balance" class="form-label">Your Balance</label>
+                                <span>$@Model.Wallet.Balance</span>
+                                <input type="hidden" name="walletId" value="@Model.Wallet.WalletId" />
+                                <input type="hidden" id="balance" name="balance" value="@Model.Wallet.Balance">
+                            </div>
+                        </div>
+                    </div>
+                    @if (Model.TransactionExist == null)
+                    {
+                        @if (ViewData["msg$Not"] != null)
+                        {
+                            @ViewData["msg$Not"]
+                            <button type="submit" class="btn btn-lg btn-primary" disabled>Finish</button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn btn-lg btn-primary">Finish</button>
+                        }
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-lg btn-primary" disabled>Finish</button>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

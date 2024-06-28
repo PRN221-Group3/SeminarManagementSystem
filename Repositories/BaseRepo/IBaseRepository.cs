@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObject.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace Repositories.BaseRepo
 {
     public interface IBaseRepository<T> where T : class
     {
+        Task<IQueryable<T>> GetAllQueryableAsync();
         Task<List<T>> GetAllAsync();
         Task<T> GetByIdAsync(Guid id);
         T GetById(Guid id);

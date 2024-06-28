@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repositories
 {
+    // Fix lai
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
         private readonly SeminarManagementDbContext _context;
@@ -136,6 +137,11 @@ namespace Repositories
         private bool VerifyPassword(string inputPassword, string storedPasswordHash)
         {
             return inputPassword == storedPasswordHash;
+        }
+
+        public Task<IEnumerable<User>> GetVisitorsOfEvent(Guid eventId)
+        {
+            return Task.Run(async () => await _userDAO.GetVisitorsOfEvent(eventId));
         }
     }
 }

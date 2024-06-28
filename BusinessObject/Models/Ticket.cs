@@ -20,4 +20,6 @@ public partial class Ticket
     public virtual Category? Category { get; set; }
 
     public virtual Event? Event { get; set; }
+
+    public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 }

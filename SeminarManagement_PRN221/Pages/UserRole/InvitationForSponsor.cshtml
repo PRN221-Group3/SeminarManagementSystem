@@ -1,0 +1,174 @@
+﻿@page
+@model SeminarManagement_PRN221.Pages.UserRole.InvitationSponsorModel
+@{
+    ViewData["Title"] = "InvitationForSponsor";
+}
+
+<h1>All Events</h1>
+
+@if (Model.InvitedEvents != null && Model.InvitedEvents.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Event Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var eventItem in Model.InvitedEvents)
+            {
+                <tr>
+                    <td>@eventItem.EventName</td>
+                    <td>@(eventItem.StartDate.HasValue ? eventItem.StartDate.Value.ToShortDateString() : "-")</td>
+                    <td>@(eventItem.EndDate.HasValue ? eventItem.EndDate.Value.ToShortDateString() : "-")</td>
+                    <td>
+                        <a asp-page-handler="Details" asp-route-eventId="@eventItem.EventId" class="btn btn-info">Details</a>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sponsorshipModal"
+                                data-event-id="@eventItem.EventId" data-sponsor-id="@Model.SponsorId">
+                            Accept
+                        </button>
+                        <button type="button" class="btn btn-danger reject-btn"
+                                data-event-id="@eventItem.EventId.ToString()"
+                                data-sponsor-id="@Model.SponsorId.ToString()">
+                            Reject
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No events found.</p>
+}
+
+<!-- Sponsorship Modal -->
+<div class="modal fade" id="sponsorshipModal" tabindex="-1" aria-labelledby="sponsorshipModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="sponsorshipModalLabel">Sponsorship Details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="sponsorshipForm" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="mb-3">
+                        <label for="sponsorshipProduct" class="form-label">Sponsorship Product</label>
+                        <textarea class="form-control" id="sponsorshipProduct" name="sponsorshipProduct" rows="3" required></textarea>
+                    </div>
+                    <input type="hidden" id="eventId" name="eventId">
+                    <input type="hidden" id="sponsorId" name="sponsorId" value="@Model.SponsorId">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Event listener for Reject button clicks
+            document.querySelectorAll('.reject-btn').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var eventId = this.getAttribute('data-event-id');
+                    var sponsorId = this.getAttribute('data-sponsor-id');
+
+                    if (confirm('Are you sure you want to reject this Event?')) {
+                        var antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                        var formData = new FormData();
+                        formData.append('eventId', eventId);
+                        formData.append('sponsorId', sponsorId);
+                        formData.append('__RequestVerificationToken', antiForgeryToken);
+
+                        fetch('/UserRole/InvitationForSponsor?handler=Reject', {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    alert('Event rejected successfully.');
+                                    // Optionally refresh the event list or update UI
+                                    location.reload();
+                                } else {
+                                    throw new Error(data.error || 'Unknown error');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error rejecting event:', error);
+                                alert('Error rejecting event: ' + error.message);
+                            });
+                    }
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var sponsorshipModal = document.getElementById('sponsorshipModal');
+            sponsorshipModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var eventId = button.getAttribute('data-event-id');
+                var sponsorId = button.getAttribute('data-sponsor-id');
+                var modal = this;
+                modal.querySelector('#eventId').value = eventId;
+                modal.querySelector('#sponsorId').value = sponsorId;
+            });
+
+            document.getElementById('sponsorshipForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                var antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                var formData = new FormData();
+                formData.append('eventId', document.getElementById('eventId').value);
+                formData.append('sponsorId', document.getElementById('sponsorId').value);
+                formData.append('sponsorshipProduct', document.getElementById('sponsorshipProduct').value.trim());
+                formData.append('__RequestVerificationToken', antiForgeryToken);
+
+                fetch('/UserRole/InvitationForSponsor?handler=Accept', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        var sponsorshipModalInstance = bootstrap.Modal.getInstance(sponsorshipModal);
+                        sponsorshipModalInstance.hide();
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        throw new Error(data.error || 'Unknown error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error submitting sponsorship details:', error);
+                    alert('Error submitting sponsorship details: ' + error.message);
+                });
+            });
+        });
+    </script>
+}

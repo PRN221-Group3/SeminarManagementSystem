@@ -12,4 +12,8 @@ public partial class Sponsor
     public string? SponsorType { get; set; }
 
     public bool? IsDeleted { get; set; }
+
+    public virtual ICollection<EventSponsor> EventSponsors { get; set; } = new List<EventSponsor>();
+
+    public virtual User SponsorNavigation { get; set; } = null!;
 }

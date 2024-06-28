@@ -5,11 +5,15 @@ namespace BusinessObject.Models;
 
 public partial class EventSponsor
 {
-    public Guid? SponsorId { get; set; }
+    public Guid EventId { get; set; }
 
-    public Guid? EventId { get; set; }
+    public Guid SponsorId { get; set; }
 
-    public virtual Event? Event { get; set; }
+    public string? Status { get; set; }
 
-    public virtual Sponsor? Sponsor { get; set; }
+    public string? SponsorProduct { get; set; }
+
+    public virtual Event Event { get; set; } = null!;
+
+    public virtual Sponsor Sponsor { get; set; } = null!;
 }

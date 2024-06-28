@@ -17,5 +17,10 @@ namespace Repositories
         {
             _transactionDao = transactionDao;
         }
+
+        public Task<Transaction?> GetByWalletId(Guid walletId, Guid eventId)
+        {
+            return Task.Run(async () => await _transactionDao.GetByWalletId(walletId, eventId));
+        }
     }
 }

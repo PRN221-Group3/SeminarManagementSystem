@@ -10,5 +10,7 @@ namespace Repositories.Interfaces
 {
     public interface ISponsorRepository : IBaseRepository<Sponsor>
     {
+        Task<List<Sponsor>> GetSponsorsWithUserAsync();
+        Task<IEnumerable<Sponsor>> GetAvailableSponsorsForEventAsync(Guid eventId);
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BusinessObject.Models;
 using DataAccess.DAO;
+using Microsoft.EntityFrameworkCore;
 using Repositories.BaseRepo;
 using Repositories.Interfaces;
 
@@ -17,5 +18,14 @@ namespace Repositories
         {
             _sponsorDao = sponsorDao;
         }
+        public async Task<List<Sponsor>> GetSponsorsWithUserAsync()
+        {
+            return await _sponsorDao.GetAllWithUserAsync();
+        }
+        public async Task<IEnumerable<Sponsor>> GetAvailableSponsorsForEventAsync(Guid eventId)
+        {
+            return await _sponsorDao.GetAvailableSponsorsForEventAsync(eventId);
+        }
     }
+
 }

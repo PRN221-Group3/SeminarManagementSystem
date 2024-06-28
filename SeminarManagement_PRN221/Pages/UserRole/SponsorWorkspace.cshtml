@@ -1,8 +1,93 @@
 ﻿@page
 @model SeminarManagement_PRN221.Pages.UserRole.SponsorWorkspace.IndexModel
 @{
+    Layout = "_Layout";
     ViewData["Title"] = "Sponsor";
 }
 
-<h1>Sponsor Workspace</h1>
-<h5>You must be signed in to access this resource.</h5>
+<div class="container">
+    <h2>Event Sponsoring</h2>
+
+    <div class="table-responsive">
+        <table class="table table-bordereless">
+            <thead class="bg-light">
+                <tr>
+                    <th>Event ID</th>
+                    <th>Event Code</th>
+                    <th>Event Name</th>
+                    <th>Created Date</th>
+                    <th>Updated Date</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Fee</th>
+                    <th>Status</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var eventSponsored in Model.Events)
+                {
+                    var rowClass = eventSponsored.IsDeleted == true ? "table-danger" : string.Empty;
+                    <tr class="@rowClass">
+                        <td>@eventSponsored.EventId</td>
+                        <td>@eventSponsored.EventCode</td>
+                        <td>@eventSponsored.EventName</td>
+                        <td>@(eventSponsored.CreationDate?.ToString("MM/dd/yyyy") ?? "")</td>
+                        <td>@(eventSponsored.UpdateDate?.ToString("MM/dd/yyyy") ?? "")</td>
+                        <td>@(eventSponsored.StartDate?.ToString("MM/dd/yyyy") ?? "")</td>
+                        <td>@(eventSponsored.EndDate?.ToString("MM/dd/yyyy") ?? "")</td>
+                        <td>@eventSponsored.Fee</td>
+                        <td>@Model.EventSponsor.Status</td>
+                        <td class="text-center">
+                            <a href="/EventDetails?EventId=@eventSponsored.EventId" class="btn btn-outline-primary btn-sm" role="button">View Details</a>
+                        </td>
+                        <td class="text-center">
+                                <a role="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-event-id="@eventSponsored.EventId">Visitors</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Visitors</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="visitorsPartialContainer">
+                    <ul>
+                        @await Html.PartialAsync("_VisitorsPartialView", Model.Users)
+                    </ul>    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#staticBackdrop').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var eventId = button.data('event-id'); // Extract eventId from data attribute
+
+        // Example AJAX call to load visitors based on eventId
+        $.ajax({
+            type: 'GET',
+            url: '/UserRole/Visitors?eventId=' + eventId,
+            success: function (data) {
+                $('#visitorsPartialContainer').html(data);
+            },
+            error: function () {
+                console.log('Error loading visitors.');
+            }
+        });
+    });
+</script>
