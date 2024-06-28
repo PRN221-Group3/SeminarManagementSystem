@@ -31,7 +31,9 @@ namespace SeminarManagement_PRN221.Pages.Events
         [BindProperty]
         public decimal? TotalMoney { get; set; }
         [BindProperty]
-        public int Quantity { get; set; } = 1;
+        public int? Quantity { get; set; } = 1;
+        [BindProperty]
+        public int MaxQuantity { get; set; }
         [BindProperty]
         public decimal? Fee { get; set; }
         [BindProperty]
@@ -41,24 +43,46 @@ namespace SeminarManagement_PRN221.Pages.Events
         public async Task<IActionResult> OnGet()
         {
             var allEvents = await _eventRepository.GetAllQueryableAsync();
+
             Event = allEvents.Include(s => s.Hall).FirstOrDefault(s => s.EventId == EventId);
+
             if (Event == null)
             {
                 return NotFound();
             }
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            Wallet = _walletRepository.GetById(userId);
-
-            if(Event.Fee <= 0)
+            var nameIdentifierClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (nameIdentifierClaim == null)
             {
-                TransactionExist = await _transactionRepository.GetByWalletId(Wallet.WalletId, EventId);
+                return Page();
             }
+            else
+            {
+                var userId = Guid.Parse(nameIdentifierClaim.Value);
+                Wallet = _walletRepository.GetById(userId);
 
-            TotalMoney = Event.Fee * Quantity;
+                MaxQuantity = Event.NumberOfTickets ?? 0;
 
-            QrCodeGenerator.GenerateQRCode(Event);
-            
-            return Page();
+                if(MaxQuantity == 0)
+                {
+                    return RedirectToPage("/Index");
+                }
+
+                if(Quantity > MaxQuantity)
+                {
+                    return Page();
+                }
+
+                if (Event.Fee <= 0)
+                {
+                    TransactionExist = await _transactionRepository.GetByWalletId(Wallet.WalletId, EventId);
+                }
+
+                TotalMoney = Event.Fee * Quantity;
+
+                QrCodeGenerator.GenerateQRCode(Event);
+
+                return Page();
+            }
         }
 
         public IActionResult OnPost()
