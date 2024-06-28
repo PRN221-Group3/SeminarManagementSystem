@@ -15,7 +15,9 @@ namespace Repositories.Interfaces
         public Task<Role> GetRoleByName(string roleName);
 
         public Task<List<Role>> GetAllRolesAsync();
+
         Task<Role> GetRoleByNameAsync(string roleName);
+
         Task<Guid> GetSponsorRoleIdAsync();
     }
 }

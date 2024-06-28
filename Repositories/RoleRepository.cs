@@ -10,37 +10,36 @@ namespace Repositories
     // Fix lai
     public class RoleRepository : BaseRepository<Role>, IRoleRepository
     {
-        private readonly SeminarManagementDbContext _context;
         private readonly RoleDAO _roleDAO;
 
-        public RoleRepository(SeminarManagementDbContext context, RoleDAO roleDao) : base(roleDao)
+        public RoleRepository(RoleDAO roleDao) : base(roleDao)
         {
             _roleDAO = roleDao;
-            _context = context;
         }
 
         public async Task<Role> GetRoleById(Guid? id)
         {
-            return await _context.Roles.FirstOrDefaultAsync(r => r.RoleId == id);
+            return await _roleDAO.GetRoleById(id);
         }
 
         public async Task<Role> GetRoleByName(string roleName)
         {
-            return await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == roleName);
-        }
-        public async Task<List<Role>> GetAllRolesAsync()
-        {
-            return await _context.Roles.ToListAsync();
-        }
-        public async Task<Role> GetRoleByNameAsync(string roleName)
-        {
-            return await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == roleName);
-        }
-        public async Task<Guid> GetSponsorRoleIdAsync()
-        {
-            var sponsorRole = await _context.Roles.FirstOrDefaultAsync(r => r.RoleName == "Sponsor");
-            return sponsorRole != null ? sponsorRole.RoleId : Guid.Empty;
+            return await _roleDAO.GetRoleByName(roleName);
         }
 
+        public async Task<List<Role>> GetAllRolesAsync()
+        {
+            return await _roleDAO.GetAllRolesAsync();
+        }
+
+        public async Task<Role> GetRoleByNameAsync(string roleName)
+        {
+            return await _roleDAO.GetRoleByNameAsync(roleName);
+        }
+
+        public async Task<Guid> GetSponsorRoleIdAsync()
+        {
+            return await _roleDAO.GetSponsorRoleIdAsync();
+        }
     }
 }
