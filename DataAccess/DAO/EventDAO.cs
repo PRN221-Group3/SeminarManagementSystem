@@ -28,7 +28,7 @@ namespace DataAccess.DAO
 				.ToListAsync();
 		}
 
-		public async Task<List<Event>> GetInvitedEventsForSponsorAsync(Guid sponsorId)
+        public async Task<List<Event>> GetInvitedEventsForSponsorAsync(Guid sponsorId)
 		{
 			var invitedEvents = await (from es in _context.EventSponsors
 									   where es.Status == "Invited" && es.SponsorId == sponsorId

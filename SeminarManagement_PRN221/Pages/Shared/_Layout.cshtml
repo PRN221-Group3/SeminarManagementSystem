@@ -49,7 +49,7 @@
                     }
                     else if (User.IsInRole("Sponsor"))
                     {
-                        <a class="nav-link text-dark" asp-page="/UserRole/SponsorWorkspace">Sponsor</a>
+                        <a class="nav-link text-dark" asp-page="/UserRole/InvitationForSponsor">Sponsor</a>
                     }
                     <a class="btn btn-primary ms-3" asp-area="Identity" asp-page="/Account/Manage/Index">Hello, @User.Identity.Name!</a>
                     <a class="btn btn-primary ms-3" asp-page="/Account/Wallet" asp-route-username="@User.Identity.Name">Wallet</a>
