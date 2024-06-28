@@ -34,7 +34,7 @@ namespace SeminarManagement_PRN221.Pages.UserRole
 			// Retrieve data from the form submission
 			var eventId = Guid.Parse(Request.Form["eventId"]);
 			var sponsorId = Guid.Parse(Request.Form["sponsorId"]);
-			var sponsorProduct = Request.Form["sponsorshipProduct"].ToString().Trim(); ;
+			var sponsorProduct = Request.Form["sponsorshipProduct"].ToString().Trim(); 
 
 			try
 			{
