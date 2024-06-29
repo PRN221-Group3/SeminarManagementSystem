@@ -29,16 +29,16 @@ namespace DataAccess.DAO
 		}
 
         public async Task<List<Event>> GetInvitedEventsForSponsorAsync(Guid sponsorId)
-		{
-			var invitedEvents = await (from es in _context.EventSponsors
-									   where es.Status == "Invited" && es.SponsorId == sponsorId
-									   join e in _context.Events on es.EventId equals e.EventId
-									   select e).ToListAsync();
+        {
+            var invitedEvents = await (from es in _context.EventSponsors
+                                       where es.Status == "Invited" && es.SponsorId == sponsorId && es.Sponsor.IsDeleted == false
+                                       join e in _context.Events on es.EventId equals e.EventId
+                                       select e).ToListAsync();
 
-			return invitedEvents;
-		}
+            return invitedEvents;
+        }
 
-		public async Task<List<Event>> GetAllEventsAsync()
+        public async Task<List<Event>> GetAllEventsAsync()
 		{
 			return await _context.Events.ToListAsync();
 		}
