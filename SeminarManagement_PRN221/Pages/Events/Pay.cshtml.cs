@@ -71,7 +71,18 @@ namespace SeminarManagement_PRN221.Pages.Events
             if (eventUpdate != null)
             {
 
-                eventUpdate.NumberOfTickets -= Quantity;
+                var maxQuantity = eventUpdate.NumberOfTickets;
+
+                if(maxQuantity >= Quantity)
+                {
+                    maxQuantity -= Quantity;
+                    eventUpdate.NumberOfTickets = maxQuantity;
+                }
+                else
+                {
+                    ViewData["msgTicketError"] = "Out of tickets";
+                    return Page();
+                }
 
                 Transaction transaction = new()
                 {
@@ -81,7 +92,7 @@ namespace SeminarManagement_PRN221.Pages.Events
                     TransactionStatus = "Successfull",
                     WalletId = Wallet.WalletId,
                     EventId = Event.EventId,
-                    DepositAmount = Event.Fee
+                    DepositAmount = TotalMoney
                 };
 
                 Ticket ticket = new()
