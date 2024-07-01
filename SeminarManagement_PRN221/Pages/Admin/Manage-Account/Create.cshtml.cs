@@ -7,9 +7,11 @@ using Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
 {
+    [Authorize(Roles = "Operator")]
     public class CreateModel : PageModel
     {
         private readonly IUserRepository _userRepository;
