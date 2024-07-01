@@ -12,10 +12,10 @@ namespace DataAccess.DAO
     public class TransactionDAO : BaseDAO<Transaction>
     {
         public TransactionDAO(SeminarManagementDbContext context) : base(context) { }  
-        public async Task<Transaction?> GetByWalletId(Guid walletId, Guid eventId)
+        public async Task<Transaction?> GetByWalletId(Guid walletId)
         {
             return await _context.Transactions
-                .FirstOrDefaultAsync(x => x.WalletId == walletId && x.EventId == eventId);
+                .FirstOrDefaultAsync(x => x.WalletId == walletId);
         }
     }
 }

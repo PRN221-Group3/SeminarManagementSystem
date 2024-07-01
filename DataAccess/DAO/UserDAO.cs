@@ -26,12 +26,11 @@ namespace DataAccess.DAO
 
         public async Task<IEnumerable<User>> GetVisitorsOfEvent(Guid eventId)
         {
-            var visitors = from u in _context.Users
-                           join w in _context.Wallets on u.UserId equals w.WalletId
-                           join t in _context.Transactions on w.WalletId equals t.WalletId
-                           join e in _context.Events on t.EventId equals e.EventId
-                           where e.EventId == eventId
-                           select u;
+            var visitors = (from u in _context.Users
+                            from b in u.Bookings
+                            from t in b.Tickets
+                            where t.EventId == eventId
+                            select u);
             return await visitors.Distinct().ToListAsync();
         }
     }
