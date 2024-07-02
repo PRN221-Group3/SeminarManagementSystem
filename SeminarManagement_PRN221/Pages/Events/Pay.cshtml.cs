@@ -91,7 +91,6 @@ namespace SeminarManagement_PRN221.Pages.Events
                     UpdateDate = DateTime.Now,
                     TransactionStatus = "Successfull",
                     WalletId = Wallet.WalletId,
-                    EventId = Event.EventId,
                     DepositAmount = TotalMoney
                 };
 
@@ -109,7 +108,9 @@ namespace SeminarManagement_PRN221.Pages.Events
                     BookingId = Guid.NewGuid(),
                     CreatedDate = transaction.CreationDate,
                     UpdatedDate = transaction.UpdateDate,
-                    UserId = Wallet.WalletId
+                    UserId = Wallet.WalletId,
+                    TotalAmount = TotalMoney,
+                    TotalTicket = Quantity
                 };
 
                 var wallet = _walletRepository.GetById(Wallet.WalletId);
