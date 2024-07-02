@@ -6,6 +6,7 @@ namespace BusinessObject.Models;
 
 public partial class SeminarManagementDbContext : DbContext
 {
+    private readonly IConfiguration _configuration;
     public SeminarManagementDbContext()
     {
     }
