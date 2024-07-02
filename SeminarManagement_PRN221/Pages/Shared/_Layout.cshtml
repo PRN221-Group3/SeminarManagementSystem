@@ -31,7 +31,7 @@
                 {
                     @if (User.IsInRole("Operator"))
                     {
-                        <div class="nav-item dropdown" >
+                        <div class="nav-item dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Admin
                             </button>
@@ -54,6 +54,7 @@
                     <a class="btn btn-primary ms-3" asp-area="Identity" asp-page="/Account/Manage/Index">Hello, @User.Identity.Name!</a>
                     <a class="btn btn-primary ms-3" asp-page="/Account/Orders" asp-route-username="@User.Identity.Name">Order History</a>
                     <a class="btn btn-primary ms-3" asp-page="/Account/Wallet" asp-route-username="@User.Identity.Name">Wallet</a>
+                    <a class="btn btn-primary ms-3" asp-page="/Account/UpdateProfile">Update Profile</a>
                     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post" class="d-inline ms-2">
                         <button type="submit" class="btn btn-secondary">Logout</button>
                     </form>
@@ -113,7 +114,6 @@
     <script src="~/js/scripts.js"></script>
     <!-- SB Forms JS-->
     <!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->
-
     @RenderSection("Scripts", required: false)
 </body>
 </html>
