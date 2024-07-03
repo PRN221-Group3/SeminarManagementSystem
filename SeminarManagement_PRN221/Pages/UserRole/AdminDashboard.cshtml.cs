@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Repositories.Interfaces;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SeminarManagement_PRN221.Pages.UserRole.AdminDashboard;
 
@@ -36,20 +39,37 @@ public class IndexModel : PageModel
     public List<Transaction> Transactions { get; set; }
     public List<EventSponsor> SponsorProducts { get; set; }
     public Dictionary<string, int> SponsorStatusData { get; set; }
+    public Dictionary<string, decimal> MonthlyRevenue { get; set; }
+    public Dictionary<string, int> MonthlyTicketsSold { get; set; }
 
     public void OnGet()
     {
-        // Mock lay so ve da ban Booking Ticket sau
-        TicketsSold = 34;
+        // Fetch bookings
+        var bookings = _bookingRepository.GetAllQueryableAsync().Result
+            .Where(b => b.CreatedDate.HasValue)
+            .ToList();
+
+        // Calculate total revenue and tickets sold
+        Revenue = bookings.Sum(b => b.TotalAmount) ?? 0;
+        TicketsSold = bookings.Sum(b => b.TotalTicket) ?? 0;
         var eventQueryable = _eventRepository.GetAllQueryableAsync().Result;
         TicketsAvailable = eventQueryable.Select(s => s.NumberOfTickets).Sum();
-        // Mock lay Total Amount of Booking Ticket sau
-        Revenue = 8000000;
-        Transactions = _transactionRepository.GetAllQueryableAsync().Result.Include(s => s.Event).ToList();
-        SponsorProducts = _eventSponsorRepository.GetAllQueryableAsync().Result.Include(s => s.Sponsor).ToList();
+
+        // Group data by month
+        MonthlyRevenue = bookings
+            .GroupBy(b => b.CreatedDate.Value.ToString("yyyy-MM"))
+            .ToDictionary(g => g.Key, g => g.Sum(b => b.TotalAmount) ?? 0);
+
+        MonthlyTicketsSold = bookings
+            .GroupBy(b => b.CreatedDate.Value.ToString("yyyy-MM"))
+            .ToDictionary(g => g.Key, g => g.Sum(b => b.TotalTicket) ?? 0);
+
+        // Fetch other data
+        Transactions = _transactionRepository.GetAllQueryableAsync().Result.Include(s => s.Wallet.WalletNavigation).OrderByDescending(s => s.CreationDate).ToList();
+        SponsorProducts = _eventSponsorRepository.GetAllQueryableAsync().Result.Include(s => s.Sponsor).OrderByDescending(s => s.EventId).ToList();
 
         // Get sponsor status data
-        SponsorStatusData = _eventSponsorRepository.GetAllQueryableAsync().Result
+        SponsorStatusData = _eventSponsorRepository.GetAllQueryableAsync().Result.OrderByDescending(s => s.EventId)
             .GroupBy(s => s.Status ?? "Not Invited")
             .ToDictionary(g => g.Key, g => g.Count());
     }
