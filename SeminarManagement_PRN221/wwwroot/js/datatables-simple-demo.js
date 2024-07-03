@@ -7,3 +7,11 @@ window.addEventListener('DOMContentLoaded', event => {
         new simpleDatatables.DataTable(datatablesSimple);
     }
 });
+
+window.addEventListener('beforeprint', () => {
+    myPieChart.resize(200, 200);
+});
+window.addEventListener('afterprint', () => {
+    myChart.resize();
+});
+

@@ -5,10 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-
+using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
 {
+    [Authorize(Roles = "Operator")]
     public class ManageModel : PageModel
     {
         private readonly IEventRepository _eventRepository;
