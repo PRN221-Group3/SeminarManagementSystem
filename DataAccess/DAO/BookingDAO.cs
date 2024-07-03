@@ -39,7 +39,7 @@ namespace DataAccess.DAO
                             TransactionStatus = tr.TransactionStatus,
                             IsFeedbackOpen = e.IsFeedbackOpen,
                         };
-            return await query.Distinct().ToListAsync();
+            return await query.Distinct().OrderByDescending(x => x.CreatedDate).ToListAsync();
         }
     }
 }

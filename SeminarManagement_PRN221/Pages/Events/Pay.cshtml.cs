@@ -91,7 +91,8 @@ namespace SeminarManagement_PRN221.Pages.Events
                     UpdateDate = DateTime.Now,
                     TransactionStatus = "Successfull",
                     WalletId = Wallet.WalletId,
-                    DepositAmount = TotalMoney
+                    DepositAmount = TotalMoney,
+                    OrderId = "#buyticket"
                 };
 
                 Ticket ticket = new()
