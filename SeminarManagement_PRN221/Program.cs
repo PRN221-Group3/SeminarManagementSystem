@@ -56,6 +56,16 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireSponsorRole", policy => policy.RequireRole("Sponsor"));
 });
 
+// Add Session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddDistributedMemoryCache();
+
 // Add Database Context
 builder.Services.AddDbContext<SeminarManagementDbContext>(options =>
     options.UseSqlServer(connectionString)
@@ -91,7 +101,8 @@ builder.Services.AddScoped<WalletDAO>();
 builder.Services.AddScoped<SponsorDAO>();
 builder.Services.AddScoped<EventSponsorDAO>();
 builder.Services.AddScoped<EventSponsorDAO>();
-
+builder.Services.AddScoped<IVnPayRepository, VnPayRepository>();
+builder.Services.AddHttpContextAccessor();
 // Configure AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
 {

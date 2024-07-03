@@ -1,14 +1,111 @@
 ﻿@page
 @model SeminarManagement_PRN221.Pages.Account.WalletModel
 @{
+    ViewData["Title"] = "Wallet";
 }
-<div class="container">
+<<div class="container">
     <div class="row justify-content-center mt-5">
         <div class="col-md-6 text-center">
             <h2>Wallet</h2>
             <h3 class="mt-4">Balance:</h3>
-            <p class="lead">$@Model.Wallet.Balance</p> <!-- Replace with your actual balance variable or value -->
-            <!-- Optional additional content or buttons can go here -->
+            <p class="lead">$@Model.Wallet.Balance</p>
+            <button class="btn btn-primary" id="cashInButton">Cash in wallet</button>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <h3>Transaction History</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transaction in Model.Transactions)
+                    {
+                        <tr>
+                            <td>@transaction.CreationDate</td>
+                            <td>@transaction.DepositAmount</td>
+                            <td>@transaction.TransactionStatus</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+<!-- Confirmation Dialog -->
+@if (Model.IsDialogVisible)
+{
+    <div class="modal" tabindex="-1" style="display:block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation</h5>
+                    <button type="button" class="btn-close" onclick="closeDialog()"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You cannot cash out when you have already charged in your wallet, are you sure?</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="dontRemindMeAgainCheckbox">
+                        <label class="form-check-label">
+                            Don't remind me again
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="proceedToCashIn()">Yes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeDialog()">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById('cashInButton').addEventListener('click', function () {
+            if (getCookie('dontRemindMeAgain') === 'true') {
+                window.location.href = '/cash-in';
+            } else {
+                document.querySelector('.modal').style.display = 'block';
+            }
+        });
+
+        function proceedToCashIn() {
+            if (document.getElementById('dontRemindMeAgainCheckbox').checked) {
+                setCookie('dontRemindMeAgain', 'true', 365);
+            }
+            window.location.href = '/cash-in';
+        }
+
+        function closeDialog() {
+            document.querySelector('.modal').style.display = 'none';
+        }
+
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+    </script>
+}

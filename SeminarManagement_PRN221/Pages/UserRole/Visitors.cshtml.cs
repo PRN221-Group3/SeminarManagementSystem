@@ -17,7 +17,7 @@ namespace SeminarManagement_PRN221.Pages.UserRole
         public async Task<IActionResult> OnGet(string eventId)
         {
             var eid = Guid.Parse(eventId);
-            Users = await _userRepository.GetVisitorsOfEvent(eid);
+            //Users = await _userRepository.GetVisitorsOfEvent(eid);
             return Partial("_VisitorsPartialView", Users);
         }
     }

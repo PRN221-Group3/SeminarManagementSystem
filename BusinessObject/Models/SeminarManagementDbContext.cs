@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace BusinessObject.Models;
 
 public partial class SeminarManagementDbContext : DbContext
 {
-    private readonly IConfiguration _configuration;
     public SeminarManagementDbContext()
     {
     }
@@ -42,13 +40,9 @@ public partial class SeminarManagementDbContext : DbContext
     public virtual DbSet<Wallet> Wallets { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            var connectionString = _configuration.GetConnectionString("LocalDB");
-            optionsBuilder.UseSqlServer(connectionString);
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-JNCKUFJ;Initial Catalog=SeminarManagementDB;Persist Security Info=True;User ID=sa;Password=12345;Trust Server Certificate=True");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Booking>(entity =>
@@ -74,7 +68,7 @@ public partial class SeminarManagementDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Booking__user_id__4D94879B");
+                .HasConstraintName("FK__Booking__user_id__4E88ABD4");
 
             entity.HasMany(d => d.Tickets).WithMany(p => p.Bookings)
                 .UsingEntity<Dictionary<string, object>>(
@@ -82,11 +76,11 @@ public partial class SeminarManagementDbContext : DbContext
                     r => r.HasOne<Ticket>().WithMany()
                         .HasForeignKey("TicketId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__BookingTi__ticke__4F7CD00D"),
+                        .HasConstraintName("FK__BookingTi__ticke__5070F446"),
                     l => l.HasOne<Booking>().WithMany()
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__BookingTi__booki__4E88ABD4"),
+                        .HasConstraintName("FK__BookingTi__booki__4F7CD00D"),
                     j =>
                     {
                         j.HasKey("BookingId", "TicketId").HasName("PK__BookingT__F0BACA271B34FC55");
@@ -291,11 +285,11 @@ public partial class SeminarManagementDbContext : DbContext
 
             entity.HasOne(d => d.Category).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.CategoryId)
-                .HasConstraintName("FK__Ticket__category__5535A963");
+                .HasConstraintName("FK__Ticket__category__5629CD9C");
 
             entity.HasOne(d => d.Event).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.EventId)
-                .HasConstraintName("FK__Ticket__event_id__5629CD9C");
+                .HasConstraintName("FK__Ticket__event_id__571DF1D5");
         });
 
         modelBuilder.Entity<Transaction>(entity =>

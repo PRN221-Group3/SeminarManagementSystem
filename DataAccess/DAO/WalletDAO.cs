@@ -12,4 +12,5 @@ namespace DataAccess.DAO
     {
         public WalletDAO(SeminarManagementDbContext context) : base(context) { }
     }
+
 }

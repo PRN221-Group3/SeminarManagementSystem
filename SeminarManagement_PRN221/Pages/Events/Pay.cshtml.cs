@@ -44,7 +44,7 @@ namespace SeminarManagement_PRN221.Pages.Events
         {
             EventId = eventId;
             Quantity = quantity;
-            TotalMoney = total;  
+            TotalMoney = total;
             Balance = balance;
 
             var allEvents = await _eventRepository.GetAllQueryableAsync();
@@ -73,7 +73,7 @@ namespace SeminarManagement_PRN221.Pages.Events
 
                 var maxQuantity = eventUpdate.NumberOfTickets;
 
-                if(maxQuantity >= Quantity)
+                if (maxQuantity >= Quantity)
                 {
                     maxQuantity -= Quantity;
                     eventUpdate.NumberOfTickets = maxQuantity;
@@ -169,4 +169,3 @@ namespace SeminarManagement_PRN221.Pages.Events
         }
     }
 }
-
