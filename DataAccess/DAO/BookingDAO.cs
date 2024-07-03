@@ -38,7 +38,7 @@ namespace DataAccess.DAO
                             UpdatedDate = b.UpdatedDate,
                             TransactionStatus = tr.TransactionStatus,
                         };
-            return await query.ToListAsync();
+            return await query.Distinct().ToListAsync();
         }
     }
 }
