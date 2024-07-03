@@ -52,10 +52,10 @@
         color: #ffffff;
     }
 
-    .btn-custom:hover {
-        background-color: #495057;
-        color: #ffffff;
-    }
+        .btn-custom:hover {
+            background-color: #495057;
+            color: #ffffff;
+        }
 
     .alert-dismissible .btn-close {
         position: absolute;
@@ -80,11 +80,11 @@
         height: 34px;
     }
 
-    .custom-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
+        .custom-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
     .slider {
         position: absolute;
@@ -98,25 +98,25 @@
         border-radius: 34px;
     }
 
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        transition: .4s;
-        border-radius: 50%;
-    }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
 
     input:checked + .slider {
         background-color: #2196F3;
     }
 
-    input:checked + .slider:before {
-        transform: translateX(26px);
-    }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
 </style>
 
 <div class="container-custom">
@@ -203,10 +203,12 @@
                     <td>@evt.NumberOfTickets</td>
                     <td class="text-center">
                         <label class="custom-switch">
-                            <input type="checkbox" @if (evt.IsFeedbackOpen == true) { <text>checked</text> } onchange="toggleFeedbackStatus('@evt.EventId', this.checked)">
+                            <input type="checkbox" @if (evt.IsFeedbackOpen == true)
+                            {
+                                <text>checked</text>
+                            } onchange="toggleFeedbackStatus('@evt.EventId', this.checked)">
                             <span class="slider"></span>
                         </label>
-                        
                     </td>
                     <td class="text-center">
                         <a class="btn btn-primary btn-sm" asp-page="/Admin/Manage-Event/Update" asp-route-id="@evt.EventId" data-bs-toggle="tooltip" title="Update Event">
@@ -261,7 +263,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2 class="modal-title" id="sponsorDetailsModalLabel" style="font-weight: bold">Sponsor has been invited to participate in the event </h2>
+                    <h2 class="modal-title" id="sponsorDetailsModalLabel" style="font-weight: bold">Sponsor has been invited to participate in the event</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -345,12 +347,11 @@
         function formatFeedback(feedbacks) {
             let html = '<ul>';
             feedbacks.forEach((feedback, index) => {
-                html += `<li> Anonymous: ${feedback.feedBackContent}</li>`;
+                html += `<li>${index + 1}. Anonymous: ${feedback.feedBackContent}</li>`;
             });
             html += '</ul>';
             return html;
         }
-
 
         function formatSponsorDetails(sponsors) {
             let html = '<ul>';
@@ -392,7 +393,7 @@
 
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
     </script>
 }
