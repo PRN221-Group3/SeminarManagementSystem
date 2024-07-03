@@ -24,14 +24,14 @@ namespace DataAccess.DAO
             }
         }
 
-		public async Task<IEnumerable<User>> GetVisitorsOfEvent(Guid eventId)
-		{
-			var visitors = (from u in _context.Users
-							from b in u.Bookings
-							from t in b.Tickets
-							where t.EventId == eventId
-							select u);
-			return await visitors.Distinct().ToListAsync();
-		}
-	}
+        public async Task<IEnumerable<User>> GetVisitorsOfEvent(Guid eventId)
+        {
+            var visitors = (from u in _context.Users
+                            from b in u.Bookings
+                            from t in b.Tickets
+                            where t.EventId == eventId
+                            select u);
+            return await visitors.Distinct().ToListAsync();
+        }
+    }
 }
