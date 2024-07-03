@@ -52,8 +52,8 @@
                     {
                         <a class="nav-link text-dark" asp-page="/UserRole/InvitationForSponsor">Sponsor</a>
                     }
-                    <a class="btn btn-primary ms-3" asp-area="Identity" asp-page="/Account/Manage/Index">Hello, @User.Identity.Name!</a>
                     <a class="btn btn-primary ms-3" asp-page="/Account/Orders" asp-route-username="@User.Identity.Name">Order History</a>
+                    <a class="btn btn-primary ms-3" asp-area="Identity" asp-page="/Account/Manage/Index">Hello, @User.Identity.Name!</a>
                     <a class="btn btn-primary ms-3" asp-page="/Account/Wallet" asp-route-username="@User.Identity.Name">Wallet</a>
                     <a class="btn btn-primary ms-3" asp-page="/Account/UpdateProfile">Update Profile</a>
                     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/" method="post" class="d-inline ms-2">
