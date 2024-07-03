@@ -72,10 +72,10 @@ namespace SeminarManagement_PRN221.Pages.Events
                     return Page();
                 }
 
-                if (Event.Fee <= 0)
-                {
-                    TransactionExist = await _transactionRepository.GetByWalletId(Wallet.WalletId, EventId);
-                }
+                //if (Event.Fee <= 0)
+                //{
+                //    TransactionExist = await _transactionRepository.GetByWalletId(Wallet.WalletId, EventId);
+                //}
 
                 TotalMoney = Event.Fee * Quantity;
 

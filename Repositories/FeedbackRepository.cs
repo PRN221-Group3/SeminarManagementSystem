@@ -10,10 +10,10 @@ using Repositories.Interfaces;
 
 namespace Repositories
 {
-    public class SurveyRepository : BaseRepository<Survey>, ISurveyRepository
+    public class FeedbackRepository : BaseRepository<Feedback>, IFeedbackRepository
     {
-        private readonly SurveyDAO _surveyDAO;
-        public SurveyRepository(SurveyDAO surveyDAO) : base(surveyDAO)
+        private readonly FeedbackDAO _surveyDAO;
+        public FeedbackRepository(FeedbackDAO surveyDAO) : base(surveyDAO)
         {
             _surveyDAO = surveyDAO;
         }

@@ -10,5 +10,8 @@ namespace Repositories.Interfaces
 {
     public interface IWalletRepository : IBaseRepository<Wallet>
     {
+        Task<Wallet> GetByIdAsync(Guid walletId);
+        Task AddAsync(Wallet wallet);
+        Task UpdateAsync(Wallet wallet);
     }
 }

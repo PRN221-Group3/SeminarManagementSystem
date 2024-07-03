@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "Repositorie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{7FEAEB18-DBE3-4A61-9BA3-F13A7F692338}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper", "Helper\Helper.csproj", "{EFAC3B98-D872-4071-A03F-6D8BBDD3A901}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{7FEAEB18-DBE3-4A61-9BA3-F13A7F692338}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FEAEB18-DBE3-4A61-9BA3-F13A7F692338}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FEAEB18-DBE3-4A61-9BA3-F13A7F692338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFAC3B98-D872-4071-A03F-6D8BBDD3A901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFAC3B98-D872-4071-A03F-6D8BBDD3A901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFAC3B98-D872-4071-A03F-6D8BBDD3A901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFAC3B98-D872-4071-A03F-6D8BBDD3A901}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -44,7 +44,7 @@ namespace SeminarManagement_PRN221.Pages.Events
         {
             EventId = eventId;
             Quantity = quantity;
-            TotalMoney = total;  
+            TotalMoney = total;
             Balance = balance;
 
             var allEvents = await _eventRepository.GetAllQueryableAsync();
@@ -73,7 +73,7 @@ namespace SeminarManagement_PRN221.Pages.Events
 
                 var maxQuantity = eventUpdate.NumberOfTickets;
 
-                if(maxQuantity >= Quantity)
+                if (maxQuantity >= Quantity)
                 {
                     maxQuantity -= Quantity;
                     eventUpdate.NumberOfTickets = maxQuantity;
@@ -91,7 +91,6 @@ namespace SeminarManagement_PRN221.Pages.Events
                     UpdateDate = DateTime.Now,
                     TransactionStatus = "Successfull",
                     WalletId = Wallet.WalletId,
-                    EventId = Event.EventId,
                     DepositAmount = TotalMoney
                 };
 
@@ -109,7 +108,9 @@ namespace SeminarManagement_PRN221.Pages.Events
                     BookingId = Guid.NewGuid(),
                     CreatedDate = transaction.CreationDate,
                     UpdatedDate = transaction.UpdateDate,
-                    UserId = Wallet.WalletId
+                    UserId = Wallet.WalletId,
+                    TotalAmount = TotalMoney,
+                    TotalTicket = Quantity
                 };
 
                 var wallet = _walletRepository.GetById(Wallet.WalletId);
@@ -168,4 +169,3 @@ namespace SeminarManagement_PRN221.Pages.Events
         }
     }
 }
-

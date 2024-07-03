@@ -8,7 +8,7 @@ using Repositories.BaseRepo;
 
 namespace Repositories.Interfaces
 {
-    public interface ISurveyRepository : IBaseRepository<Survey>
+    public interface IFeedbackRepository : IBaseRepository<Feedback>
     {
     }
 }

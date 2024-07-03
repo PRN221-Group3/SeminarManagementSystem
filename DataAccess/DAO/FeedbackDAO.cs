@@ -8,8 +8,8 @@ using DataAccess.DAO.Base;
 
 namespace DataAccess.DAO
 {
-    public class SurveyDAO : BaseDAO<Survey>
+    public class FeedbackDAO : BaseDAO<Feedback>
     {
-        public SurveyDAO(SeminarManagementDbContext context) : base(context) { }
+        public FeedbackDAO(SeminarManagementDbContext context) : base(context) { }
     }
 }
