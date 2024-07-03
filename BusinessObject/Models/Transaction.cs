@@ -15,6 +15,8 @@ public partial class Transaction
 
     public string? TransactionStatus { get; set; }
 
+    public string? OrderId { get; set; }
+
     public Guid? WalletId { get; set; }
 
     public virtual Wallet? Wallet { get; set; }

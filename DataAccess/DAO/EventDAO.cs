@@ -93,5 +93,15 @@ namespace DataAccess.DAO
 
             return await eventsSponsor.ToListAsync();
         }
+
+        public async Task UpdateFeedbackStatusAsync(Guid eventId, bool isFeedbackOpen)
+        {
+            var eventEntity = await _context.Events.FindAsync(eventId);
+            if (eventEntity != null)
+            {
+                eventEntity.IsFeedbackOpen = isFeedbackOpen;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

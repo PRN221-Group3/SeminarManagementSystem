@@ -37,6 +37,8 @@ public partial class User
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
 
+    public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
+
     public virtual Role? Role { get; set; }
 
     public virtual Sponsor? Sponsor { get; set; }

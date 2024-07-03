@@ -20,8 +20,9 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
         private readonly IEventSponsorRepository _eventSponsorRepository;
         private readonly IEmailRepository _emailRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IFeedBackRepository _feedbackRepository;
 
-        public ManageModel(IEventRepository eventRepository, IHallRepository hallRepository, ISponsorRepository sponsorRepository, IEventSponsorRepository eventSponsorRepository, IEmailRepository emailRepository, IUserRepository userRepository)
+        public ManageModel(IEventRepository eventRepository, IHallRepository hallRepository, ISponsorRepository sponsorRepository, IEventSponsorRepository eventSponsorRepository, IEmailRepository emailRepository, IUserRepository userRepository, IFeedBackRepository feedbackRepository)
         {
             _eventRepository = eventRepository;
             _hallRepository = hallRepository;
@@ -29,6 +30,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             _eventSponsorRepository = eventSponsorRepository;
             _emailRepository = emailRepository;
             _userRepository = userRepository;
+            _feedbackRepository = feedbackRepository;
         }
 
         public IList<Event> Events { get; private set; }
@@ -140,6 +142,45 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
 
                 // Return a 500 status code with the error message
                 return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        public async Task<IActionResult> OnGetFeedbackAsync(Guid eventId)
+        {
+            try
+            {
+                var feedbacks = await _feedbackRepository.GetByEventIdAsync(eventId);
+                var feedbackList = feedbacks.Select(f => new { f.FeedBackContent });
+
+                return new JsonResult(feedbackList);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework here)
+                Console.WriteLine($"Error fetching feedback: {ex.Message}");
+
+                // Return a 500 status code with the error message
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+        public async Task<IActionResult> OnPostToggleFeedbackStatusAsync(Guid eventId, bool isOpen)
+        {
+            try
+            {
+                var eventToUpdate = await _eventRepository.GetByIdAsync(eventId);
+
+                if (eventToUpdate == null)
+                {
+                    return new JsonResult(new { success = false, message = "Event not found." });
+                }
+
+                eventToUpdate.IsFeedbackOpen = isOpen;
+                await _eventRepository.UpdateAsync(eventToUpdate);
+
+                return new JsonResult(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { success = false, message = ex.Message });
             }
         }
 
