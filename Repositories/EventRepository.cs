@@ -58,5 +58,10 @@ namespace Repositories
         {
             return await Task.Run(() => _eventDAO.GetEventsSponsored(sponsorId));
         }
+
+        public async Task UpdateFeedbackStatusAsync(Guid eventId, bool isFeedbackOpen)
+        {
+            await _eventDAO.UpdateFeedbackStatusAsync(eventId, isFeedbackOpen);
+        }
     }
 }

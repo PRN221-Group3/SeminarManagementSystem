@@ -63,6 +63,60 @@
         right: 0;
         padding: 1rem 1rem;
     }
+
+    .scroll-panel {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .feedback-content {
+        font-size: 1.5rem;
+    }
+
+    .custom-switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .custom-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
 </style>
 
 <div class="container-custom">
@@ -117,6 +171,7 @@
                 <th>Updated Date</th>
                 <th>Hall</th>
                 <th>Number of Tickets</th>
+                <th>Feedback Status</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -147,6 +202,15 @@
                     <td>@Model.GetHallName(evt.HallId)</td>
                     <td>@evt.NumberOfTickets</td>
                     <td class="text-center">
+                        <label class="custom-switch">
+                            <input type="checkbox" @if (evt.IsFeedbackOpen == true)
+                            {
+                                <text>checked</text>
+                            } onchange="toggleFeedbackStatus('@evt.EventId', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td class="text-center">
                         <a class="btn btn-primary btn-sm" asp-page="/Admin/Manage-Event/Update" asp-route-id="@evt.EventId" data-bs-toggle="tooltip" title="Update Event">
                             <i class="fas fa-edit"></i>
                         </a>
@@ -161,6 +225,9 @@
                         }
                         <button class="btn btn-info btn-sm" onclick="showSponsorDetails('@evt.EventId')" data-bs-toggle="tooltip" title="View Sponsor Details">
                             <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="showFeedback('@evt.EventId')" data-bs-toggle="tooltip" title="View Feedback">
+                            <i class="fas fa-comments"></i> Feedback
                         </button>
                     </td>
                 </tr>
@@ -196,11 +263,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="sponsorDetailsModalLabel">Sponsor has been invited to participate in the event </h5>
+                    <h2 class="modal-title" id="sponsorDetailsModalLabel" style="font-weight: bold">Sponsor has been invited to participate in the event</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div id="sponsorDetailsContent"></div>
+                    <pre id="sponsorDetailsContent"></pre>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -209,16 +276,16 @@
         </div>
     </div>
 
-    <!-- Add a modal to display sponsor details -->
-    <div class="modal fade" id="sponsorDetailsModal" tabindex="-1" aria-labelledby="sponsorDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <!-- Add a modal to display feedback -->
+    <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="sponsorDetailsModalLabel">Sponsor Details</h5>
+                    <h2 class="modal-title" id="feedbackModalLabel" style="font-weight: bold">Event Feedback</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <pre id="sponsorDetailsContent"></pre>
+                <div class="modal-body scroll-panel">
+                    <div id="feedbackContent" class="feedback-content"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -261,6 +328,31 @@
             }
         }
 
+        async function showFeedback(eventId) {
+            try {
+                const response = await fetch(`/Admin/Manage-Event/Manage?handler=Feedback&eventId=${eventId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                const feedbackHtml = formatFeedback(data);
+                document.getElementById('feedbackContent').innerHTML = feedbackHtml;
+                var feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+                feedbackModal.show();
+            } catch (error) {
+                console.error('Error fetching feedback:', error);
+            }
+        }
+
+        function formatFeedback(feedbacks) {
+            let html = '<ul>';
+            feedbacks.forEach((feedback, index) => {
+                html += `<li>${index + 1}. Anonymous: ${feedback.feedBackContent}</li>`;
+            });
+            html += '</ul>';
+            return html;
+        }
+
         function formatSponsorDetails(sponsors) {
             let html = '<ul>';
             if (sponsors && Array.isArray(sponsors)) {
@@ -277,9 +369,31 @@
             return html;
         }
 
+        async function toggleFeedbackStatus(eventId, isOpen) {
+            try {
+                const response = await fetch(`/Admin/Manage-Event/Manage?handler=ToggleFeedbackStatus&eventId=${eventId}&isOpen=${isOpen}`, {
+                    method: 'POST'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Feedback status updated successfully!');
+                } else {
+                    alert('Failed to update feedback status.');
+                }
+            } catch (error) {
+                console.error('Error toggling feedback status:', error);
+            }
+        }
+
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
     </script>
 }

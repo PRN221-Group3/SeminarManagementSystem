@@ -31,6 +31,8 @@ public partial class Event
 
     public int? NumberOfTickets { get; set; }
 
+    public bool? IsFeedbackOpen { get; set; }
+
     public virtual ICollection<EventSponsor> EventSponsors { get; set; } = new List<EventSponsor>();
 
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();

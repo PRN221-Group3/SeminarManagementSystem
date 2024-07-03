@@ -8,7 +8,9 @@ using Repositories.BaseRepo;
 
 namespace Repositories.Interfaces
 {
-    public interface ISurveyRepository : IBaseRepository<Survey>
+    public interface IFeedBackRepository : IBaseRepository<Feedback>
     {
+        Task<IEnumerable<Feedback>> GetByEventIdAsync(Guid eventId);
+        Task<bool> FeedbackExistsAsync(Guid eventId, Guid userId);
     }
 }

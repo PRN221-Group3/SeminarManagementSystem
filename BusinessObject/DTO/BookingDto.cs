@@ -20,5 +20,6 @@ namespace BusinessObject.DTO
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public string? TransactionStatus { get; set; }
+        public bool? IsFeedbackOpen { get; set; }
     }
 }

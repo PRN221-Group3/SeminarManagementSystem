@@ -37,6 +37,7 @@ namespace DataAccess.DAO
                             CreatedDate = b.CreatedDate,
                             UpdatedDate = b.UpdatedDate,
                             TransactionStatus = tr.TransactionStatus,
+                            IsFeedbackOpen = e.IsFeedbackOpen,
                         };
             return await query.Distinct().ToListAsync();
         }
