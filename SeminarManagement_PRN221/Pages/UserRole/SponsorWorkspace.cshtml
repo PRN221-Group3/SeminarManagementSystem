@@ -33,10 +33,10 @@
                         <td>@eventSponsored.EventId</td>
                         <td>@eventSponsored.EventCode</td>
                         <td>@eventSponsored.EventName</td>
-                        <td>@(eventSponsored.CreationDate?.ToString("MM/dd/yyyy") ?? "")</td>
-                        <td>@(eventSponsored.UpdateDate?.ToString("MM/dd/yyyy") ?? "")</td>
-                        <td>@(eventSponsored.StartDate?.ToString("MM/dd/yyyy") ?? "")</td>
-                        <td>@(eventSponsored.EndDate?.ToString("MM/dd/yyyy") ?? "")</td>
+                        <td>@(eventSponsored.CreationDate?.ToString("dd/MM/yyyy") ?? "")</td>
+                        <td>@(eventSponsored.UpdateDate?.ToString("dd/MM/yyyy") ?? "")</td>
+                        <td>@(eventSponsored.StartDate?.ToString("dd/MM/yyyy") ?? "")</td>
+                        <td>@(eventSponsored.EndDate?.ToString("dd/MM/yyyy") ?? "")</td>
                         <td>@eventSponsored.Fee</td>
                         <td>@Model.EventSponsor.Status</td>
                         <td class="text-center">

@@ -53,10 +53,10 @@ Layout = "_Layout";
         <td>@order.EventFee</td>
         <td>@order.TotalTicket</td>
         <td>$@order.TotalAmount</td>
-        <td>@order.EventStartDate</td>
-        <td>@order.EventEndDate</td>
-        <td>@order.CreatedDate</td>
-        <td>@order.UpdatedDate</td>
+        <td>@order.EventStartDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
+        <td>@order.EventEndDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
+        <td>@order.CreatedDate.Value.ToString("dd/MM/yyyy")</td>
+        <td>@order.UpdatedDate.Value.ToString("dd/MM/yyyy")</td>
         <td>@order.TransactionStatus</td>
         <td>
             @if (order.IsFeedbackOpen == true && (DateTime.Now >= order.EventStartDate && DateTime.Now <= order.EventEndDate || DateTime.Now > order.EventEndDate))

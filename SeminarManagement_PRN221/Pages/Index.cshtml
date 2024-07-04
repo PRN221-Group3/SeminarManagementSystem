@@ -55,7 +55,7 @@
                                 <h5 class="card-title pricing-card-title">
                                     @if (eventItem.Fee > 0)
                                     {
-                                        <span class="badge bg-primary">$@eventItem.Fee</span>
+                                        <span class="badge bg-primary">@eventItem.Fee VND</span>
                                     }
                                     else
                                     {
@@ -63,8 +63,8 @@
                                     }
                                 </h5>
                                 <ul class="list-unstyled mt-3 mb-4">
-                                    <li>Start Date: @eventItem.StartDate?.ToString("g")</li>
-                                    <li>End Date: @eventItem.EndDate?.ToString("g")</li>
+                                    <li>Start Date: @eventItem.StartDate?.ToString("dd/MM/yyyy HH:mm")</li>
+                                    <li>End Date: @eventItem.EndDate?.ToString("dd/MM/yyyy HH:mm")</li>
                                     <li>Location: @eventItem.Hall?.HallName</li>
                                 </ul>
                                 <a href="/EventDetails?EventId=@eventItem.EventId" class="btn btn-lg btn-block btn-outline-primary">View Details</a>

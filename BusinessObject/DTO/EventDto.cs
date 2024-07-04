@@ -17,12 +17,14 @@ namespace BusinessObject.DTO
 
         [Required]
         [DataType(DataType.DateTime)]
-        [CustomDateRange("1/1/1753", "12/31/9999", ErrorMessage = "Start Date must be between 01/01/1753 and 12/31/9999")]
+        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}", ApplyFormatInEditMode = true)]
+        [CustomDateRange("1/1/1753", "12/31/9999", ErrorMessage = "Start Date must be between 01/01/1753 and 31/12/9999")]
         public DateTime StartDate { get; set; }
 
         [Required]
         [DataType(DataType.DateTime)]
-        [CustomDateRange("1/1/1753", "12/31/9999", ErrorMessage = "End Date must be between 01/01/1753 and 12/31/9999")]
+        [DisplayFormat(DataFormatString = "{0:dd'/'MM'/'yyyy}", ApplyFormatInEditMode = true)]
+        [CustomDateRange("1/1/1753", "12/31/9999", ErrorMessage = "End Date must be between 01/01/1753 and 31/12/9999")]
         public DateTime EndDate { get; set; }
 
         [StringLength(1000)]

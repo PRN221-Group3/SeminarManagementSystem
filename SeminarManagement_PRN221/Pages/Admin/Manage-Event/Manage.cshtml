@@ -193,12 +193,12 @@
                     <td>@evt.EventName</td>
                     <td>@evt.EventCode</td>
                     <td>@evt.Description</td>
-                    <td>@evt.StartDate?.ToString("MM/dd/yyyy HH:mm")</td>
-                    <td>@evt.EndDate?.ToString("MM/dd/yyyy HH:mm")</td>
+                    <td>@evt.StartDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@evt.EndDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td class="@statusClass">@Model.GetEventStatus(evt)</td>
                     <td>@evt.Fee?.ToString("C")</td>
-                    <td>@evt.CreationDate?.ToString("MM/dd/yyyy HH:mm")</td>
-                    <td>@evt.UpdateDate?.ToString("MM/dd/yyyy HH:mm")</td>
+                    <td>@evt.CreationDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@evt.UpdateDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@Model.GetHallName(evt.HallId)</td>
                     <td>@evt.NumberOfTickets</td>
                     <td class="text-center">

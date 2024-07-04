@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Wallet";
 }
-<<div class="container">
+<div class="container">
     <div class="row justify-content-center mt-5">
         <div class="col-md-6 text-center">
             <h2>Wallet</h2>
@@ -27,7 +27,7 @@
                     @foreach (var transaction in Model.Transactions)
                     {
                         <tr>
-                            <td>@transaction.CreationDate</td>
+                            <td>@transaction.CreationDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
                             <td>@transaction.DepositAmount</td>
                             <td>@transaction.TransactionStatus</td>
                         </tr>

@@ -53,15 +53,15 @@ public class IndexModel : PageModel
         Revenue = bookings.Sum(b => b.TotalAmount) ?? 0;
         TicketsSold = bookings.Sum(b => b.TotalTicket) ?? 0;
         var eventQueryable = _eventRepository.GetAllQueryableAsync().Result;
-        TicketsAvailable = eventQueryable.Select(s => s.NumberOfTickets).Sum();
+        TicketsAvailable = eventQueryable.Where(s => s.EndDate >= DateTime.Now).Select(s => s.NumberOfTickets).Sum();
 
         // Group data by month
         MonthlyRevenue = bookings
-            .GroupBy(b => b.CreatedDate.Value.ToString("yyyy-MM"))
+            .GroupBy(b => b.CreatedDate.Value.ToString("MM/dd/yyyy"))
             .ToDictionary(g => g.Key, g => g.Sum(b => b.TotalAmount) ?? 0);
 
         MonthlyTicketsSold = bookings
-            .GroupBy(b => b.CreatedDate.Value.ToString("yyyy-MM"))
+            .GroupBy(b => b.CreatedDate.Value.ToString("MM/dd/yyyy"))
             .ToDictionary(g => g.Key, g => g.Sum(b => b.TotalTicket) ?? 0);
 
         // Fetch other data

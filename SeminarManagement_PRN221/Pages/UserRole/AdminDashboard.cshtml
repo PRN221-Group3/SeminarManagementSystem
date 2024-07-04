@@ -118,7 +118,7 @@
                             <td>@transaction.Wallet.WalletNavigation.Username</td>
                             <td>@transaction.DepositAmount?.ToString("N0")đ</td>
                             <td>@transaction.TransactionStatus</td>
-                            <td>@transaction.CreationDate</td>
+                            <td>@transaction.CreationDate?.ToString("dd/MM/yyyy HH:mm:ss")</td>
                         </tr>
                     }
                 </tbody>
@@ -148,11 +148,22 @@
             var monthlyTicketsSoldData = @Html.Raw(monthlyTicketsSoldJson);
             var sponsorStatusData = @Html.Raw(sponsorStatusJson);
 
+            function formatDate(dateStr) {
+                var date = new Date(dateStr);
+                var day = ("0" + date.getDate()).slice(-2);
+                var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                var year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            }
+
+            var revenueLabels = Object.keys(monthlyRevenueData).map(dateStr => formatDate(dateStr));
+            var ticketsSoldLabels = Object.keys(monthlyTicketsSoldData).map(dateStr => formatDate(dateStr));
+
             var ctxRevenue = document.getElementById('revenueChart').getContext('2d');
             var revenueChart = new Chart(ctxRevenue, {
                 type: 'line',
                 data: {
-                    labels: Object.keys(monthlyRevenueData),
+                    labels: revenueLabels,
                     datasets: [{
                         label: 'Revenue',
                         data: Object.values(monthlyRevenueData),
@@ -174,7 +185,7 @@
             var ticketsSoldChart = new Chart(ctxTicketsSold, {
                 type: 'bar',
                 data: {
-                    labels: Object.keys(monthlyTicketsSoldData),
+                    labels: ticketsSoldLabels,
                     datasets: [{
                         label: 'Tickets Sold',
                         data: Object.values(monthlyTicketsSoldData),
