@@ -1,0 +1,28 @@
+﻿@page
+@model SeminarManagement_PRN221.Pages.Events.FailedPayModel
+@{
+}
+<div class="container mt-5">
+    <div class="card p-4 mx-auto" style="max-width: 40rem;">
+        <h2 class="my-3 text-center">SeminarManagement</h2>
+        <hr>
+
+        <div class="text-center">
+            <i class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 3rem;"></i>
+            <div class="title h2 text-danger mt-3">
+                @Model.ErrorMessage
+            </div>
+            <div class="card mt-3 p-3 text-lg-start bg-light mx-auto" style="width: auto;">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="mb-0">Transaction Time:</p>
+                    </div>
+                    <div class="col-6">
+                        <p class="mb-0"><strong>@Model.CreatedDate</strong></p>
+                    </div>
+                </div>
+            </div>
+            <a href="/Index" class="btn btn-primary mt-4">Go to Home</a>
+        </div>
+    </div>
+</div>
