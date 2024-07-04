@@ -1,0 +1,36 @@
+﻿@page
+@model SeminarManagement_PRN221.Pages.Events.SuccessPayModel
+@{
+}
+<div class="container mt-5">
+    <<div class="card p-4 mx-auto" style="max-width: 40rem;">
+        <h2 class="my-3 text-center">SeminarManagement</h2>
+        <hr>
+
+        <div class="text-center">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+            <div class="title h2 text-success mt-3">
+                Your booking was completed successfully.
+            </div>
+            <div class="card mt-3 p-3 text-lg-start bg-light mx-auto" style="width: auto;">
+                <div class="row">
+                    <div class="col-6">
+                        <p class="mb-0">Booking Id:</p>
+                    </div>
+                    <div class="col-6">
+                        <p class="mb-0"><strong>@Model.BookingId</strong></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <p class="mb-0">Thời gian giao dịch:</p>
+                    </div>
+                    <div class="col-6">
+                        <p class="mb-0"><strong>7/4/2024 1:03:59 PM</strong></p>
+                    </div>
+                </div>
+            </div>
+            <a href="/Index" class="btn btn-primary mt-4">Go to Home</a>
+        </div>
+    </div>
+</div>
