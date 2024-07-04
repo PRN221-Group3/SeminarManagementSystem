@@ -5,8 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using BusinessObject.DTO;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
 {
@@ -20,8 +22,9 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
         private readonly IEmailRepository _emailRepository;
         private readonly IUserRepository _userRepository;
         private readonly IFeedBackRepository _feedbackRepository;
+        private readonly IMemoryCache _cache;
 
-        public ManageModel(IEventRepository eventRepository, IHallRepository hallRepository, ISponsorRepository sponsorRepository, IEventSponsorRepository eventSponsorRepository, IEmailRepository emailRepository, IUserRepository userRepository, IFeedBackRepository feedbackRepository)
+        public ManageModel(IEventRepository eventRepository, IHallRepository hallRepository, ISponsorRepository sponsorRepository, IEventSponsorRepository eventSponsorRepository, IEmailRepository emailRepository, IUserRepository userRepository, IFeedBackRepository feedbackRepository, IMemoryCache cache)
         {
             _eventRepository = eventRepository;
             _hallRepository = hallRepository;
@@ -30,6 +33,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             _emailRepository = emailRepository;
             _userRepository = userRepository;
             _feedbackRepository = feedbackRepository;
+            _cache = cache;
         }
 
         public IList<Event> Events { get; private set; }
@@ -207,6 +211,65 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             if (currentDate >= evt.StartDate && currentDate <= evt.EndDate)
                 return "Open";
             return "Closed";
+        }
+
+        public async Task<IActionResult> OnPostToggleFreeStatusAsync(Guid eventId, bool isOpen)
+        {
+            try
+            {
+                var eventToUpdate = await _eventRepository.GetByIdAsync(eventId);
+
+                if (eventToUpdate == null)
+                {
+                    return new JsonResult(new { success = false, message = "Event not found." });
+                }
+               
+                if(eventToUpdate.Fee > 0)
+                {
+                    AddOriginalFeeToCache(eventToUpdate);
+                }
+
+                if (isOpen == true)
+                {
+                    eventToUpdate.Fee = 0;
+                    await _eventRepository.UpdateAsync(eventToUpdate);
+                }
+                else
+                {
+                    string cacheKey = "originalFee";
+
+                    if(_cache.TryGetValue(cacheKey, out decimal originalFee))
+                    {
+                        eventToUpdate.Fee = originalFee;
+                        await _eventRepository.UpdateAsync(eventToUpdate);
+                    }
+                    else
+                    {
+                        eventToUpdate.Fee = 1;
+                        await _eventRepository.UpdateAsync(eventToUpdate);
+                    }
+
+                }
+
+                return new JsonResult(new { success = true, newFee = eventToUpdate.Fee });
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(new { success = false, message = ex.Message });
+            }
+        }
+
+        private void AddOriginalFeeToCache(Event @event)
+        {
+            string cacheKey = "originalFee";
+
+            decimal? originalFee = @event.Fee;
+
+            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                .SetPriority(CacheItemPriority.Normal);
+
+            _cache.Set(cacheKey, originalFee, cacheEntryOptions);
         }
     }
 }

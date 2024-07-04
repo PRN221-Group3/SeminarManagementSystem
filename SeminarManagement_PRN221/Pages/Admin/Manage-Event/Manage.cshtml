@@ -172,6 +172,7 @@
                 <th>Hall</th>
                 <th>Number of Tickets</th>
                 <th>Feedback Status</th>
+                <th>Free Status</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -196,7 +197,7 @@
                     <td>@evt.StartDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evt.EndDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td class="@statusClass">@Model.GetEventStatus(evt)</td>
-                    <td>@evt.Fee?.ToString("C")</td>
+                    <td id="feeItem">@evt.Fee?.ToString("C")</td>
                     <td>@evt.CreationDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evt.UpdateDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@Model.GetHallName(evt.HallId)</td>
@@ -207,6 +208,15 @@
                             {
                                 <text>checked</text>
                             } onchange="toggleFeedbackStatus('@evt.EventId', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td class="text-center">
+                        <label class="custom-switch">
+                            <input type="checkbox" @if (evt.Fee == 0)
+                            {
+                                <text>checked</text>
+                            } onchange="toggleFreeStatus('@evt.EventId', this.checked)">
                             <span class="slider"></span>
                         </label>
                     </td>
@@ -395,5 +405,29 @@
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
+
+        async function toggleFreeStatus(eventId, isOpen) {
+            try {
+                const response = await fetch(`/Admin/Manage-Event/Manage?handler=ToggleFreeStatus&eventId=${eventId}&isOpen=${isOpen}`, {
+                    method: 'POST'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Event Fee is updated successfully!');
+                    const feeElement = document.getElementById(`feeItem`);
+                    feeElement.textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.newFee);
+                } else {
+                    alert('Failed to change the event to free');
+                }
+            } catch (error) {
+                console.error('Error toggling free event status:', error);
+            }
+        }
     </script>
 }
