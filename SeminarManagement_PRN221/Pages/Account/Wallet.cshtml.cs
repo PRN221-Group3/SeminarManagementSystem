@@ -17,8 +17,8 @@ namespace SeminarManagement_PRN221.Pages.Account
             _transactionRepository = transactionRepository;
         }
 
-        public bool IsDialogVisible { get; set; }
-        public bool DontRemindMeAgain { get; set; }
+        //public bool IsDialogVisible { get; set; }
+        //public bool DontRemindMeAgain { get; set; }
         public Wallet Wallet { get; set; }
         public List<Transaction> Transactions { get; set; }
 
@@ -37,7 +37,7 @@ namespace SeminarManagement_PRN221.Pages.Account
             }
             Transactions = (await _transactionRepository.GetTransactionsByWalletIdAsync(Wallet.WalletId)).ToList();
 
-            IsDialogVisible = !Request.Cookies.TryGetValue("dontRemindMeAgain", out var dontRemindMeAgain) || dontRemindMeAgain != "true";
+            //IsDialogVisible = !Request.Cookies.TryGetValue("dontRemindMeAgain", out var dontRemindMeAgain) || dontRemindMeAgain != "true";
             return Page();
         }
     }
