@@ -17,5 +17,20 @@ namespace Repositories
         {
             _walletDAO = walletDAO;
         }
+
+        public async Task<Wallet> GetByIdAsync(Guid walletId)
+        {
+            return await _walletDAO.GetByIdAsync(walletId);
+        }
+
+        public async Task AddAsync(Wallet wallet)
+        {
+            await Task.Run(() => _walletDAO.Create(wallet));
+        }
+
+        public async Task UpdateAsync(Wallet wallet)
+        {
+            await Task.Run(() => _walletDAO.Update(wallet));
+        }
     }
 }

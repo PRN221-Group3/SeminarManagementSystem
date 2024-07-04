@@ -1,4 +1,5 @@
 using BusinessObject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories.Interfaces;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
 {
+    [Authorize(Roles = "Operator")]
     public class SponsorModel : PageModel
     {
         private readonly ISponsorRepository _sponsorRepository;

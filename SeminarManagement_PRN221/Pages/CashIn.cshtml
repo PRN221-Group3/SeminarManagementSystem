@@ -1,0 +1,90 @@
+﻿@page "/cash-in"
+@model SeminarManagement_PRN221.Pages.CashInModel
+@{
+    ViewData["Title"] = "Cash In Wallet";
+}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6 text-center">
+            <h2>Cash In Your Wallet</h2>
+            <form id="cashInForm" method="post" onsubmit="return handleCashIn()">
+                <div class="form-group">
+                    <label for="amount">Enter Amount:</label>
+                    <input type="number" id="amount" name="amount" class="form-control" asp-for="Amount" required min="0.01" step="0.01" />
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Proceed to Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div class="modal" tabindex="-1" style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmation</h5>
+                    <button type="button" class="btn-close" onclick="closeDialog()"></button>
+                </div>
+                <div class="modal-body">
+                    <p>You cannot cash out when you have already charged in your wallet, are you sure?</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="dontRemindMeAgainCheckbox">
+                        <label class="form-check-label">
+                            Don't remind me again
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="proceedToCashIn()">Yes</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeDialog()">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function handleCashIn() {
+            if (getCookie('dontRemindMeAgain') === 'true') {
+                return true; 
+            } else {
+                document.querySelector('.modal').style.display = 'block';
+                return false; 
+            }
+        }
+
+        function proceedToCashIn() {
+            if (document.getElementById('dontRemindMeAgainCheckbox').checked) {
+                setCookie('dontRemindMeAgain', 'true', 365);
+            }
+            document.getElementById('cashInForm').submit();
+        }
+
+        function closeDialog() {
+            document.querySelector('.modal').style.display = 'none';
+        }
+
+        function setCookie(name, value, days) {
+            var expires = "";
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+    </script>
+}

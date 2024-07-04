@@ -74,7 +74,7 @@ namespace SeminarManagement_PRN221.Pages.Events
 
                 if (Event.Fee <= 0)
                 {
-                    TransactionExist = await _transactionRepository.GetByWalletId(Wallet.WalletId, EventId);
+                    TransactionExist = await _transactionRepository.GetByWalletId(Wallet.WalletId);
                 }
 
                 TotalMoney = Event.Fee * Quantity;

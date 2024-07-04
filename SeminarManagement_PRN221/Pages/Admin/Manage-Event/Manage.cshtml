@@ -2,7 +2,7 @@
 @using Repositories
 @model SeminarManagement_PRN221.Pages.Admin.Manage_Event.ManageModel
 @{
-Layout = "_AdminLayout";
+    Layout = "_AdminLayout";
 }
 
 <h2 class="text-center mb-5">List of Events</h2>
@@ -52,10 +52,10 @@ Layout = "_AdminLayout";
         color: #ffffff;
     }
 
-    .btn-custom:hover {
-        background-color: #495057;
-        color: #ffffff;
-    }
+        .btn-custom:hover {
+            background-color: #495057;
+            color: #ffffff;
+        }
 
     .alert-dismissible .btn-close {
         position: absolute;
@@ -63,6 +63,60 @@ Layout = "_AdminLayout";
         right: 0;
         padding: 1rem 1rem;
     }
+
+    .scroll-panel {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .feedback-content {
+        font-size: 1.5rem;
+    }
+
+    .custom-switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+        .custom-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
 </style>
 
 <div class="container-custom">
@@ -89,82 +143,105 @@ Layout = "_AdminLayout";
 
     @if (!string.IsNullOrEmpty(Model.ErrorMessage))
     {
-    <div class='alert alert-danger alert-dismissible fade show' role='alert'>
-        <strong>@Model.ErrorMessage</strong>
-        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-    </div>
+        <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+            <strong>@Model.ErrorMessage</strong>
+            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>
     }
     else if (!string.IsNullOrEmpty(Model.SuccessMessage))
     {
-    <div class='alert alert-success alert-dismissible fade show' role='alert'>
-        <strong>@Model.SuccessMessage</strong>
-        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-    </div>
+        <div class='alert alert-success alert-dismissible fade show' role='alert'>
+            <strong>@Model.SuccessMessage</strong>
+            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>
     }
 
     <table class="table table-bordered table-hover table-custom">
         <thead>
-        <tr>
-            <th>ID</th>
-            <th>Event Name</th>
-            <th>Event Code</th>
-            <th>Description</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Status</th>
-            <th>Fee</th>
-            <th>Created Date</th>
-            <th>Updated Date</th>
-            <th>Hall</th>
-            <th>Number of Tickets</th>
-            <th>Action</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th>Event Name</th>
+                <th>Event Code</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Fee</th>
+                <th>Created Date</th>
+                <th>Updated Date</th>
+                <th>Hall</th>
+                <th>Number of Tickets</th>
+                <th>Feedback Status</th>
+                <th>Free Status</th>
+                <th>Action</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var evt in Model.Events.Where(e => e.IsDeleted != true))
-        {
-        var statusClass = Model.GetEventStatus(evt) switch
-        {
-        "Open" => "status-open",
-        "Closed" => "status-closed",
-        "Future" => "status-future",
-        _ => string.Empty
-        };
-
-        var rowClass = Model.GetEventStatus(evt) == "Closed" ? "table-danger" : string.Empty;
-
-        <tr class="@rowClass">
-            <td>@evt.EventId</td>
-            <td>@evt.EventName</td>
-            <td>@evt.EventCode</td>
-            <td>@evt.Description</td>
-            <td>@evt.StartDate?.ToString("MM/dd/yyyy HH:mm")</td>
-            <td>@evt.EndDate?.ToString("MM/dd/yyyy HH:mm")</td>
-            <td class="@statusClass">@Model.GetEventStatus(evt)</td>
-            <td>@evt.Fee?.ToString("C")</td>
-            <td>@evt.CreationDate?.ToString("MM/dd/yyyy HH:mm")</td>
-            <td>@evt.UpdateDate?.ToString("MM/dd/yyyy HH:mm")</td>
-            <td>@Model.GetHallName(evt.HallId)</td>
-            <td>@evt.NumberOfTickets</td>
-            <td class="text-center">
-                <a class="btn btn-primary btn-sm" asp-page="/Admin/Manage-Event/Update" asp-route-id="@evt.EventId" data-bs-toggle="tooltip" title="Update Event">
-                    <i class="fas fa-edit"></i>
-                </a>
-                @if (Model.GetEventStatus(evt) != "Open")
+            @foreach (var evt in Model.Events.Where(e => e.IsDeleted != true))
+            {
+                var statusClass = Model.GetEventStatus(evt) switch
                 {
-                <button class="btn btn-danger btn-sm" onclick="confirmDelete('@evt.EventId')" data-bs-toggle="tooltip" title="Delete Event">
-                    <i class="fas fa-trash-alt"></i>
-                </button>
-                <a class="btn btn-warning btn-sm" asp-page="/Admin/Manage-Event/Sponsor" asp-route-EventId="@evt.EventId" data-bs-toggle="tooltip" title="Get Sponsor of Event">
-                    <i class="fas fa-users"></i>
-                </a>
-                }
-                <button class="btn btn-info btn-sm" onclick="showSponsorDetails('@evt.EventId')" data-bs-toggle="tooltip" title="View Sponsor Details">
-                    <i class="fas fa-info-circle"></i> Details
-                </button>
-            </td>
-        </tr>
-        }
+                    "Open" => "status-open",
+                    "Closed" => "status-closed",
+                    "Future" => "status-future",
+                    _ => string.Empty
+                };
+
+                var rowClass = Model.GetEventStatus(evt) == "Closed" ? "table-danger" : string.Empty;
+
+                <tr class="@rowClass">
+                    <td>@evt.EventId</td>
+                    <td>@evt.EventName</td>
+                    <td>@evt.EventCode</td>
+                    <td>@evt.Description</td>
+                    <td>@evt.StartDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@evt.EndDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="@statusClass">@Model.GetEventStatus(evt)</td>
+                    <td id="feeItem">@evt.Fee?.ToString("C")</td>
+                    <td>@evt.CreationDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@evt.UpdateDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@Model.GetHallName(evt.HallId)</td>
+                    <td>@evt.NumberOfTickets</td>
+                    <td class="text-center">
+                        <label class="custom-switch">
+                            <input type="checkbox" @if (evt.IsFeedbackOpen == true)
+                            {
+                                <text>checked</text>
+                            } onchange="toggleFeedbackStatus('@evt.EventId', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td class="text-center">
+                        <label class="custom-switch">
+                            <input type="checkbox" @if (evt.Fee == 0)
+                            {
+                                <text>checked</text>
+                            } onchange="toggleFreeStatus('@evt.EventId', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td class="text-center">
+                        <a class="btn btn-primary btn-sm" asp-page="/Admin/Manage-Event/Update" asp-route-id="@evt.EventId" data-bs-toggle="tooltip" title="Update Event">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        @if (Model.GetEventStatus(evt) != "Open")
+                        {
+                            <button class="btn btn-danger btn-sm" onclick="confirmDelete('@evt.EventId')" data-bs-toggle="tooltip" title="Delete Event">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <a class="btn btn-warning btn-sm" asp-page="/Admin/Manage-Event/Sponsor" asp-route-EventId="@evt.EventId" data-bs-toggle="tooltip" title="Get Sponsor of Event">
+                                <i class="fas fa-users"></i>
+                            </a>
+                        }
+                        <button class="btn btn-info btn-sm" onclick="showSponsorDetails('@evt.EventId')" data-bs-toggle="tooltip" title="View Sponsor Details">
+                            <i class="fas fa-info-circle"></i> Details
+                        </button>
+                        <button class="btn btn-secondary btn-sm" onclick="showFeedback('@evt.EventId')" data-bs-toggle="tooltip" title="View Feedback">
+                            <i class="fas fa-comments"></i> Feedback
+                        </button>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 
@@ -196,25 +273,7 @@ Layout = "_AdminLayout";
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="sponsorDetailsModalLabel">Sponsor has been invited to participate in the event </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div id="sponsorDetailsContent"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add a modal to display sponsor details -->
-    <div class="modal fade" id="sponsorDetailsModal" tabindex="-1" aria-labelledby="sponsorDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="sponsorDetailsModalLabel">Sponsor Details</h5>
+                    <h2 class="modal-title" id="sponsorDetailsModalLabel" style="font-weight: bold">Sponsor has been invited to participate in the event</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -226,60 +285,149 @@ Layout = "_AdminLayout";
             </div>
         </div>
     </div>
+
+    <!-- Add a modal to display feedback -->
+    <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="feedbackModalLabel" style="font-weight: bold">Event Feedback</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body scroll-panel">
+                    <div id="feedbackContent" class="feedback-content"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
-<script>
-    function confirmDelete(eventId) {
-        var eventIdToDeleteInput = document.getElementById('eventIdToDelete');
-        eventIdToDeleteInput.value = eventId;
-        var deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-        deleteModal.show();
-    }
+    <script>
+        function confirmDelete(eventId) {
+            var eventIdToDeleteInput = document.getElementById('eventIdToDelete');
+            eventIdToDeleteInput.value = eventId;
+            var deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            deleteModal.show();
+        }
 
-    function handleDelete() {
-        var eventIdToDelete = document.getElementById('eventIdToDelete').value;
-        var eventIdToDeleteFormInput = document.getElementById('eventIdToDeleteForm');
-        eventIdToDeleteFormInput.value = eventIdToDelete;
-        return true;
-    }
+        function handleDelete() {
+            var eventIdToDelete = document.getElementById('eventIdToDelete').value;
+            var eventIdToDeleteFormInput = document.getElementById('eventIdToDeleteForm');
+            eventIdToDeleteFormInput.value = eventIdToDelete;
+            return true;
+        }
 
-    async function showSponsorDetails(eventId) {
-        try {
-            const response = await fetch(`/Admin/Manage-Event/Manage?handler=SponsorDetails&eventId=${eventId}`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+        async function showSponsorDetails(eventId) {
+            try {
+                const response = await fetch(`/Admin/Manage-Event/Manage?handler=SponsorDetails&eventId=${eventId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                const sponsors = JSON.parse(data).$values;
+                const sponsorDetails = formatSponsorDetails(sponsors);
+                document.getElementById('sponsorDetailsContent').innerHTML = sponsorDetails;
+                var sponsorModal = new bootstrap.Modal(document.getElementById('sponsorDetailsModal'));
+                sponsorModal.show();
+            } catch (error) {
+                console.error('Error fetching sponsor details:', error);
             }
-            const data = await response.json();
-            const sponsors = JSON.parse(data).$values;
-            const sponsorDetails = formatSponsorDetails(sponsors);
-            document.getElementById('sponsorDetailsContent').innerHTML = sponsorDetails;
-            var sponsorModal = new bootstrap.Modal(document.getElementById('sponsorDetailsModal'));
-            sponsorModal.show();
-        } catch (error) {
-            console.error('Error fetching sponsor details:', error);
         }
-    }
 
-    function formatSponsorDetails(sponsors) {
-        let html = '<ul>';
-        if (sponsors && Array.isArray(sponsors)) {
-            sponsors.forEach(sponsor => {
-                html += `<li><strong>Sponsor Name:</strong> ${sponsor.Sponsor ? sponsor.Sponsor.SponsorName : 'N/A'}</li>`;
-                html += `<li><strong>Status:</strong> ${sponsor.Status ?? 'N/A'}</li>`;
-                html += `<li><strong>Sponsor Product:</strong> ${sponsor.SponsorProduct ?? 'N/A'}</li>`;
-                html += '<hr>';
+        async function showFeedback(eventId) {
+            try {
+                const response = await fetch(`/Admin/Manage-Event/Manage?handler=Feedback&eventId=${eventId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                const feedbackHtml = formatFeedback(data);
+                document.getElementById('feedbackContent').innerHTML = feedbackHtml;
+                var feedbackModal = new bootstrap.Modal(document.getElementById('feedbackModal'));
+                feedbackModal.show();
+            } catch (error) {
+                console.error('Error fetching feedback:', error);
+            }
+        }
+
+        function formatFeedback(feedbacks) {
+            let html = '<ul>';
+            feedbacks.forEach((feedback, index) => {
+                html += `<li>${index + 1}. Anonymous: ${feedback.feedBackContent}</li>`;
             });
-        } else {
-            html += '<li>No sponsors found</li>';
+            html += '</ul>';
+            return html;
         }
-        html += '</ul>';
-        return html;
-    }
 
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-</script>
+        function formatSponsorDetails(sponsors) {
+            let html = '<ul>';
+            if (sponsors && Array.isArray(sponsors)) {
+                sponsors.forEach(sponsor => {
+                    html += `<li><strong>Sponsor Name:</strong> ${sponsor.Sponsor ? sponsor.Sponsor.SponsorName : 'N/A'}</li>`;
+                    html += `<li><strong>Status:</strong> ${sponsor.Status ?? 'N/A'}</li>`;
+                    html += `<li><strong>Sponsor Product:</strong> ${sponsor.SponsorProduct ?? 'N/A'}</li>`;
+                    html += '<hr>';
+                });
+            } else {
+                html += '<li>No sponsors found</li>';
+            }
+            html += '</ul>';
+            return html;
+        }
+
+        async function toggleFeedbackStatus(eventId, isOpen) {
+            try {
+                const response = await fetch(`/Admin/Manage-Event/Manage?handler=ToggleFeedbackStatus&eventId=${eventId}&isOpen=${isOpen}`, {
+                    method: 'POST'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Feedback status updated successfully!');
+                } else {
+                    alert('Failed to update feedback status.');
+                }
+            } catch (error) {
+                console.error('Error toggling feedback status:', error);
+            }
+        }
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        async function toggleFreeStatus(eventId, isOpen) {
+            try {
+                const response = await fetch(`/Admin/Manage-Event/Manage?handler=ToggleFreeStatus&eventId=${eventId}&isOpen=${isOpen}`, {
+                    method: 'POST'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert('Event Fee is updated successfully!');
+                    const feeElement = document.getElementById(`feeItem`);
+                    feeElement.textContent = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.newFee);
+                } else {
+                    alert('Failed to change the event to free');
+                }
+            } catch (error) {
+                console.error('Error toggling free event status:', error);
+            }
+        }
+    </script>
 }

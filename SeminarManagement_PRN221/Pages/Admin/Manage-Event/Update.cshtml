@@ -71,10 +71,21 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                 </div>
 
                 <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="freeEventCheckbox" onchange="toggleFee()">
+                            <label class="form-check-label" for="freeEventCheckbox">
+                                Free Event
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
                     <div class="col-sm-6">
                         <label class="col-form-label">Fee</label>
                         <div class="input-group">
-                            <span class="input-group-text">$</span>
+                            <span class="input-group-text">VND</span>
                             <input type="number" step="0.01" class="form-control" asp-for="EventDto.Fee" id="fee">
                         </div>
                         <span asp-validation-for="EventDto.Fee" class="text-danger"></span>
@@ -100,10 +111,6 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                         <input type="number" class="form-control" asp-for="EventDto.NumberOfTickets" id="numberOfTickets">
                         <span asp-validation-for="EventDto.NumberOfTickets" class="text-danger"></span>
                     </div>
-                    <div class="col-sm-6">
-                        <label class="col-form-label">Hall Capacity</label>
-                        <input readonly type="number" class="form-control" id="hallCapacity">
-                    </div>
                 </div>
             }
 
@@ -115,6 +122,9 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                     <a class="btn btn-outline-primary" href="/Admin/Manage-Event/Manage" role="button"><i class="fas fa-times"></i> Cancel</a>
                 </div>
             </div>
+
+            <input type="hidden" id="feeHidden" asp-for="EventDto.Fee">
+
         </form>
     </div>
 </div>
@@ -195,6 +205,33 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
 
             return true;
         }
+            var checkbox = document.getElementById('freeEventCheckbox');
+            var feeInput = document.getElementById('fee');
+            var feeHidden = document.getElementById('feeHidden');
+
+        if (feeInput.value === '0.00') {
+            feeInput.value = '';
+            checkbox.checked = true;
+            feeInput.disabled = true;
+        }
+
+        function toggleFee() {
+
+            if (checkbox.checked) {
+                feeInput.dataset.originalValue = feeInput.value;
+                feeInput.value = '';
+                feeInput.disabled = true;
+                feeHidden.value = 0;
+            } else {
+                feeInput.disabled = false;
+                feeInput.value = feeInput.dataset.originalValue || '';
+                feeHidden.value = feeInput.value;
+            }
+        }
+
+        document.getElementById('fee').addEventListener('input', function () {
+            document.getElementById('feeHidden').value = this.value;
+        });
     </script>
 
     <style>

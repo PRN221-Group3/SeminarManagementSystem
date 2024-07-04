@@ -104,8 +104,8 @@
                     <td>@GetRoleName(user.RoleId)</td>
                     <td>@user.IsDeleted</td>
                     <td>@user.IsActivated</td>
-                    <td>@user.CreatedDate?.ToString("MM/dd/yyyy")</td>
-                    <td>@user.UpdatedDate?.ToString("MM/dd/yyyy")</td>
+                    <td>@user.CreatedDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@user.UpdatedDate?.ToString("dd/MM/yyyy")</td>
                     <td>
                         @if (!string.IsNullOrEmpty(user.QrCode))
                         {

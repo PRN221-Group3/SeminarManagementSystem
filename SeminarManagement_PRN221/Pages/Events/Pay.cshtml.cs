@@ -44,7 +44,7 @@ namespace SeminarManagement_PRN221.Pages.Events
         {
             EventId = eventId;
             Quantity = quantity;
-            TotalMoney = total;  
+            TotalMoney = total;
             Balance = balance;
 
             var allEvents = await _eventRepository.GetAllQueryableAsync();
@@ -67,51 +67,70 @@ namespace SeminarManagement_PRN221.Pages.Events
 
         public async Task<IActionResult> OnPost()
         {
-            var eventUpdate = _eventRepository.GetById(Event.EventId);
-            if (eventUpdate != null)
+            try
             {
-
-                eventUpdate.NumberOfTickets -= Quantity;
-
-                Transaction transaction = new()
+                var eventUpdate = _eventRepository.GetById(Event.EventId);
+                if (eventUpdate != null)
                 {
-                    TransactionId = Guid.NewGuid(),
-                    CreationDate = DateTime.Now,
-                    UpdateDate = DateTime.Now,
-                    TransactionStatus = "Successfull",
-                    WalletId = Wallet.WalletId,
-                    EventId = Event.EventId,
-                    DepositAmount = Event.Fee
-                };
 
-                Ticket ticket = new()
-                {
-                    TicketId = Guid.NewGuid(),
-                    EventId = Event.EventId,
-                    Price = Event.Fee,
-                    CreatedDate = transaction.CreationDate,
-                    UpdatedDate = transaction.UpdateDate,
-                };
+                    var maxQuantity = eventUpdate.NumberOfTickets;
 
-                Booking booking = new()
-                {
-                    BookingId = Guid.NewGuid(),
-                    CreatedDate = transaction.CreationDate,
-                    UpdatedDate = transaction.UpdateDate,
-                    UserId = Wallet.WalletId
-                };
+                    if (maxQuantity >= Quantity)
+                    {
+                        maxQuantity -= Quantity;
+                        eventUpdate.NumberOfTickets = maxQuantity;
+                    }
+                    else
+                    {
+                        ViewData["msgTicketError"] = "Out of tickets";
+                        return Page();
+                    }
 
-                var wallet = _walletRepository.GetById(Wallet.WalletId);
-                wallet.Balance = Balance - TotalMoney;
+                    Transaction transaction = new()
+                    {
+                        TransactionId = Guid.NewGuid(),
+                        CreationDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        TransactionStatus = "Successfull",
+                        WalletId = Wallet.WalletId,
+                        DepositAmount = TotalMoney,
+                        OrderId = "#buyticket"
+                    };
 
-                booking.Tickets.Add(ticket);
+                    Ticket ticket = new()
+                    {
+                        TicketId = Guid.NewGuid(),
+                        EventId = Event.EventId,
+                        Price = Event.Fee,
+                        CreatedDate = transaction.CreationDate,
+                        UpdatedDate = transaction.UpdateDate,
+                    };
 
-                await _ticketRepository.AddAsync(ticket);
-                await _bookingRepository.AddAsync(booking);
-                await _walletRepository.UpdateAsync(wallet);
-                await _transactionRepository.AddAsync(transaction);
-                await _eventRepository.UpdateAsync(eventUpdate);
-                return RedirectToPage("/Index");
+                    Booking booking = new()
+                    {
+                        BookingId = Guid.NewGuid(),
+                        CreatedDate = transaction.CreationDate,
+                        UpdatedDate = transaction.UpdateDate,
+                        UserId = Wallet.WalletId,
+                        TotalAmount = TotalMoney,
+                        TotalTicket = Quantity
+                    };
+
+                    var wallet = _walletRepository.GetById(Wallet.WalletId);
+                    wallet.Balance = Balance - TotalMoney;
+
+                    booking.Tickets.Add(ticket);
+                    await _ticketRepository.AddAsync(ticket);
+                    await _bookingRepository.AddAsync(booking);
+                    await _walletRepository.UpdateAsync(wallet);
+                    await _transactionRepository.AddAsync(transaction);
+                    await _eventRepository.UpdateAsync(eventUpdate);
+                    return RedirectToPage("/Events/SuccessPay", new { booking.CreatedDate, booking.BookingId });
+                }
+            }
+            catch (Exception ex)
+            {
+                return RedirectToPage("/Events/FailedPay", new { ErrorMessage = ex.Message, CreatedDate = DateTime.Now });
             }
             return Page();
         }
@@ -157,4 +176,3 @@ namespace SeminarManagement_PRN221.Pages.Events
         }
     }
 }
-

@@ -1,14 +1,47 @@
 ﻿@page
 @model SeminarManagement_PRN221.Pages.Account.WalletModel
 @{
+    ViewData["Title"] = "Wallet";
 }
 <div class="container">
     <div class="row justify-content-center mt-5">
         <div class="col-md-6 text-center">
             <h2>Wallet</h2>
             <h3 class="mt-4">Balance:</h3>
-            <p class="lead">$@Model.Wallet.Balance</p> <!-- Replace with your actual balance variable or value -->
-            <!-- Optional additional content or buttons can go here -->
+            <p class="lead">$@Model.Wallet.Balance</p>
+            <button class="btn btn-primary" id="cashInButton">Cash in wallet</button>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <h3>Transaction History</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transaction in Model.Transactions)
+                    {
+                        <tr>
+                            <td>@transaction.CreationDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                            <td>@transaction.DepositAmount</td>
+                            <td>@transaction.TransactionStatus</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById('cashInButton').addEventListener('click', function () {
+            window.location.href = '/cash-in';
+        });
+    </script>
+}

@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BusinessObject.DTO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
 {
+    [Authorize(Roles = "Operator")]
     public class UpdateModel : PageModel
     {
         private readonly IEventRepository _eventRepository;

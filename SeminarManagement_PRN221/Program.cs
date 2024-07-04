@@ -56,11 +56,21 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireSponsorRole", policy => policy.RequireRole("Sponsor"));
 });
 
+// Add Session
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddDistributedMemoryCache();
+
 // Add Database Context
 builder.Services.AddDbContext<SeminarManagementDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
-
+builder.Services.AddMemoryCache();
 // Add Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -70,7 +80,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IHallRepository, HallRepository>();
 builder.Services.AddScoped<ISponsorRepository, SponsorRepository>();
-builder.Services.AddScoped<ISurveyRepository, SurveyRepository>();
+builder.Services.AddScoped<IFeedBackRepository, FeedBackRepository>();
 builder.Services.AddScoped<ITicketRepository, TicketRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
@@ -84,14 +94,15 @@ builder.Services.AddScoped<BookingDAO>();
 builder.Services.AddScoped<CategoryDAO>();
 builder.Services.AddScoped<EventDAO>();
 builder.Services.AddScoped<HallDAO>();
-builder.Services.AddScoped<SurveyDAO>();
+builder.Services.AddScoped<FeedBackDAO>();
 builder.Services.AddScoped<TicketDAO>();
 builder.Services.AddScoped<TransactionDAO>();
 builder.Services.AddScoped<WalletDAO>();
 builder.Services.AddScoped<SponsorDAO>();
 builder.Services.AddScoped<EventSponsorDAO>();
 builder.Services.AddScoped<EventSponsorDAO>();
-
+builder.Services.AddScoped<IVnPayRepository, VnPayRepository>();
+builder.Services.AddHttpContextAccessor();
 // Configure AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
 {

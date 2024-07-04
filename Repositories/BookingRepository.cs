@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BusinessObject.DTO;
 using BusinessObject.Models;
 using DataAccess.DAO;
 using Repositories.BaseRepo;
@@ -16,6 +17,11 @@ namespace Repositories
         public BookingRepository(BookingDAO bookingDAO) : base(bookingDAO)
         {
             _bookingDAO = bookingDAO;
+        }
+
+        public Task<IEnumerable<BookingDto>> GetBookingsOfUser(Guid userId)
+        {
+            return Task.Run(async () => await _bookingDAO.GetBookingsOfUser(userId));
         }
     }
 }

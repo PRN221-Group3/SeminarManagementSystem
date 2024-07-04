@@ -1,4 +1,5 @@
 using BusinessObject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repositories;
 using Repositories.Interfaces;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
 {
+    [Authorize(Roles = "Operator")]
     public class IndexModel : PageModel
     {
         private readonly IUserRepository _userRepository;
