@@ -7,13 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SeminarManagement_PRN221", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessObject", "BusinessObject\BusinessObject.csproj", "{C5ADD8D2-1877-492A-A060-1024F2445F5D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{9C78ABDA-419B-4DBB-B05B-46915B3F169E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "Repositories\Repositories.csproj", "{89BA7A67-F3D0-489E-B444-919A6AD3059F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{7FEAEB18-DBE3-4A61-9BA3-F13A7F692338}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper", "Helper\Helper.csproj", "{EFAC3B98-D872-4071-A03F-6D8BBDD3A901}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helper", "Helper\Helper.csproj", "{EFAC3B98-D872-4071-A03F-6D8BBDD3A901}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{C5ADD8D2-1877-492A-A060-1024F2445F5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5ADD8D2-1877-492A-A060-1024F2445F5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5ADD8D2-1877-492A-A060-1024F2445F5D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C78ABDA-419B-4DBB-B05B-46915B3F169E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C78ABDA-419B-4DBB-B05B-46915B3F169E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C78ABDA-419B-4DBB-B05B-46915B3F169E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C78ABDA-419B-4DBB-B05B-46915B3F169E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89BA7A67-F3D0-489E-B444-919A6AD3059F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89BA7A67-F3D0-489E-B444-919A6AD3059F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89BA7A67-F3D0-489E-B444-919A6AD3059F}.Release|Any CPU.ActiveCfg = Release|Any CPU
