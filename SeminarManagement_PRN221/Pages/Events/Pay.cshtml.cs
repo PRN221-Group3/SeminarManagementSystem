@@ -91,7 +91,7 @@ namespace SeminarManagement_PRN221.Pages.Events
                         TransactionId = Guid.NewGuid(),
                         CreationDate = DateTime.Now,
                         UpdateDate = DateTime.Now,
-                        TransactionStatus = "Successfull",
+                        TransactionStatus = "SUCCESS",
                         WalletId = Wallet.WalletId,
                         DepositAmount = TotalMoney,
                         OrderId = "#buyticket"
