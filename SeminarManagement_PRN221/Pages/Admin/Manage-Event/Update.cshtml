@@ -30,7 +30,7 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                 <div class="row mb-3">
                     <label class="col-sm-4 col-form-label">End Date</label>
                     <div class="col-sm-8">
-                        <input type="datetime-local" class="form-control" asp-for="EventDto.EndDate" id="endDate">
+                        <input type="datetime-local" class="form-control" asp-for="EventDto.EndDate" id="endDate" value="@Model.EventDto.EndDate.ToString("yyyy-MM-ddTHH:mm")">
                         <span asp-validation-for="EventDto.EndDate" class="text-danger"></span>
                     </div>
                 </div>
@@ -54,12 +54,12 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                 <div class="row mb-3">
                     <div class="col-sm-6">
                         <label class="col-form-label">Start Date</label>
-                        <input type="datetime-local" class="form-control" asp-for="EventDto.StartDate" id="startDate">
+                        <input type="datetime-local" class="form-control" asp-for="EventDto.StartDate" id="startDate" value="@Model.EventDto.StartDate.ToString("yyyy-MM-ddTHH:mm")">
                         <span asp-validation-for="EventDto.StartDate" class="text-danger"></span>
                     </div>
                     <div class="col-sm-6">
                         <label class="col-form-label">End Date</label>
-                        <input type="datetime-local" class="form-control" asp-for="EventDto.EndDate" id="endDate">
+                        <input type="datetime-local" class="form-control" asp-for="EventDto.EndDate" id="endDate" value="@Model.EventDto.EndDate.ToString("yyyy-MM-ddTHH:mm")">
                         <span asp-validation-for="EventDto.EndDate" class="text-danger"></span>
                     </div>
                 </div>
@@ -108,10 +108,11 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                 <div class="row mb-3">
                     <div class="col-sm-6">
                         <label class="col-form-label">Number of Tickets</label>
-                        <input type="number" class="form-control" asp-for="EventDto.NumberOfTickets" id="numberOfTickets">
+                        <input type="number" class="form-control" asp-for="EventDto.NumberOfTickets" id="numberOfTickets" min="50">
                         <span asp-validation-for="EventDto.NumberOfTickets" class="text-danger"></span>
                     </div>
                 </div>
+
             }
 
             <div class="row mb-3">

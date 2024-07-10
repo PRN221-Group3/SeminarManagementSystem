@@ -1,23 +1,23 @@
 ﻿@page
 @model SeminarManagement_PRN221.Pages.Admin.Manage_Account.CreateModel
 @{
-    Layout = "_AdminLayout";
+Layout = "_AdminLayout";
 }
 
 <h2 class="text-center mb-5">New User</h2>
 @if (!string.IsNullOrEmpty(Model.ErrorMessage))
 {
-    <div class='alert alert-danger alert-dismissible fade show' role='alert'>
-        <strong>@Model.ErrorMessage</strong>
-        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-    </div>
+<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+    <strong>@Model.ErrorMessage</strong>
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+</div>
 }
 else if (!string.IsNullOrEmpty(Model.SuccessMessage))
 {
-    <div class='alert alert-success alert-dismissible fade show' role='alert'>
-        <strong>@Model.SuccessMessage</strong>
-        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-    </div>
+<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>@Model.SuccessMessage</strong>
+    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+</div>
 }
 
 <div class="row">
@@ -80,7 +80,7 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                         <option value="">Select Role</option>
                         @foreach (var role in Model.Roles)
                         {
-                            <option value="@role.RoleId">@role.RoleName</option>
+                        <option value="@role.RoleId">@role.RoleName</option>
                         }
                     </select>
                     <span asp-validation-for="UserDto.RoleId" class="text-danger"></span>
@@ -113,14 +113,14 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
 </div>
 
 @section Scripts {
-    <script>
-        document.getElementById('Role').addEventListener('change', function () {
-            var sponsorDetails = document.getElementById('SponsorDetails');
-            if (this.value == '@Model.SponsorRoleId') {
-                sponsorDetails.style.display = 'block';
-            } else {
-                sponsorDetails.style.display = 'none';
-            }
-        });
-    </script>
+<script>
+    document.getElementById('Role').addEventListener('change', function () {
+        var sponsorDetails = document.getElementById('SponsorDetails');
+        if (this.value == '@Model.SponsorRoleId') {
+            sponsorDetails.style.display = 'block';
+        } else {
+            sponsorDetails.style.display = 'none';
+        }
+    });
+</script>
 }

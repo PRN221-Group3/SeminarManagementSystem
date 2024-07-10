@@ -30,27 +30,30 @@
                             <strong>Fee:</strong>
                             @if (Model.Event.Fee > 0)
                             {
-                                <text>$@Model.Event.Fee</text>
+                            <text>@Model.Event.Fee VND</text>
                             }
                             else
                             {
-                                <text>FREE</text>
+                            <text>FREE</text>
                             }
                         </p>
                         <p>
                             <strong>Status:</strong>
                             @if (DateTime.Now < Model.Event.StartDate)
                             {
-                                <span class="badge bg-primary">Future</span>
+                            <span class="badge bg-primary">Future</span>
                             }
                             else if (DateTime.Now >= Model.Event.StartDate && DateTime.Now <= Model.Event.EndDate)
                             {
-                                <span class="badge bg-success">Open</span>
+                            <span class="badge bg-success">Open</span>
                             }
                             else
                             {
-                                <span class="badge bg-secondary">Closed</span>
+                            <span class="badge bg-secondary">Closed</span>
                             }
+                        </p>
+                        <p>
+                            <strong>Tickets Remaining:</strong> @Model.Event.NumberOfTickets
                         </p>
                     </div>
                 </div>
@@ -63,15 +66,15 @@
                             <div class="mb-3 d-flex justify-content-between">
                                 <div class="input-group">
                                     <button type="button" class="btn btn-warning" onclick="changeQuantity(-1)">-</button>
-                                    <input id="quantity" type="text" name="quantity" value="@Model.Quantity" min="1" 
-                                    max="@Model.MaxQuantity" width="80" class="text-md-center" onchange="setQuantityText()" />
+                                    <input id="quantity" type="text" name="quantity" value="@Model.Quantity" min="1"
+                                           max="@Model.MaxQuantity" width="80" class="text-md-center" onchange="setQuantityText()" />
                                     <button type="button" class="btn btn-warning" onclick="changeQuantity(1)">+</button>
                                 </div>
                             </div>
                             <hr class="my-4">
                             <div class="mb-3 d-flex justify-content-between">
                                 <label for="fee" class="form-label">Subtotal</label>
-                                <span>$@Model.Event.Fee</span>
+                                <span>@Model.Event.Fee VND</span>
                                 <input type="hidden" id="fee" name="fee" value="@Model.Event.Fee">
                             </div>
 
@@ -79,21 +82,21 @@
                     </div>
                     @if (Model.Wallet != null)
                     {
-                        <input type="hidden" name="walletId" value="@Model.Wallet.WalletId" />
-                        <input type="hidden" name="balance" value="@Model.Wallet.Balance" />
-                        @if (Model.TransactionExist != null)
-                        {
-                            <button type="submit" class="btn btn-lg btn-primary" disabled>Next</button>
-                            <span class="text-danger">You have already joined this event.</span>
-                        }
-                        else
-                        {
-                            <button type="submit" class="btn btn-lg btn-primary" id="btnNExt">Next</button>
-                        }
+                    <input type="hidden" name="walletId" value="@Model.Wallet.WalletId" />
+                    <input type="hidden" name="balance" value="@Model.Wallet.Balance" />
+                    @if (Model.TransactionExist != null)
+                    {
+                    <button type="submit" class="btn btn-lg btn-primary" disabled>Next</button>
+                    <span class="text-danger">You have already joined this event.</span>
                     }
                     else
                     {
-                        <a class="btn btn-lg btn-primary" asp-area="Identity" asp-page="/Account/Login">Next</a>
+                    <button type="submit" class="btn btn-lg btn-primary" id="btnNext">Next</button>
+                    }
+                    }
+                    else
+                    {
+                    <a class="btn btn-lg btn-primary" asp-area="Identity" asp-page="/Account/Login">Next</a>
                     }
                 </form>
             </div>
@@ -101,42 +104,42 @@
     </div>
 </div>
 @section Scripts {
-    <script>
-        function changeQuantity(change) {
-            var quantityInput = document.getElementById("quantity");
-            var currentQuantity = parseInt(quantityInput.value);
-            var maxQuantity = @Model.MaxQuantity;
-            var newQuantity = currentQuantity + change;
-            if (newQuantity <= 0) {
-                newQuantity = currentQuantity;
-            }
-
-            if (newQuantity > maxQuantity) {
-                newQuantity = currentQuantity;
-                document.getElementById("increase-btn").ariaDisabled;
-            }
-
-            console.log(newQuantity);
-            quantityInput.value = newQuantity;
+<script>
+    function changeQuantity(change) {
+        var quantityInput = document.getElementById("quantity");
+        var currentQuantity = parseInt(quantityInput.value);
+        var maxQuantity = @Model.MaxQuantity;
+        var newQuantity = currentQuantity + change;
+        if (newQuantity <= 0) {
+            newQuantity = currentQuantity;
         }
 
-        function setQuantityText() {
-            var quantityInput = document.getElementById("quantity");
-            var errorMessage = document.getElementById("error-message");
-            var currentQuantity = parseInt(quantityInput.value);
-            var maxQuantity = @Model.MaxQuantity;
-
-            if (currentQuantity > maxQuantity) {
-                quantityInput.value = maxQuantity; // Set the quantity to maxQuantity
-                errorMessage.textContent = `Quantity cannot exceed ${maxQuantity}.`;
-                errorMessage.style.display = "block";
-            } else if (currentQuantity < 1) {
-                quantityInput.value = 1; // Ensure the quantity does not go below 1
-                errorMessage.textContent = "Quantity cannot be less than 1.";
-                errorMessage.style.display = "block";
-            } else {
-                errorMessage.style.display = "none"; // Hide error message if quantity is within the valid range
-            }
+        if (newQuantity > maxQuantity) {
+            newQuantity = currentQuantity;
+            document.getElementById("increase-btn").ariaDisabled;
         }
-    </script>
+
+        console.log(newQuantity);
+        quantityInput.value = newQuantity;
+    }
+
+    function setQuantityText() {
+        var quantityInput = document.getElementById("quantity");
+        var errorMessage = document.getElementById("error-message");
+        var currentQuantity = parseInt(quantityInput.value);
+        var maxQuantity = @Model.MaxQuantity;
+
+        if (currentQuantity > maxQuantity) {
+            quantityInput.value = maxQuantity; // Set the quantity to maxQuantity
+            errorMessage.textContent = `Quantity cannot exceed ${maxQuantity}.`;
+            errorMessage.style.display = "block";
+        } else if (currentQuantity < 1) {
+            quantityInput.value = 1; // Ensure the quantity does not go below 1
+            errorMessage.textContent = "Quantity cannot be less than 1.";
+            errorMessage.style.display = "block";
+        } else {
+            errorMessage.style.display = "none"; // Hide error message if quantity is within the valid range
+        }
+    }
+</script>
 }

@@ -28,7 +28,7 @@
                             <strong>Fee:</strong>
                             @if (Model.Event.Fee > 0)
                             {
-                                <text>$@Model.Event.Fee</text>
+                                <text>@Model.Event.Fee VND</text>
                             }
                             else
                             {
@@ -68,18 +68,18 @@
                             </div>
                             <div class="mb-3 d-flex justify-content-between">
                                 <label for="fee" class="form-label">Fee</label>
-                                <span>$@Model.Event.Fee</span>
+                                <span>@Model.Event.Fee VND</span>
                                 <input type="hidden" id="fee" name="fee" value="@Model.Event.Fee">
                             </div>
                             <hr class="my-4">
                             <div class="mb-3 d-flex justify-content-between">
                                 <label for="total" class="form-label fw-bold">Total</label>
-                                <span class="fw-bold">$@Model.TotalMoney</span>
+                                <span class="fw-bold">@Model.TotalMoney VND</span>
                                 <input type="hidden" id="total" name="totalMoney" value="@Model.TotalMoney">
                             </div>
                             <div class="mb-3 d-flex justify-content-between">
                                 <label for="balance" class="form-label">Your Balance</label>
-                                <span>$@Model.Wallet.Balance</span>
+                                <span>@Model.Wallet.Balance VND</span>
                                 <input type="hidden" name="walletId" value="@Model.Wallet.WalletId" />
                                 <input type="hidden" id="balance" name="balance" value="@Model.Wallet.Balance">
                             </div>

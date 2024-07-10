@@ -72,7 +72,7 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                 <div class="col-sm-6">
                     <label class="col-form-label">Fee</label>
                     <div class="input-group">
-                        <span class="input-group-text">$</span>
+                        <span class="input-group-text">VND</span>
                         <input type="number" step="0.01" class="form-control" asp-for="EventDto.Fee" id="fee">
                     </div>
                     <span asp-validation-for="EventDto.Fee" class="text-danger"></span>
@@ -97,10 +97,6 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                     <label class="col-form-label">Number of Tickets</label>
                     <input type="number" class="form-control" asp-for="EventDto.NumberOfTickets" id="numberOfTickets">
                     <span asp-validation-for="EventDto.NumberOfTickets" class="text-danger"></span>
-                </div>
-                <div class="col-sm-6">
-                    <label class="col-form-label">Hall Capacity</label>
-                    <input readonly type="number" class="form-control" id="hallCapacity">
                 </div>
             </div>
 
@@ -180,6 +176,11 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
                     alert("Event Code already exists. Please use a different code.");
                     return false;
                 }
+            }
+            var numberOfTickets = parseInt(document.getElementById("numberOfTickets").value, 10);
+            if (numberOfTickets < 50) {
+                alert("Number of tickets cannot be less than 50.");
+                return false;
             }
 
             return true;

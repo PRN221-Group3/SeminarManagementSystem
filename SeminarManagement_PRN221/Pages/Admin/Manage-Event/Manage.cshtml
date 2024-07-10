@@ -159,7 +159,6 @@
     <table class="table table-bordered table-hover table-custom">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Event Name</th>
                 <th>Event Code</th>
                 <th>Description</th>
@@ -190,14 +189,13 @@
                 var rowClass = Model.GetEventStatus(evt) == "Closed" ? "table-danger" : string.Empty;
 
                 <tr class="@rowClass">
-                    <td>@evt.EventId</td>
                     <td>@evt.EventName</td>
                     <td>@evt.EventCode</td>
                     <td>@evt.Description</td>
                     <td>@evt.StartDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evt.EndDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td class="@statusClass">@Model.GetEventStatus(evt)</td>
-                    <td id="feeItem">@evt.Fee?.ToString("C")</td>
+                    <td id="feeItem">@evt.Fee?.ToString() VND</td>
                     <td>@evt.CreationDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evt.UpdateDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@Model.GetHallName(evt.HallId)</td>

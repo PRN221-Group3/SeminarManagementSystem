@@ -18,6 +18,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
         private readonly IHallRepository _hallRepository;
         private readonly IUserRepository _userRepository;
         private readonly IEmailRepository _emailRepository;
+        private readonly IRoleRepository _roleRepository;
 
         public SponsorModel(
             ISponsorRepository sponsorRepository,
@@ -25,7 +26,8 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             IEventRepository eventRepository,
             IHallRepository hallRepository,
             IUserRepository userRepository,
-            IEmailRepository emailRepository)
+            IEmailRepository emailRepository,
+            IRoleRepository roleRepository)
         {
             _sponsorRepository = sponsorRepository;
             _eventSponsorRepository = eventSponsorRepository;
@@ -33,15 +35,18 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             _hallRepository = hallRepository;
             _userRepository = userRepository;
             _emailRepository = emailRepository;
+            _roleRepository = roleRepository;
         }
 
         [BindProperty(SupportsGet = true)]
         public Guid EventId { get; set; }
         public IEnumerable<Sponsor> Sponsors { get; set; }
+        public Guid SponsorRoleId { get; private set; }
 
         public async Task OnGetAsync()
         {
             Sponsors = await _sponsorRepository.GetAvailableSponsorsForEventAsync(EventId);
+            SponsorRoleId = await _roleRepository.GetSponsorRoleIdAsync();
         }
 
         public async Task<IActionResult> OnPostInviteSponsorAsync(Guid SponsorId, Guid EventId)
@@ -109,7 +114,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             <p><strong>Description:</strong> {eventDetails.Description}</p>
             <p><strong>Start Date:</strong> {eventDetails.StartDate?.ToString("MM/dd/yyyy")}</p>
             <p><strong>End Date:</strong> {eventDetails.EndDate?.ToString("MM/dd/yyyy")}</p>
-            <p><strong>Fee:</strong> {eventDetails.Fee:C}</p>
+            <p><strong>Fee:</strong> {eventDetails.Fee: VND}</p>
             <p><strong>Hall Name:</strong> {hallDetails?.HallName}</p>
             <p><strong>Hall Capacity:</strong> {hallDetails?.Capacity}</p>
             <p><strong>Hall Description:</strong> {hallDetails?.HallDescription}</p>
@@ -118,4 +123,4 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             return await _emailRepository.SendEmailAsync(email, "Event Sponsorship Invitation", emailContent);
         }
     }
-}
+}   

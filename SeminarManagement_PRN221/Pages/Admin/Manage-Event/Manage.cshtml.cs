@@ -48,7 +48,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             {
                 eventsQueryable = eventsQueryable.Where(e => e.EventName.Contains(searchQuery) || e.EventCode.Contains(searchQuery));
             }
-            Events = await eventsQueryable.ToListAsync();
+            Events = await eventsQueryable.OrderByDescending(e => e.CreationDate).ToListAsync();
 
             var hallsQueryable = await _hallRepository.GetAllQueryableAsync();
             HallNames = await hallsQueryable.ToDictionaryAsync(h => h.HallId, h => h.HallName);

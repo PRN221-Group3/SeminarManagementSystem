@@ -17,6 +17,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly ISponsorRepository _sponsorRepository;
+        private readonly IEventRepository _eventRepository;
 
         [BindProperty]
         public UserDto UserDto { get; set; } = new UserDto();
@@ -28,20 +29,28 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
         public string ErrorMessage { get; set; } = "";
         public string SuccessMessage { get; set; } = "";
 
-        public CreateModel(IUserRepository userRepository, IRoleRepository roleRepository, ISponsorRepository sponsorRepository)
+        public CreateModel(IUserRepository userRepository, IRoleRepository roleRepository, ISponsorRepository sponsorRepository, IEventRepository eventRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _sponsorRepository = sponsorRepository;
+            _eventRepository = eventRepository;
         }
 
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(Guid? role, Guid? eventId)
         {
             Roles = await _roleRepository.GetAllRolesAsync();
             SponsorRoleId = await _roleRepository.GetSponsorRoleIdAsync(); // Assume this method gets the Sponsor Role Id
+
+            if (role.HasValue && role.Value == SponsorRoleId)
+            {
+                UserDto.RoleId = SponsorRoleId;
+            }
+
+            ViewData["EventId"] = eventId;
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(Guid? eventId)
         {
             Roles = await _roleRepository.GetAllRolesAsync();
             SponsorRoleId = await _roleRepository.GetSponsorRoleIdAsync(); // Assume this method gets the Sponsor Role Id
@@ -96,6 +105,12 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Account
             await _userRepository.AddAsync(newUser);
 
             SuccessMessage = "User created successfully";
+
+            if (UserDto.RoleId == SponsorRoleId)
+            {
+                return RedirectToPage("/Admin/Manage-Event/Sponsor", new { EventId = eventId });
+            }
+
             return RedirectToPage("/Admin/Manage-Account/Manage");
         }
 

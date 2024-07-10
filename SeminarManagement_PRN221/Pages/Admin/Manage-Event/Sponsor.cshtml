@@ -1,25 +1,25 @@
 ﻿@page "{EventId:guid}"
 @model SeminarManagement_PRN221.Pages.Admin.Manage_Event.SponsorModel
 @{
-    Layout = "_AdminLayout";
+Layout = "_AdminLayout";
 }
 
 <h2 class="text-center mb-5">Invite Sponsors to Event</h2>
 
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @TempData["ErrorMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+    @TempData["ErrorMessage"]
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 }
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    @TempData["SuccessMessage"]
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 }
 
 <style>
@@ -44,10 +44,10 @@
         color: #ffffff;
     }
 
-        .btn-custom:hover {
-            background-color: #495057;
-            color: #ffffff;
-        }
+    .btn-custom:hover {
+        background-color: #495057;
+        color: #ffffff;
+    }
 
     .alert-dismissible .btn-close {
         position: absolute;
@@ -63,43 +63,46 @@
         <a class="btn btn-secondary" asp-page="/Admin/Manage-Event/Manage">
             <i class="fas fa-arrow-left"></i> Back to Manage
         </a>
+        <a class="btn btn-primary" asp-page="/Admin/Manage-Account/Create" asp-route-role="@Model.SponsorRoleId" asp-route-eventId="@Model.EventId">
+            <i class="fas fa-plus"></i> Create Sponsor
+        </a>
     </div>
     <table class="table table-bordered table-hover table-custom">
         <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Type</th>
-                <th>Action</th>
-            </tr>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Type</th>
+            <th>Action</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var sponsor in Model.Sponsors)
-            {
-                <tr>
-                    <td>@sponsor.SponsorName</td>
-                    <td>@sponsor.SponsorNavigation.Email</td>
-                    <td>@sponsor.SponsorType</td>
-                    <td class="text-center">
-                        <form method="post" asp-page-handler="InviteSponsor">
-                            <input type="hidden" name="SponsorId" value="@sponsor.SponsorId" />
-                            <input type="hidden" name="EventId" value="@Model.EventId" />
-                            <button type="submit" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Invite Sponsor">
-                                <i class="fas fa-envelope"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            }
+        @foreach (var sponsor in Model.Sponsors)
+        {
+        <tr>
+            <td>@sponsor.SponsorName</td>
+            <td>@sponsor.SponsorNavigation.Email</td>
+            <td>@sponsor.SponsorType</td>
+            <td class="text-center">
+                <form method="post" asp-page-handler="InviteSponsor">
+                    <input type="hidden" name="SponsorId" value="@sponsor.SponsorId" />
+                    <input type="hidden" name="EventId" value="@Model.EventId" />
+                    <button type="submit" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Invite Sponsor">
+                        <i class="fas fa-envelope"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        }
         </tbody>
     </table>
 </div>
 
 @section Scripts {
-    <script>
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-    </script>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
 }

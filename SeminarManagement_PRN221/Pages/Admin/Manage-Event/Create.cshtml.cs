@@ -61,6 +61,12 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 Halls = await _hallRepository.GetAllAsync();
                 return Page();
             }
+            if (EventDto.NumberOfTickets < 50)
+            {
+                ModelState.AddModelError(string.Empty, "Number of tickets cannot be less than 50.");
+                Halls = await _hallRepository.GetAllAsync();
+                return Page();
+            }
 
             // Check for hall availability
             if (await IsHallBooked(EventDto.HallId, EventDto.StartDate, EventDto.EndDate))
