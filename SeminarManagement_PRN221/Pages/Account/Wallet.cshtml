@@ -22,15 +22,32 @@
                         {
                             <tr>
                                 <td>@transaction.CreationDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                                <td>@transaction.DepositAmount</td>
-                                <td>@transaction.TransactionStatus</td>
+                                <td>@transaction.DepositAmount VND</td>
+                                @if (transaction.TransactionStatus == "SUCCESS")
+                                {
+                                    <td class="text-success fw-bold">
+                                        @transaction.TransactionStatus
+                                    </td>
+                                }
+                                else if(transaction.TransactionStatus == "PENDING")
+                                {
+                                    <td class="text-warning fw-bold">
+                                        @transaction.TransactionStatus
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="text-danger fw-bold">
+                                        @transaction.TransactionStatus
+                                    </td>
+                                }
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
             <!-- Wallet Column -->
-            <div class="col-md-4 bg-light p-4 mx-1 rounded">
+            <div class="col-md-4 bg-light p-4 h-100 mx-1 rounded">
                 <div class="text-center">
                     <h2 class="text-maingreeen">Wallet</h2>
                     <h3 class="mt-4">Balance:</h3>
