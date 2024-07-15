@@ -3,12 +3,12 @@
 @{
     ViewData["Title"] = "Wallet";
 }
-<section class="bg-dark py-5">
-    <div class="container d-flex flex-row justify-content-between">
-        <div class="row">
+<section class="bg-dark pt-5 vh-100">
+    <div class="container">
+        <div class="row d-flex flex-row justify-content-between">
             <!-- Transaction History Column -->
-            <div class="col-lg-7 bg-light p-4 rounded">
-                <h3>Transaction History</h3>
+            <div class="col-md-7 bg-light p-4 rounded">
+                <h3 class="text-maingreeen">Transaction History</h3>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -30,12 +30,12 @@
                 </table>
             </div>
             <!-- Wallet Column -->
-            <div class="col-lg-5 bg-light p-4 rounded ms-lg-4 mt-4 mt-lg-0">
+            <div class="col-md-4 bg-light p-4 mx-1 rounded">
                 <div class="text-center">
-                    <h2>Wallet</h2>
+                    <h2 class="text-maingreeen">Wallet</h2>
                     <h3 class="mt-4">Balance:</h3>
-                    <p class="lead">@Model.Wallet.Balance VND</p>
-                    <button class="btn btn-primary" id="cashInButton">Cash in wallet</button>
+                    <p class="lead fw-bold text-success">@Model.Wallet.Balance VND</p>
+                    <button class="btn btn-button w-100" id="cashInButton">Cash in wallet</button>
                 </div>
             </div>
         </div>
