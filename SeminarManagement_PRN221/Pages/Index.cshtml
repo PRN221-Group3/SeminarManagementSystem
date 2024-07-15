@@ -27,7 +27,7 @@
         </div>
     </div>
 </section>
-<section class="features-icons bg-dark text-center pt-5">
+<section class="bg-dark text-center pt-5" style="min-height: 100vh;">
     <h1 class="pb-5 text-white">Upcoming Seminars</h1>
     <div class="container">
         @if (Model.FutureEvents.Count == 0)
@@ -43,37 +43,40 @@
             <div class="row">
                 @foreach (var eventItem in Model.FutureEvents.Take(3))
                 {
-                    <div class="col-sm-4">
-                        <a href="/EventDetails?EventId=@eventItem.EventId" class="h4 text-decoration-none my-0 font-weight-normal text-white fw-5">
-                            <div class="shadow-lg p-3 mb-5">
-                                <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="img-fluid mb-3 border rounded-3 border-0" alt="Event Image">
-                                <div class="mt-0 mb-4 text-start">
-                                    <div class="d-flex flex-row justify-content-between">
-                                        <h4 class="fs-4 mb-4">@eventItem.EventName</h4>
-                                        <h5 class="pricing-card-title">
-                                            @if (eventItem.Fee > 0)
-                                            {
-                                                <span class="badge bg-primary">@eventItem.Fee VND</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge bg-success">FREE</span>
-                                            }
-                                        </h5>
+                    <div class="col-sm-4 d-flex align-items-stretch">
+                        <div class="card bg-dark text-white shadow-lg p-3 mb-5 w-100 d-flex flex-column">
+                            <a href="/EventDetails?EventId=@eventItem.EventId" class="h4 text-decoration-none my-0 font-weight-normal text-white fw-5 flex-grow-1 d-flex flex-column justify-content-between">
+                                <div>
+                                    <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="img-fluid mb-3 border rounded-3 border-0" alt="Event Image">
+                                    <div class="mt-0 mb-4 text-start">
+                                        <div class="d-flex flex-row justify-content-between">
+                                            <h4 class="fs-4 mb-4">@eventItem.EventName</h4>
+                                            <h5 class="pricing-card-title">
+                                                @if (eventItem.Fee > 0)
+                                                {
+                                                    <span class="badge bg-primary">@eventItem.Fee VND</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-success">FREE</span>
+                                                }
+                                            </h5>
+                                        </div>
+                                        <ul class="list-unstyled mt-0 mb-4 text-start text-white fs-6">
+                                            <li><i class="bi bi-calendar-minus"></i><span class="text-white mx-2">@eventItem.StartDate?.ToString("dd/MM/yyyy HH:mm")</span></li>
+                                            <li><i class="bi bi-geo-alt"></i><span class="text-white mx-2">@eventItem.Hall?.HallName</span></li>
+                                        </ul>
                                     </div>
-                                    <ul class="list-unstyled mt-0 mb-4 text-start text-white fs-6">
-                                        <li><i class="bi bi-calendar-minus"></i><span class="text-white mx-2">@eventItem.StartDate?.ToString("dd/MM/yyyy HH:mm")</span></li>
-                                        <li><i class="bi bi-geo-alt"></i><span class="text-white mx-2">@eventItem.Hall?.HallName</span></li>
-                                    </ul>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
                 }
             </div>
         }
     </div>
 </section>
+
 
 @section Scripts {
     <script>
