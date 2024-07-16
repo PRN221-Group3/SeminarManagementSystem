@@ -3,40 +3,62 @@
 @{
     ViewData["Title"] = "Wallet";
 }
-<div class="container">
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-6 text-center">
-            <h2>Wallet</h2>
-            <h3 class="mt-4">Balance:</h3>
-            <p class="lead">@Model.Wallet.Balance VND</p>
-            <button class="btn btn-primary" id="cashInButton">Cash in wallet</button>
-        </div>
-    </div>
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-            <h3>Transaction History</h3>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Amount</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var transaction in Model.Transactions)
-                    {
+<section class="bg-dark pt-5 vh-100">
+    <div class="container">
+        <div class="row d-flex flex-row justify-content-between">
+            <!-- Transaction History Column -->
+            <div class="col-md-7 bg-light p-4 rounded">
+                <h3 class="text-maingreeen">Transaction History</h3>
+                <table class="table table-striped">
+                    <thead>
                         <tr>
-                            <td>@transaction.CreationDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                            <td>@transaction.DepositAmount</td>
-                            <td>@transaction.TransactionStatus</td>
+                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Status</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in Model.Transactions)
+                        {
+                            <tr>
+                                <td>@transaction.CreationDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                                <td>@transaction.DepositAmount VND</td>
+                                @if (transaction.TransactionStatus == "SUCCESS")
+                                {
+                                    <td class="text-success fw-bold">
+                                        @transaction.TransactionStatus
+                                    </td>
+                                }
+                                else if(transaction.TransactionStatus == "PENDING")
+                                {
+                                    <td class="text-warning fw-bold">
+                                        @transaction.TransactionStatus
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td class="text-danger fw-bold">
+                                        @transaction.TransactionStatus
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- Wallet Column -->
+            <div class="col-md-4 bg-light p-4 h-100 mx-1 rounded">
+                <div class="text-center">
+                    <h2 class="text-maingreeen">Wallet</h2>
+                    <h3 class="mt-4">Balance:</h3>
+                    <p class="lead fw-bold text-success">@Model.Wallet.Balance VND</p>
+                    <button class="btn btn-button w-100" id="cashInButton">Cash in wallet</button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
+
 
 @section Scripts {
     <script>

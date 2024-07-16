@@ -1,80 +1,104 @@
 ﻿@page
 @model SeminarManagement_PRN221.Pages.Account.OrdersModel
 @{
-Layout = "_Layout";
+    Layout = "_Layout";
 }
 
-<h1>Orders</h1>
+<section class="bg-dark vh-100">
+    <div class="container text-white text-center pt-4">
+        <h1 class="text-maingreeen">Orders</h1>
 
-@if (TempData["SuccessMessage"] != null)
-{
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    @TempData["SuccessMessage"]
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-}
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-@if (TempData["ErrorMessage"] != null)
-{
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-    @TempData["ErrorMessage"]
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-}
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-<table class="table table-striped table-bordered">
-    <thead class="thead-dark">
-    <tr>
-        <th>Booking Id</th>
-        <th>Event Name</th>
-        <th>Event Code</th>
-        <th>Event Fee</th>
-        <th>Total Ticket</th>
-        <th>Total Amount</th>
-        <th>Event Start Date</th>
-        <th>Event End Date</th>
-        <th>Created Date</th>
-        <th>Updated Date</th>
-        <th>Status</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var order in Model.Bookings)
-    {
-    <tr>
-        <td>@order.BookingId</td>
-        <td>
-            <a href="/eventdetails?eventId=@order.EventId">@order.EventName</a>
-        </td>
-        <td>
-            <a href="/eventdetails?eventId=@order.EventId">@order.EventCode</a>
-        </td>
-        <td>@order.EventFee</td>
-        <td>@order.TotalTicket</td>
-        <td>@order.TotalAmount VND</td>
-        <td>@order.EventStartDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
-        <td>@order.EventEndDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
-        <td>@order.CreatedDate.Value.ToString("dd/MM/yyyy")</td>
-        <td>@order.UpdatedDate.Value.ToString("dd/MM/yyyy")</td>
-        <td>@order.TransactionStatus</td>
-        <td>
-            @if (order.IsFeedbackOpen == true && (DateTime.Now >= order.EventStartDate && DateTime.Now <= order.EventEndDate || DateTime.Now > order.EventEndDate))
-            {
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#feedbackModal" data-booking-id="@order.BookingId" data-event-id="@order.EventId">Give Feedback</button>
-            }
-        </td>
-    </tr>
-    }
-    </tbody>
-</table>
+        <div class="table-responsive mt-4">
+            <table class="table">
+                <thead class="bg-banner text-white text-center align-middle">
+                    <tr>
+                        <th scope="col" class="align-middle">Booking Id</th>
+                        <th scope="col" class="align-middle">Event Name</th>
+                        <th scope="col" class="align-middle">Event Code</th>
+                        <th scope="col" class="align-middle">Event Fee</th>
+                        <th scope="col" class="align-middle">Total Ticket</th>
+                        <th scope="col" class="align-middle">Total Amount</th>
+                        <th scope="col" class="align-middle">Event Start Date</th>
+                        <th scope="col" class="align-middle">Event End Date</th>
+                        <th scope="col" class="align-middle">Created Date</th>
+                        <th scope="col" class="align-middle">Updated Date</th>
+                        <th scope="col" class="align-middle">Status</th>
+                        <th scope="col" class="align-middle">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="table-light text-black">
+                    @foreach (var order in Model.Bookings)
+                    {
+                        <tr>
+                            <td class="fw-bold">@order.BookingId</td>
+                            <td>
+                                <a href="/eventdetails?eventId=@order.EventId" class="text-maingreeen text-decoration-none fw-bold">@order.EventName</a>
+                            </td>
+                            <td>
+                                <a href="/eventdetails?eventId=@order.EventId" class="text-maingreeen text-decoration-none fw-bold">@order.EventCode</a>
+                            </td>
+                            <td>@order.EventFee VND</td>
+                            <td>@order.TotalTicket</td>
+                            <td>@order.TotalAmount VND</td>
+                            <td>@order.EventStartDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                            <td>@order.EventEndDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                            <td>@order.CreatedDate.Value.ToString("dd/MM/yyyy")</td>
+                            <td>@order.UpdatedDate.Value.ToString("dd/MM/yyyy")</td>
+                            @if (order.TransactionStatus == "SUCCESS")
+                            {
+                                <td class="text-success fw-bold">
+                                    @order.TransactionStatus
+                                </td>
+                            }
+                            else if (order.TransactionStatus == "PENDING")
+                            {
+                                <td class="text-warning fw-bold">
+                                    @order.TransactionStatus
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="text-danger fw-bold">
+                                    @order.TransactionStatus
+                                </td>
+                            }
+                            <td>
+                                @if (order.IsFeedbackOpen == true && (DateTime.Now >= order.EventStartDate && DateTime.Now <= order.EventEndDate || DateTime.Now > order.EventEndDate))
+                                {
+                                    <button type="button" class="btn btn-button btn-sm fw-bold" data-bs-toggle="modal" data-bs-target="#feedbackModal" data-booking-id="@order.BookingId" data-event-id="@order.EventId">Feedback</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
 
 <!-- Feedback Modal -->
 <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="feedbackModalLabel">Give Feedback</h5>
+                <h5 class="modal-title text-maingreeen" id="feedbackModalLabel">Give Feedback</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -87,7 +111,7 @@ Layout = "_Layout";
                     <input type="hidden" id="eventId" name="eventId" />
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                        <button type="submit" class="btn btn-button">Submit Feedback</button>
                     </div>
                 </form>
             </div>
@@ -96,16 +120,16 @@ Layout = "_Layout";
 </div>
 
 @section Scripts {
-<script>
-    var feedbackModal = document.getElementById('feedbackModal');
-    feedbackModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
-        var bookingId = button.getAttribute('data-booking-id');
-        var eventId = button.getAttribute('data-event-id');
-        var modalBodyInputBookingId = feedbackModal.querySelector('.modal-body #bookingId');
-        var modalBodyInputEventId = feedbackModal.querySelector('.modal-body #eventId');
-        modalBodyInputBookingId.value = bookingId;
-        modalBodyInputEventId.value = eventId;
-    });
-</script>
+    <script>
+        var feedbackModal = document.getElementById('feedbackModal');
+        feedbackModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var bookingId = button.getAttribute('data-booking-id');
+            var eventId = button.getAttribute('data-event-id');
+            var modalBodyInputBookingId = feedbackModal.querySelector('.modal-body #bookingId');
+            var modalBodyInputEventId = feedbackModal.querySelector('.modal-body #eventId');
+            modalBodyInputBookingId.value = bookingId;
+            modalBodyInputEventId.value = eventId;
+        });
+    </script>
 }

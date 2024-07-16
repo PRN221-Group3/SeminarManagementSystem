@@ -4,54 +4,58 @@
     ViewData["Title"] = "InvitationForSponsor";
 }
 
-<h1>All Events</h1>
+<section class="bg-dark vh-100">
+    <div class="container text-white text-center pt-4">
+        <h1 class="text-maingreeen">All Events</h1>
 
-@if (Model.InvitedEvents != null && Model.InvitedEvents.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Event Name</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var eventItem in Model.InvitedEvents)
-            {
-                <tr>
-                    <td>@eventItem.EventName</td>
-                    <td>@(eventItem.StartDate.HasValue ? eventItem.StartDate.Value.ToShortDateString() : "-")</td>
-                    <td>@(eventItem.EndDate.HasValue ? eventItem.EndDate.Value.ToShortDateString() : "-")</td>
-                    <td>
-                        <a asp-page-handler="Details" asp-route-eventId="@eventItem.EventId" class="btn btn-info">Details</a>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sponsorshipModal"
-                                data-event-id="@eventItem.EventId" data-sponsor-id="@Model.SponsorId">
-                            Accept
-                        </button>
-                        <button type="button" class="btn btn-danger reject-btn"
-                                data-event-id="@eventItem.EventId.ToString()"
-                                data-sponsor-id="@Model.SponsorId.ToString()">
-                            Reject
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No events found.</p>
-}
+        @if (Model.InvitedEvents != null && Model.InvitedEvents.Any())
+        {
+            <table class="table mt-5">
+                <thead class="bg-banner text-white text-center align-middle">
+                    <tr>
+                        <th scope="col" class="align-middle">Event Name</th>
+                        <th scope="col" class="align-middle">Start Date</th>
+                        <th scope="col" class="align-middle">End Date</th>
+                        <th scope="col" class="align-middle">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-light text-black">
+                    @foreach (var eventItem in Model.InvitedEvents)
+                    {
+                        <tr>
+                            <td class="align-middle text-success fw-bold">@eventItem.EventName</td>
+                            <td class="align-middle">@(eventItem.StartDate.HasValue ? eventItem.StartDate.Value.ToShortDateString() : "-")</td>
+                            <td class="align-middle">@(eventItem.EndDate.HasValue ? eventItem.EndDate.Value.ToShortDateString() : "-")</td>
+                            <td class="align-middle">
+                                <a asp-page-handler="Details" asp-route-eventId="@eventItem.EventId" class="btn btn-info btn-sm">Details</a>
+                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#sponsorshipModal"
+                                        data-event-id="@eventItem.EventId" data-sponsor-id="@Model.SponsorId">
+                                    Accept
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm reject-btn"
+                                        data-event-id="@eventItem.EventId.ToString()"
+                                        data-sponsor-id="@Model.SponsorId.ToString()">
+                                    Reject
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No events found.</p>
+        }
+    </div>
+</section>
 
 <!-- Sponsorship Modal -->
 <div class="modal fade" id="sponsorshipModal" tabindex="-1" aria-labelledby="sponsorshipModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="sponsorshipModalLabel">Sponsorship Details</h1>
+                <h1 class="modal-title fs-5 text-maingreeen" id="sponsorshipModalLabel">Sponsorship Details</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -63,13 +67,16 @@ else
                     </div>
                     <input type="hidden" id="eventId" name="eventId">
                     <input type="hidden" id="sponsorId" name="sponsorId" value="@Model.SponsorId">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-button">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 
 @section Scripts {
     <script>
