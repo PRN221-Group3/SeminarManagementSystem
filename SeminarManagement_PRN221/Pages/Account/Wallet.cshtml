@@ -22,7 +22,7 @@
                         {
                             <tr>
                                 <td>@transaction.CreationDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                                <td>@transaction.DepositAmount VND</td>
+                                <td>@string.Format("{0:N0}", transaction.DepositAmount) VND</td>
                                 @if (transaction.TransactionStatus == "SUCCESS")
                                 {
                                     <td class="text-success fw-bold">
@@ -51,7 +51,7 @@
                 <div class="text-center">
                     <h2 class="text-maingreeen">Wallet</h2>
                     <h3 class="mt-4">Balance:</h3>
-                    <p class="lead fw-bold text-success">@Model.Wallet.Balance VND</p>
+                    <p class="lead fw-bold text-success">@string.Format("{0:N0}", Model.Wallet.Balance) VND</p>
                     <button class="btn btn-button w-100" id="cashInButton">Cash in wallet</button>
                 </div>
             </div>

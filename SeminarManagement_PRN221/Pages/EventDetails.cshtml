@@ -76,6 +76,13 @@
             <strong style="font-weight: bold; color: rgb(45, 194, 117);">Capacity:</strong> @Model.Event.Hall?.Capacity
         </p>
     </div>
+    @if (Model.Event.EventSponsors != null)
+    {
+        <div class="mt-4 text-start">
+            <h2 style="font-weight: bold; color: rgb(45, 194, 117);">Sponsor</h2>
+            
+        </div>
+    }
 </section>
 
 @section Scripts {
