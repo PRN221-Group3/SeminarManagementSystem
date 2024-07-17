@@ -61,6 +61,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 Halls = await _hallRepository.GetAllAsync();
                 return Page();
             }
+
             if (EventDto.NumberOfTickets < 50)
             {
                 ModelState.AddModelError(string.Empty, "Number of tickets cannot be less than 50.");
@@ -89,6 +90,14 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             if (EventDto.NumberOfTickets > selectedHall.Capacity)
             {
                 ModelState.AddModelError(string.Empty, "Number of tickets cannot exceed hall capacity.");
+                Halls = await _hallRepository.GetAllAsync();
+                return Page();
+            }
+
+            // Validate event fee
+            if (EventDto.Fee < 10000 || EventDto.Fee > 500000)
+            {
+                ModelState.AddModelError(string.Empty, "Event Fee must be between 10,000 VND and 500,000 VND.");
                 Halls = await _hallRepository.GetAllAsync();
                 return Page();
             }

@@ -161,7 +161,6 @@
             <tr>
                 <th>Event Name</th>
                 <th>Event Code</th>
-                <th>Description</th>
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Status</th>
@@ -191,7 +190,6 @@
                 <tr class="@rowClass">
                     <td>@evt.EventName</td>
                     <td>@evt.EventCode</td>
-                    <td>@evt.Description</td>
                     <td>@evt.StartDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evt.EndDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td class="@statusClass">@Model.GetEventStatus(evt)</td>

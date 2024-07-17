@@ -19,5 +19,7 @@ namespace Repositories.Interfaces
 		Task<List<Event>> GetAllEventsAsync();
         Task<IEnumerable<Event>> GetEventsSponsored(Guid sponsorId);
         Task UpdateFeedbackStatusAsync(Guid eventId, bool isFeedbackOpen);
+        Task<IQueryable<Event>> GetAllQueryableAsync1();
+        Task DeleteEventAndRelatedAsync(Guid eventId);
     }
 }

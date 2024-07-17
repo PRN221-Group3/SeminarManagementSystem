@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using BusinessObject.DTO;
 using Microsoft.Extensions.Caching.Memory;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
 {
@@ -23,8 +25,10 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
         private readonly IUserRepository _userRepository;
         private readonly IFeedBackRepository _feedbackRepository;
         private readonly IMemoryCache _cache;
+        private readonly IBookingRepository _bookingRepository;
+        private readonly IWalletRepository _walletRepository;
 
-        public ManageModel(IEventRepository eventRepository, IHallRepository hallRepository, ISponsorRepository sponsorRepository, IEventSponsorRepository eventSponsorRepository, IEmailRepository emailRepository, IUserRepository userRepository, IFeedBackRepository feedbackRepository, IMemoryCache cache)
+        public ManageModel(IEventRepository eventRepository, IHallRepository hallRepository, ISponsorRepository sponsorRepository, IEventSponsorRepository eventSponsorRepository, IEmailRepository emailRepository, IUserRepository userRepository, IFeedBackRepository feedbackRepository, IMemoryCache cache, IWalletRepository walletRepository, IBookingRepository bookingRepository)
         {
             _eventRepository = eventRepository;
             _hallRepository = hallRepository;
@@ -34,6 +38,8 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             _userRepository = userRepository;
             _feedbackRepository = feedbackRepository;
             _cache = cache;
+            _walletRepository = walletRepository;
+            _bookingRepository = bookingRepository;
         }
 
         public IList<Event> Events { get; private set; }
@@ -86,11 +92,36 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                         var emailSent = await SendDeletionEmail(user.Email, eventToDelete);
                         if (!emailSent)
                         {
-                            ErrorMessage = "Failed to send email notifications.";
+                            ErrorMessage = "Failed to send email notifications to sponsors.";
                         }
                     }
                 }
 
+                // Retrieve bookings and customers for the event
+                var bookings = await _bookingRepository.GetBookingsByEventIdAsync(eventId);
+                foreach (var booking in bookings)
+                {
+                    var user = await _userRepository.GetByIdAsync((Guid)booking.UserId);
+                    if (user != null)
+                    {
+                        // Refund the customer
+                        var wallet = await _walletRepository.GetByIdAsync(user.UserId);
+                        wallet.Balance += booking.TotalAmount ?? 0;
+                        await _walletRepository.UpdateAsync(wallet);
+
+                        // Send email notifications to customers
+                        var emailSent = await SendRefundEmail(user.Email, eventToDelete, booking.TotalAmount ?? 0);
+                        if (!emailSent)
+                        {
+                            ErrorMessage = "Failed to send email notifications to customers.";
+                        }
+                    }
+
+                    // Delete the booking
+                    await _bookingRepository.DeleteAsync(booking.BookingId);
+                }
+
+                // Mark the event as deleted
                 eventToDelete.IsDeleted = true;
                 await _eventRepository.UpdateAsync(eventToDelete);
 
@@ -108,18 +139,33 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
         private async Task<bool> SendDeletionEmail(string email, Event eventDetails)
         {
             var emailContent = $@"
-                <h1>Event Cancellation Notice</h1>
-                <p>We regret to inform you that the following event has been cancelled:</p>
-                <p><strong>Event Name:</strong> {eventDetails.EventName}</p>
-                <p><strong>Event Code:</strong> {eventDetails.EventCode}</p>
-                <p><strong>Description:</strong> {eventDetails.Description}</p>
-                <p><strong>Start Date:</strong> {eventDetails.StartDate?.ToString("MM/dd/yyyy HH:mm")}</p>
-                <p><strong>End Date:</strong> {eventDetails.EndDate?.ToString("MM/dd/yyyy HH:mm")}</p>
-                <p><strong>Fee:</strong> {eventDetails.Fee:C}</p>
-                <p>We apologize for any inconvenience this may cause.</p>
-                ";
+        <h1>Event Cancellation Notice</h1>
+        <p>We regret to inform you that the following event has been cancelled:</p>
+        <p><strong>Event Name:</strong> {eventDetails.EventName}</p>
+        <p><strong>Event Code:</strong> {eventDetails.EventCode}</p>
+        <p><strong>Description:</strong> {eventDetails.Description}</p>
+        <p><strong>Start Date:</strong> {eventDetails.StartDate?.ToString("MM/dd/yyyy HH:mm")}</p>
+        <p><strong>End Date:</strong> {eventDetails.EndDate?.ToString("MM/dd/yyyy HH:mm")}</p>
+        <p><strong>Fee:</strong> {eventDetails.Fee:C}</p>
+        <p>We apologize for any inconvenience this may cause.</p>";
 
             return await _emailRepository.SendEmailAsync(email, "Event Cancellation Notice", emailContent);
+        }
+
+        private async Task<bool> SendRefundEmail(string email, Event eventDetails, decimal refundAmount)
+        {
+            var emailContent = $@"
+        <h1>Event Cancellation Refund</h1>
+        <p>We regret to inform you that the following event has been cancelled:</p>
+        <p><strong>Event Name:</strong> {eventDetails.EventName}</p>
+        <p><strong>Event Code:</strong> {eventDetails.EventCode}</p>
+        <p><strong>Description:</strong> {eventDetails.Description}</p>
+        <p><strong>Start Date:</strong> {eventDetails.StartDate?.ToString("MM/dd/yyyy HH:mm")}</p>
+        <p><strong>End Date:</strong> {eventDetails.EndDate?.ToString("MM/dd/yyyy HH:mm")}</p>
+        <p>We have refunded the amount of {refundAmount:C} to your wallet.</p>
+        <p>We apologize for any inconvenience this may cause.</p>";
+
+            return await _emailRepository.SendEmailAsync(email, "Event Cancellation Refund", emailContent);
         }
 
         public async Task<IActionResult> OnGetSponsorDetailsAsync(Guid eventId)
@@ -223,8 +269,8 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 {
                     return new JsonResult(new { success = false, message = "Event not found." });
                 }
-               
-                if(eventToUpdate.Fee > 0)
+
+                if (eventToUpdate.Fee > 0)
                 {
                     AddOriginalFeeToCache(eventToUpdate);
                 }
@@ -238,7 +284,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 {
                     string cacheKey = "originalFee";
 
-                    if(_cache.TryGetValue(cacheKey, out decimal originalFee))
+                    if (_cache.TryGetValue(cacheKey, out decimal originalFee))
                     {
                         eventToUpdate.Fee = originalFee;
                         await _eventRepository.UpdateAsync(eventToUpdate);

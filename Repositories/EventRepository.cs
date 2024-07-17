@@ -19,15 +19,15 @@ namespace Repositories
             _eventDAO = eventDAO;
         }
 
-		public async Task<Event> GetByIdAsync(Guid id)
-		{
-			return await _eventDAO.GetByIdAsync(id);
-		}
+        public async Task<Event> GetByIdAsync(Guid id)
+        {
+            return await _eventDAO.GetByIdAsync(id);
+        }
 
-		public async Task<List<Sponsor>> GetSponsorsByEventIdAsync(Guid eventId)
-		{
-			return await _eventDAO.GetSponsorsByEventIdAsync(eventId);
-		}
+        public async Task<List<Sponsor>> GetSponsorsByEventIdAsync(Guid eventId)
+        {
+            return await _eventDAO.GetSponsorsByEventIdAsync(eventId);
+        }
 
         public async Task<List<Event>> GetAllEventsAsync()
         {
@@ -45,9 +45,9 @@ namespace Repositories
         }
 
         public async Task<EventSponsor> GetEventSponsorAsync(Guid eventId, Guid sponsorId, string sponsorProduct)
-		{
-			return await _eventDAO.GetEventSponsorAsync(eventId, sponsorId, sponsorProduct);
-		}
+        {
+            return await _eventDAO.GetEventSponsorAsync(eventId, sponsorId, sponsorProduct);
+        }
 
         public async Task UpdateEventSponsorStatusRejectAsync(Guid eventId, Guid sponsorId)
         {
@@ -62,6 +62,16 @@ namespace Repositories
         public async Task UpdateFeedbackStatusAsync(Guid eventId, bool isFeedbackOpen)
         {
             await _eventDAO.UpdateFeedbackStatusAsync(eventId, isFeedbackOpen);
+        }
+
+        public async Task<IQueryable<Event>> GetAllQueryableAsync1()
+        {
+            return await _eventDAO.GetAllQueryableAsync1();
+        }
+
+        public async Task DeleteEventAndRelatedAsync(Guid eventId)
+        {
+            await _eventDAO.DeleteEventAndRelatedAsync(eventId);
         }
     }
 }
