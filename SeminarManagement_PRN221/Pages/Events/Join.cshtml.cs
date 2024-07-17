@@ -44,7 +44,7 @@ namespace SeminarManagement_PRN221.Pages.Events
         {
             var allEvents = await _eventRepository.GetAllQueryableAsync();
 
-            Event = allEvents.Include(s => s.Hall).FirstOrDefault(s => s.EventId == EventId);
+            Event = allEvents.Include(s => s.Hall).Include(s => s.EventSponsors).FirstOrDefault(s => s.EventId == EventId);
 
             if (Event == null)
             {

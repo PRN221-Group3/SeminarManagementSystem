@@ -4,40 +4,46 @@
     ViewData["Title"] = "Update Profile";
 }
 
-<h2>Update Profile</h2>
-
 @if (!string.IsNullOrEmpty(Model.SuccessMessage))
 {
     <div class="alert alert-success">
         @Model.SuccessMessage
     </div>
 }
+<section class="bg-dark">
+    <div class="container min-vh-100 d-flex justify-content-center align-items-center">
+        <div class="border border-secondary-1 bg-white rounded-1 p-4" style="width: 400px;">
+            <a href="/Index" class="text-maingreeen"><i class="bi bi-x-lg"></i></a>
+            <div class="text-center mb-4 text-maingreeen fw-bold fs-4">
+                Update Profile
+            </div>
+            <form method="post">
+                <div class="form-group mb-3">
+                    <label class="control-label fw-bold">First Name</label>
+                    <input asp-for="Input.FirstName" class="form-control" />
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="control-label fw-bold">Last Name</label>
+                    <input asp-for="Input.LastName" class="form-control" />
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label class="control-label fw-bold">Phone Number</label>
+                    <input asp-for="Input.PhoneNumber" class="form-control" />
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Input.Username" class="control-label fw-bold"></label>
+                    <input asp-for="Input.Username" class="form-control" />
+                    <span asp-validation-for="Input.Username" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-button w-100 border rounded-3 fw-bold">Complete</button>
 
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Input.FirstName" class="control-label"></label>
-        <input asp-for="Input.FirstName" class="form-control" />
-        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </form>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Input.LastName" class="control-label"></label>
-        <input asp-for="Input.LastName" class="form-control" />
-        <span asp-validation-for="Input.LastName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Input.PhoneNumber" class="control-label"></label>
-        <input asp-for="Input.PhoneNumber" class="form-control" />
-        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Input.Username" class="control-label"></label>
-        <input asp-for="Input.Username" class="form-control" />
-        <span asp-validation-for="Input.Username" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Update</button>
-    <a href="/Index" class="btn btn-secondary">Back</a>
-</form>
-
+</section>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

@@ -3,103 +3,89 @@
 @{
     ViewData["Title"] = "Event Details";
 }
+<section class="bg-dark py-5 px-4">
+    <div class="row">
+        <div class="col-md-4 text-white">
+            <p>
+                @if (DateTime.Now < Model.Event.StartDate)
+                {
+                    <span class="badge bg-primary">Future</span>
+                }
+                else if (DateTime.Now >= Model.Event.StartDate && DateTime.Now <= Model.Event.EndDate)
+                {
+                    <span class="badge bg-success">Open</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">Closed</span>
+                }
+            </p>
+            <h3 class="fw-bold">@Model.Event.EventName</h3>
+            <ul class="list-unstyled mt-2">
+                <li class="mb-3"><strong>Event Code:</strong> @Model.Event.EventCode</li>
+                <li class="mb-3"><i class="bi bi-calendar-minus-fill"></i> @Model.Event.StartDate?.ToString("dd/MM/yyyy HH:mm") - @Model.Event.EndDate?.ToString("dd/MM/yyyy HH:mm")</li>
+                <li class="mb-3"><i class="bi bi-geo-alt-fill"></i> @Model.Event.Hall?.HallName</li>
+            </ul>
 
-<div class="container mt-5">
-    <div class="card mb-3">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="card-img-overlay rounded-start" alt="Event Image" width="430" height="318">
+            <div class="mb-3">
+                <img src="@Model.Event.QrCode" class="img-fluid" alt="QR Code" width="145" height="145">
             </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <ul class="nav nav-tabs justify-content-center mb-3" id="eventTabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="eventDetails-tab" data-bs-toggle="tab" data-bs-target="#eventDetails" type="button" role="tab" aria-controls="eventDetails" aria-selected="true">Event Details</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="hallDetails-tab" data-bs-toggle="tab" data-bs-target="#hallDetails" type="button" role="tab" aria-controls="hallDetails" aria-selected="false">Hall Details</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="qrCode-tab" data-bs-toggle="tab" data-bs-target="#qrCode" type="button" role="tab" aria-controls="qrCode" aria-selected="false">QR Code</button>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="eventTabsContent">
-                        <div class="tab-pane fade show active" id="eventDetails" role="tabpanel" aria-labelledby="eventDetails-tab">
-                            <div class="row">
-                                <h2>Event Details</h2>
-                                <div class="col-md-6">
 
-                                    <p>
-                                        <strong>Event Name:</strong> @Model.Event.EventName
-                                    </p>
-                                    <p><strong>Date:</strong> @Model.Event.StartDate?.ToString("dd/MM/yyyy HH:mm") - @Model.Event.EndDate?.ToString("dd/MM/yyyy HH:mm")</p>
-                                    <p>
-                                        <strong>Description:</strong> @Model.Event.Description
-                                    </p>
-                                </div>
-                                <div class="col-md-6">
-                                    <p>
-                                        <strong>Event Code:</strong> @Model.Event.EventCode
-                                    </p>
-                                    <p>
-                                        <strong>Fee:</strong>
-                                        @if (Model.Event.Fee > 0)
-                                        {
-                                            <text>@Model.Event.Fee VND</text>
-                                        }
-                                        else
-                                        {
-                                            <text>FREE</text>
-                                        }
-                                    </p>
-                                    <p>
-                                        <strong>Status:</strong>
-                                        @if (DateTime.Now < Model.Event.StartDate)
-                                        {
-                                            <span class="badge bg-primary">Future</span>
-                                        }
-                                        else if (DateTime.Now >= Model.Event.StartDate && DateTime.Now <= Model.Event.EndDate)
-                                        {
-                                            <span class="badge bg-success">Open</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-secondary">Closed</span>
-                                        }
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="hallDetails" role="tabpanel" aria-labelledby="hallDetails-tab">
-                            <h2>Hall Details</h2>
-                            <p>
-                                <strong>Hall Name:</strong> @Model.Event.Hall?.HallName
-                            </p>
-                            <p>
-                                <strong>Description:</strong> @Model.Event.Hall?.HallDescription
-                            </p>
-                            <p>
-                                <strong>Capacity:</strong> @Model.Event.Hall?.Capacity
-                            </p>
-                        </div>
-                        <div class="tab-pane fade justify-content-center align-items-center" id="qrCode" role="tabpanel" aria-labelledby="qrCode-tab">
-                            <div>
-                                <h2>QR Code</h2>
-                            </div>
-                            <div>
-                                <img src="@Model.Event.QrCode" class="img-fluid" alt="QR Code" width="145" height="145">
-                            </div>
-                        </div>
-                    </div>
-                    <a href="/Index" class="btn btn-primary">Back</a>
-                    <a href="/Events/Join?EventId=@Model.Event.EventId" class="btn btn-block btn-primary">Join now!</a>
+            <div class="d-flex flex-row mb-5">
+                <div>
+                    <h3>Fee </h3>
                 </div>
+                <div class="mx-3">
+                    @if (Model.Event.Fee > 0)
+                    {
+                        <h3 style="font-weight: bold; color: rgb(45, 194, 117);">@Model.Event.Fee VND</h3>
+                    }
+                    else
+                    {
+                        <h3 style="font-weight: bold; color: rgb(45, 194, 117);">FREE</h3>
+                    }
+                </div>
+            </div>
+            <hr />
+            <a href="/Events/Join?EventId=@Model.Event.EventId" class="btn btn-block btn-button w-100">Join now!</a>
+        </div>
+        <div class="col-md-8">
+            <div class="ratio ratio-16x9">
+                <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="img-fluid rounded-start" alt="Event Image">
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<section class="bg-light py-5 px-4">
+    <div class="text-start">
+        <h2 style="font-weight: bold; color: rgb(45, 194, 117)">Description</h2>
+        <p>
+            @Model.Event.Description
+        </p>
+    </div>
+    <div class="mt-4 text-start">
+        <h2 style="font-weight: bold; color: rgb(45, 194, 117);">Hall Details</h2>
+        <p>
+            <strong style="font-weight: bold; color: rgb(45, 194, 117);">Hall Name:</strong> @Model.Event.Hall?.HallName
+        </p>
+        <p>
+            <strong style="font-weight: bold; color: rgb(45, 194, 117);">Description:</strong> @Model.Event.Hall?.HallDescription
+        </p>
+        <p>
+            <strong style="font-weight: bold; color: rgb(45, 194, 117);">Capacity:</strong> @Model.Event.Hall?.Capacity
+        </p>
+    </div>
+    @if (Model.Event.EventSponsors != null)
+    {
+        <div class="mt-4 text-start">
+            <h2 style="font-weight: bold; color: rgb(45, 194, 117);">Sponsor</h2>
+            
+        </div>
+    }
+</section>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
     <!-- Include any additional scripts here -->
 }

@@ -193,7 +193,7 @@
                     <td>@evt.StartDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evt.EndDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td class="@statusClass">@Model.GetEventStatus(evt)</td>
-                    <td id="feeItem">@evt.Fee?.ToString() VND</td>
+                    <td id="feeItem">@string.Format("{0:N0}", @evt.Fee) VND</td>
                     <td>@evt.CreationDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@evt.UpdateDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>@Model.GetHallName(evt.HallId)</td>
