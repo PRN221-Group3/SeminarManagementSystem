@@ -37,7 +37,7 @@
                     Fee:
                     @if (Model.Event.Fee > 0)
                     {
-                        <span class="text-white ms-2">@Model.Event.Fee VND</span>
+                        <span class="text-white ms-2">@string.Format("{0:N0}", @Model.Event.Fee) VND</span>
                     }
                     else
                     {
@@ -65,7 +65,7 @@
                             <hr class="my-4">
                             <div class="mb-3 d-flex justify-content-between">
                                 <label for="fee" class="form-label text-maingreeen fw-bold">Subtotal</label>
-                                <span>@Model.Event.Fee VND</span>
+                                <span>@string.Format("{0:N0}", @Model.Event.Fee) VND</span>
                                 <input type="hidden" id="fee" name="fee" value="@Model.Event.Fee">
                             </div>
                             <div class="mb-3">

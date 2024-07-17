@@ -20,7 +20,7 @@ public class IndexModel : PageModel
     {
         var allEvents = await _eventRepo.GetAllQueryableAsync();
         FutureEvents = allEvents.Include(e => e.Hall).Include(e => e.EventSponsors)
-            .Where(e => (e.StartDate > DateTime.Now || (e.StartDate < DateTime.Now && e.EndDate > DateTime.Now)) && e.NumberOfTickets > 0).Take(3)
+            .Where(e => (e.StartDate > DateTime.Now || (e.StartDate < DateTime.Now && e.EndDate > DateTime.Now)) && e.NumberOfTickets > 0 && e.IsDeleted == false).Take(3)
             .ToList();
     }
 }

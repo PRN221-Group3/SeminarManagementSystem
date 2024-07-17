@@ -40,7 +40,7 @@
                 <i class="bi bi-geo-alt-fill"></i>
             </div>
             <div class="fw-bold text-white">
-                @Model.Event.Hall.HallName
+                @Model.Event.Hall?.HallName
             </div>
         </div>
         <div class="d-flex flex-row mt-2">
@@ -115,7 +115,7 @@
                                 <div>
                                     @if (Model.Event.Fee > 0)
                                     {
-                                        <text>@Model.Event.Fee VND</text>
+                                        <text>@string.Format("{0:N0}", @Model.Event.Fee) VND</text>
                                     }
                                     else
                                     {
@@ -129,7 +129,7 @@
                                 </div>
                                 <div>
                                     @Model.Quantity
-                                    <input type="hidden" name="Quantity" value="@Model.Quantity" />
+                                    <input type="hidden" name="Quantity" value="@Model.Quantity"/>
                                 </div>
                             </div>
                         </div>
@@ -142,20 +142,20 @@
                                 Subtotal
                             </div>
                             <div>
-                                @Model.TotalMoney VND
+                                @string.Format("{0:N0}", @Model.TotalMoney) VND
                                 <input type="hidden" id="total" name="totalMoney" value="@Model.TotalMoney">
                             </div>
                         </div>
-                        <hr />
+                        <hr/>
                         <div class="d-flex flex-row ms-2 justify-content-between">
                             <div class="fw-bold">
                                 Total
                             </div>
                             <div class="text-maingreeen fw-bold">
-                                @Model.TotalMoney VND
+                                @string.Format("{0:N0}", @Model.TotalMoney) VND
                             </div>
                         </div>
-                        <input type="hidden" name="walletId" value="@Model.Wallet.WalletId" />
+                        <input type="hidden" name="walletId" value="@Model.Wallet.WalletId"/>
                         <input type="hidden" id="balance" name="balance" value="@Model.Wallet.Balance">
                         <div style="font-size: small" class="ms-2 mt-3">
                             By proceeding the order, you agree to the<span class="text-info" style="font-size: small"> General Trading Conditions</span>

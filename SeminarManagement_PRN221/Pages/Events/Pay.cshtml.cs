@@ -2,6 +2,7 @@ using BusinessObject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
 using QRCoder;
 using Repositories.Interfaces;
 using System;
@@ -21,13 +22,15 @@ namespace SeminarManagement_PRN221.Pages.Events
         private readonly ITicketRepository _ticketRepository;
         private readonly IBookingRepository _bookingRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IHubContext<SeminarHub> _hubContext;
 
         public PayModel(IWalletRepository walletRepository,
                         IEventRepository eventRepository,
                         ITransactionRepository transactionRepository,
                         ITicketRepository ticketRepository,
                         IBookingRepository bookingRepository,
-                        IUserRepository userRepository)
+                        IUserRepository userRepository,
+                        IHubContext<SeminarHub> hubContext)
         {
             _walletRepository = walletRepository;
             _eventRepository = eventRepository;
@@ -35,6 +38,7 @@ namespace SeminarManagement_PRN221.Pages.Events
             _ticketRepository = ticketRepository;
             _bookingRepository = bookingRepository;
             _userRepository = userRepository;
+            _hubContext = hubContext;
         }
 
         public Guid EventId { get; set; }
@@ -92,6 +96,7 @@ namespace SeminarManagement_PRN221.Pages.Events
                     else
                     {
                         ViewData["msgTicketError"] = "Out of tickets";
+                        await _hubContext.Clients.All.SendAsync("ReceiveTicketUpdate", "out_of_tickets");
                         return Page();
                     }
 
