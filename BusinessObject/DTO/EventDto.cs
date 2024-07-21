@@ -31,7 +31,6 @@ namespace BusinessObject.DTO
         public string Description { get; set; }
 
         [Required]
-        [Range(0, 10000, ErrorMessage = "Fee must be between 0 and 10000.")]
         public decimal Fee { get; set; }
 
         [Required]
