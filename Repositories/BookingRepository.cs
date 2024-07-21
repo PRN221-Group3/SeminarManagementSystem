@@ -23,5 +23,9 @@ namespace Repositories
         {
             return Task.Run(async () => await _bookingDAO.GetBookingsOfUser(userId));
         }
+        public Task<IEnumerable<Booking>> GetBookingsByEventIdAsync(Guid eventId)
+        {
+            return Task.Run(async () => await _bookingDAO.GetBookingsByEventId(eventId));
+        }
     }
 }

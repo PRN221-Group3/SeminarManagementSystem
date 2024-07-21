@@ -2,9 +2,15 @@ using BusinessObject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.SignalR;
+using QRCoder;
 using Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace SeminarManagement_PRN221.Pages.Events
 {
@@ -15,18 +21,26 @@ namespace SeminarManagement_PRN221.Pages.Events
         private readonly ITransactionRepository _transactionRepository;
         private readonly ITicketRepository _ticketRepository;
         private readonly IBookingRepository _bookingRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IHubContext<SeminarHub> _hubContext;
+
         public PayModel(IWalletRepository walletRepository,
-            IEventRepository eventRepository,
-            ITransactionRepository transactionRepository,
-            ITicketRepository ticketRepository,
-            IBookingRepository bookingRepository)
+                        IEventRepository eventRepository,
+                        ITransactionRepository transactionRepository,
+                        ITicketRepository ticketRepository,
+                        IBookingRepository bookingRepository,
+                        IUserRepository userRepository,
+                        IHubContext<SeminarHub> hubContext)
         {
             _walletRepository = walletRepository;
             _eventRepository = eventRepository;
             _transactionRepository = transactionRepository;
             _ticketRepository = ticketRepository;
             _bookingRepository = bookingRepository;
+            _userRepository = userRepository;
+            _hubContext = hubContext;
         }
+
         public Guid EventId { get; set; }
         [BindProperty]
         public Event Event { get; set; }
@@ -40,6 +54,7 @@ namespace SeminarManagement_PRN221.Pages.Events
         public int Quantity { get; set; }
         [BindProperty]
         public decimal Balance { get; set; }
+
         public async Task<IActionResult> OnGet(Guid eventId, Guid walletId, decimal total, decimal balance, int quantity)
         {
             EventId = eventId;
@@ -47,14 +62,17 @@ namespace SeminarManagement_PRN221.Pages.Events
             TotalMoney = total;
             Balance = balance;
 
-            var allEvents = await _eventRepository.GetAllQueryableAsync();
-            Event = allEvents.Include(s => s.Hall).FirstOrDefault(s => s.EventId == EventId);
+            var eventsQueryable = await _eventRepository.GetAllQueryableAsync();
+            Event = await eventsQueryable
+                .Include(e => e.Hall)
+                .FirstOrDefaultAsync(e => e.EventId == EventId);
+
             if (Event == null)
             {
                 return NotFound();
             }
 
-            Wallet = _walletRepository.GetById(walletId);
+            Wallet = await _walletRepository.GetByIdAsync(walletId);
 
             if (Wallet.Balance < TotalMoney)
             {
@@ -64,25 +82,21 @@ namespace SeminarManagement_PRN221.Pages.Events
             return Page();
         }
 
-
         public async Task<IActionResult> OnPost()
         {
             try
             {
-                var eventUpdate = _eventRepository.GetById(Event.EventId);
+                var eventUpdate = await _eventRepository.GetByIdAsync(Event.EventId);
                 if (eventUpdate != null)
                 {
-
-                    var maxQuantity = eventUpdate.NumberOfTickets;
-
-                    if (maxQuantity >= Quantity)
+                    if (eventUpdate.NumberOfTickets >= Quantity)
                     {
-                        maxQuantity -= Quantity;
-                        eventUpdate.NumberOfTickets = maxQuantity;
+                        eventUpdate.NumberOfTickets -= Quantity;
                     }
                     else
                     {
                         ViewData["msgTicketError"] = "Out of tickets";
+                        await _hubContext.Clients.All.SendAsync("ReceiveTicketUpdate", "out_of_tickets");
                         return Page();
                     }
 
@@ -116,7 +130,7 @@ namespace SeminarManagement_PRN221.Pages.Events
                         TotalTicket = Quantity
                     };
 
-                    var wallet = _walletRepository.GetById(Wallet.WalletId);
+                    var wallet = await _walletRepository.GetByIdAsync(Wallet.WalletId);
                     wallet.Balance = Balance - TotalMoney;
 
                     booking.Tickets.Add(ticket);
@@ -125,6 +139,13 @@ namespace SeminarManagement_PRN221.Pages.Events
                     await _walletRepository.UpdateAsync(wallet);
                     await _transactionRepository.AddAsync(transaction);
                     await _eventRepository.UpdateAsync(eventUpdate);
+
+                    var user = await _userRepository.GetByIdAsync(Wallet.WalletId);
+                    if (user != null)
+                    {
+                        SendTicketEmail(user.Email, ticket, eventUpdate, Quantity, TotalMoney); // Pass the `eventUpdate` object
+                    }
+
                     return RedirectToPage("/Events/SuccessPay", new { booking.CreatedDate, booking.BookingId });
                 }
             }
@@ -135,37 +156,43 @@ namespace SeminarManagement_PRN221.Pages.Events
             return Page();
         }
 
-        private void SendVerificationEmail(string email)
+        private void SendTicketEmail(string email, Ticket ticket, Event @event, int quantity, decimal totalAmount)
         {
             var myEmail = "seminarwebapp@gmail.com";
             var myPassword = "mbyghvpzorxaihmp";
 
-            var message = new MailMessage();
-            message.From = new MailAddress(myEmail);
-            message.To.Add(new MailAddress(email));
-            message.Subject = "[PRN221] Email Verification";
-
-            message.Body = @"
+            var message = new MailMessage
+            {
+                From = new MailAddress(myEmail),
+                Subject = "[PRN221] Your Event Ticket",
+                IsBodyHtml = true,
+                Body = $@"
                 <html>
                 <body>
-                    <h2>Welcome to Seminar Web</h2>
-                    <p>Thank you for registering. Please verify your email by clicking the button below:</p>
-                <ul>
-                    <li><strong>Ticket ID:</strong> {ticket.TicketId}</li>
-                    <li><strong>Event ID:</strong> {ticket.EventId}</li>
-                    <li><strong>Price:</strong> ${ticket.Price}</li>
-                    <li><strong>Created Date:</strong> {ticket.CreatedDate}</li>
-                    <li><strong>Updated Date:</strong> {ticket.UpdatedDate}</li>
-                </ul>
-                    <br></br>
-                    <p>If you did not request this email, please ignore it.</p>
+                    <h2>Thank you for your purchase!</h2>
+                    <p>Here are your ticket details:</p>
+                    <ul>
+                        <li><strong>Ticket ID:</strong> {ticket.TicketId}</li>
+                        <li><strong>Event Name:</strong> {@event.EventName}</li>
+                        <li><strong>Event Code:</strong> {@event.EventCode}</li>
+                        <li><strong>Price per Ticket:</strong> {ticket.Price}</li>
+                        <li><strong>Quantity:</strong> {quantity}</li>
+                        <li><strong>Total Amount:</strong> {totalAmount}</li>
+                        <li><strong>Event Location:</strong> {@event.Hall?.HallName}</li>
+                    </ul>
+                    <p>Attached is your ticket with a QR code.</p>
                     <p>Best regards,<br>PRN221 Team</p>
                 </body>
-                </html>";
+                </html>"
+            };
 
-            message.IsBodyHtml = true;
+            message.To.Add(new MailAddress(email));
 
-            var smtpClient = new SmtpClient("smtp.gmail.com")
+            var qrCodeImage = GenerateQrCode(ticket, @event, quantity, totalAmount);
+            var imageAttachment = new Attachment(new MemoryStream(qrCodeImage), "ticket_qr_code.png", "image/png");
+            message.Attachments.Add(imageAttachment);
+
+            using var smtpClient = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
                 Credentials = new NetworkCredential(myEmail, myPassword),
@@ -173,6 +200,26 @@ namespace SeminarManagement_PRN221.Pages.Events
             };
 
             smtpClient.Send(message);
+        }
+
+        private byte[] GenerateQrCode(Ticket ticket, Event @event, int quantity, decimal totalAmount)
+        {
+            var qrCodeText = $"Ticket ID: {ticket.TicketId}\n" +
+                             $"Event Name: {@event.EventName}\n" +
+                             $"Event Code: {@event.EventCode}\n" +
+                             $"Price per Ticket: {ticket.Price}\n" +
+                             $"Quantity: {quantity}\n" +
+                             $"Total Amount: {totalAmount}\n" +
+                             $"Event Location: {@event.Hall?.HallName}";
+
+            using var qrGenerator = new QRCodeGenerator();
+            var qrCodeData = qrGenerator.CreateQrCode(qrCodeText, QRCodeGenerator.ECCLevel.Q);
+            using var qrCode = new QRCode(qrCodeData);
+            using var qrCodeImage = qrCode.GetGraphic(20);
+
+            using var ms = new MemoryStream();
+            qrCodeImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            return ms.ToArray();
         }
     }
 }

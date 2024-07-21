@@ -12,5 +12,6 @@ namespace Repositories.Interfaces
     public interface IBookingRepository : IBaseRepository<Booking>
     {
         Task<IEnumerable<BookingDto>> GetBookingsOfUser(Guid userId);
+        Task<IEnumerable<Booking>> GetBookingsByEventIdAsync(Guid eventId);
     }
 }

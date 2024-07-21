@@ -20,7 +20,7 @@ namespace Repositories
         }
         public async Task<List<Sponsor>> GetSponsorsWithUserAsync()
         {
-            return await _sponsorDao.GetAllWithUserAsync();
+            return await _sponsorDao.GetSponsorsWithUserAsync();
         }
         public async Task<IEnumerable<Sponsor>> GetAvailableSponsorsForEventAsync(Guid eventId)
         {

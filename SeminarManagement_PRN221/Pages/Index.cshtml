@@ -10,18 +10,21 @@
                 <div class="text-center text-white">
                     <h1 class="mb-3 display-4">Welcome to Our Seminar Organization</h1>
                     <h4 class="mb-4">Join our events and expand your knowledge!</h4>
-                    <form class="form-subscribe p-5" id="contactForm" data-sb-form-api-token="API_TOKEN" method="post">
-                        <div class="row">
-                            <div class="col">
-                                <input class="form-control form-control-lg" id="emailAddress" name="email" type="email" placeholder="Enter your email to register" data-sb-validations="required,email" />
-                                <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
-                                <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address is not valid.</div>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <form class="form-subscribe p-5" id="contactForm" data-sb-form-api-token="API_TOKEN" method="post">
+                            <div class="row">
+                                <div class="col">
+                                    <input class="form-control form-control-lg" id="emailAddress" name="email" type="email" placeholder="Enter your email to register" data-sb-validations="required,email" />
+                                    <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
+                                    <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address is not valid.</div>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-register btn-lg" id="submitButton" type="button" onclick="redirectToRegister()">Register</button>
+                                </div>
                             </div>
-                            <div class="col-auto">
-                                <button class="btn btn-register btn-lg" id="submitButton" type="button" onclick="redirectToRegister()">Register</button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    }
                 </div>
             </div>
         </div>
@@ -54,7 +57,7 @@
                                             <h5 class="pricing-card-title">
                                                 @if (eventItem.Fee > 0)
                                                 {
-                                                    <span class="badge bg-primary">@eventItem.Fee VND</span>
+                                                    <span class="badge bg-primary">@string.Format("{0:N0}", @eventItem.Fee) VND</span>
                                                 }
                                                 else
                                                 {

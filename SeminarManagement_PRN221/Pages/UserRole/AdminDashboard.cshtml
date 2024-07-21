@@ -26,7 +26,7 @@
         </div>
         <div class="col-xl-3 col-md-6">
             <div class="card bg-success text-white mb-4">
-                <div class="card-body">Revenue: @Model.Revenue.ToString("N0")đ</div>
+                <div class="card-body">Revenue: @string.Format("{0:N0}", @Model.Revenue) VND</div>
             </div>
         </div>
     </div>

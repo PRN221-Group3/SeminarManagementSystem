@@ -53,9 +53,9 @@
                             <td>
                                 <a href="/eventdetails?eventId=@order.EventId" class="text-maingreeen text-decoration-none fw-bold">@order.EventCode</a>
                             </td>
-                            <td>@order.EventFee VND</td>
+                            <td>@string.Format("{0:N0}", @order.EventFee) VND</td>
                             <td>@order.TotalTicket</td>
-                            <td>@order.TotalAmount VND</td>
+                            <td>@string.Format("{0:N0}", @order.TotalAmount) VND</td>
                             <td>@order.EventStartDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
                             <td>@order.EventEndDate.Value.ToString("dd/MM/yyyy HH:mm:ss")</td>
                             <td>@order.CreatedDate.Value.ToString("dd/MM/yyyy")</td>
