@@ -12,22 +12,25 @@ namespace SeminarManagement_PRN221.Pages
     public class EventDetailsModel : PageModel
     {
         private readonly IEventRepository _eventRepository;
+        private readonly ISponsorRepository _sponsorRepository;
 
-        public EventDetailsModel(IEventRepository eventRepository)
+        public EventDetailsModel(IEventRepository eventRepository, ISponsorRepository sponsorRepository)
         {
             _eventRepository = eventRepository;
+            _sponsorRepository = sponsorRepository;
         }
 
         [BindProperty(SupportsGet = true)]
         public Guid EventId { get; set; }
 
         public Event Event { get; set; }
-        public EventSponsor Sponsor { get; set; }
+        public IEnumerable<Sponsor> Sponsor { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
             var allEvents = await _eventRepository.GetAllQueryableAsync();
-            Event = allEvents.Include(s => s.Hall).Include(s => s.EventSponsors).FirstOrDefault(s => s.EventId == EventId);
+            Event = allEvents.Include(s => s.Hall).FirstOrDefault(s => s.EventId == EventId);
+            Sponsor = await _sponsorRepository.GetAvailableSponsorsForEventAsync(EventId);
 
             if (Event == null)
             {
