@@ -22,6 +22,7 @@ namespace SeminarManagement_PRN221.Pages
         public Guid EventId { get; set; }
 
         public Event Event { get; set; }
+        public EventSponsor Sponsor { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {

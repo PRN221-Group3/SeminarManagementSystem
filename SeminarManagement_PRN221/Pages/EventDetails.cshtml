@@ -81,9 +81,9 @@
         <div class="mt-4 text-start">
             <h2 style="font-weight: bold; color: rgb(45, 194, 117);">Sponsors</h2>
             <ul>
-                @foreach (var sponsor in Model.Event.EventSponsors)
+                @foreach (var sponsor in Model.Sponsor)
                 {
-                    <li>@sponsor.Sponsor.SponsorName</li>
+                    <li>@sponsor.SponsorName</li>
                 }
             </ul>
         </div>
