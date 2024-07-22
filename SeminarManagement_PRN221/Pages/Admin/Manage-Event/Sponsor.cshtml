@@ -1,105 +1,124 @@
 ﻿@page "{EventId:guid}"
 @model SeminarManagement_PRN221.Pages.Admin.Manage_Event.SponsorModel
 @{
-    Layout = "_AdminLayout";
+Layout = "_AdminLayout";
 }
 
-<h2 class="text-center mb-5">Invite Sponsors to Event</h2>
+<section class="bg-dark vh-100">
+    <div class="container text-white text-center pt-4">
+        <h2 class="text-maingreeen">Invite Sponsors to Event</h2>
+        @if (TempData["ErrorMessage"] != null)
+        {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        }
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @TempData["ErrorMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
+        @if (TempData["SuccessMessage"] != null)
+        {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        }
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="container-custom bg-light text-dark p-4 rounded">
+            <h3 class="text-maingreeen mb-4">Sponsors</h3>
+            <div class="mb-3">
+                <a class="btn btn-button" asp-page="/Admin/Manage-Event/Manage">
+                    <i class="fas fa-arrow-left"></i> Back to Manage
+                </a>
+                <a class="btn btn-button" asp-page="/Admin/Manage-Account/Create" asp-route-role="@Model.SponsorRoleId" asp-route-eventId="@Model.EventId">
+                    <i class="fas fa-plus"></i> Create Sponsor
+                </a>
+            </div>
+            <div class="table-responsive mt-4">
+                <table class="table table-bordered table-hover text-white">
+                    <thead class="bg-banner text-black text-center align-middle">
+                    <tr>
+                        <th class="text-dark">Name</th>
+                        <th class="text-dark">Email</th>
+                        <th class="text-dark">Type</th>
+                        <th class="text-dark">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-light text-black">
+                    @foreach (var sponsor in Model.Sponsors)
+                    {
+                    <tr>
+                        <td>@sponsor.SponsorName</td>
+                        <td>@sponsor.SponsorNavigation.Email</td>
+                        <td>@sponsor.SponsorType</td>
+                        <td class="text-center">
+                            <form method="post" asp-page-handler="InviteSponsor" onsubmit="disableButton(this)">
+                                <input type="hidden" name="SponsorId" value="@sponsor.SponsorId" />
+                                <input type="hidden" name="EventId" value="@Model.EventId" />
+                                <button type="submit" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Invite Sponsor">
+                                    <i class="fas fa-envelope"></i> Send
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+</section>
+
+@section Scripts {
+<script>
+    function disableButton(form) {
+        const button = form.querySelector('button[type="submit"]');
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    }
+
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
 }
 
 <style>
-    body {
-        background-color: #f5f5f5;
+    .bg-dark {
+        background-color: #343a40 !important;
     }
 
-    .container-custom {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    .text-maingreeen {
+        color: #28a745 !important;
     }
 
-    .table-custom th {
-        background-color: #343a40;
-        color: #ffffff;
+    .btn-button {
+        background-color: #28a745;
+        color: white;
     }
 
-    .btn-custom {
-        background-color: #343a40;
-        color: #ffffff;
+    .btn-button:hover {
+        background-color: #218838;
+        color: white;
     }
 
-        .btn-custom:hover {
-            background-color: #495057;
-            color: #ffffff;
-        }
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
 
-    .alert-dismissible .btn-close {
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 1rem 1rem;
+    .border {
+        border: 1px solid #dee2e6 !important;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+    }
+
+    .table-light {
+        background-color: #ffffff !important;
+    }
+
+    .table th.text-dark {
+        color: #343a40 !important;
     }
 </style>
-
-<div class="container-custom">
-    <h3>Sponsors</h3>
-    <div class="mb-3">
-        <a class="btn btn-secondary" asp-page="/Admin/Manage-Event/Manage">
-            <i class="fas fa-arrow-left"></i> Back to Manage
-        </a>
-    </div>
-    <table class="table table-bordered table-hover table-custom">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Type</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var sponsor in Model.Sponsors)
-            {
-                <tr>
-                    <td>@sponsor.SponsorName</td>
-                    <td>@sponsor.SponsorNavigation.Email</td>
-                    <td>@sponsor.SponsorType</td>
-                    <td class="text-center">
-                        <form method="post" asp-page-handler="InviteSponsor">
-                            <input type="hidden" name="SponsorId" value="@sponsor.SponsorId" />
-                            <input type="hidden" name="EventId" value="@Model.EventId" />
-                            <button type="submit" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" title="Invite Sponsor">
-                                <i class="fas fa-envelope"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
-@section Scripts {
-    <script>
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
-    </script>
-}

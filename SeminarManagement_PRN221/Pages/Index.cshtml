@@ -3,40 +3,41 @@
 @{
     ViewData["Title"] = "Home - Seminar Organization";
 }
-
-<header class="masthead">
-    <div class="container position-relative">
+<section class="bg-dark text-center pt-5">
+    <div class="container bg-banner d-flex align-items-center justify-content-center banner-height vw-100 border border-0 rounded-4">
         <div class="row justify-content-center">
-            <div class="col-xl-6">
+            <div class="col-lg-8 col-md-10">
                 <div class="text-center text-white">
-                    <h1 class="mb-5">Welcome to Our Seminar Organization</h1>
-                    <h4 class="mb-5">Join our events and expand your knowledge!</h4>
-                    <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN" method="post">
-                        <div class="row">
-                            <div class="col">
-                                <input class="form-control form-control-lg" id="emailAddress" name="email" type="email" placeholder="Enter your email to register" data-sb-validations="required,email" />
-                                <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
-                                <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address is not valid.</div>
+                    <h1 class="mb-3 display-4">Welcome to Our Seminar Organization</h1>
+                    <h4 class="mb-4">Join our events and expand your knowledge!</h4>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <form class="form-subscribe p-5" id="contactForm" data-sb-form-api-token="API_TOKEN" method="post">
+                            <div class="row">
+                                <div class="col">
+                                    <input class="form-control form-control-lg" id="emailAddress" name="email" type="email" placeholder="Enter your email to register" data-sb-validations="required,email" />
+                                    <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:required">Email Address is required.</div>
+                                    <div class="invalid-feedback text-white" data-sb-feedback="emailAddress:email">Email Address is not valid.</div>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-register btn-lg" id="submitButton" type="button" onclick="redirectToRegister()">Register</button>
+                                </div>
                             </div>
-                            <div class="col-auto">
-                                <button class="btn btn-primary btn-lg" id="submitButton" type="button" onclick="redirectToRegister()">Register</button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    }
                 </div>
             </div>
         </div>
     </div>
-</header>
-
-<section class="features-icons bg-light text-center">
-    <h1 class="pb-5">Upcoming Seminars</h1>
+</section>
+<section class="bg-dark text-center pt-5" style="min-height: 100vh;">
+    <h1 class="pb-5 text-white">Upcoming Seminars</h1>
     <div class="container">
         @if (Model.FutureEvents.Count == 0)
         {
             <div class="row">
                 <div class="col">
-                    <h3>Currently, there are no upcoming events.</h3>
+                    <h3 class="text-white">Currently, there are no upcoming events.</h3>
                 </div>
             </div>
         }
@@ -45,31 +46,32 @@
             <div class="row">
                 @foreach (var eventItem in Model.FutureEvents.Take(3))
                 {
-                    <div class="col-lg-4">
-                        <div class="card mb-4 shadow-sm">
-                            <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="card-img-top" alt="Event Image">
-                            <div class="card-header">
-                                <h4 class="my-0 font-weight-normal">@eventItem.EventName</h4>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title pricing-card-title">
-                                    @if (eventItem.Fee > 0)
-                                    {
-                                        <span class="badge bg-primary">@eventItem.Fee VND</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-success">FREE</span>
-                                    }
-                                </h5>
-                                <ul class="list-unstyled mt-3 mb-4">
-                                    <li>Start Date: @eventItem.StartDate?.ToString("dd/MM/yyyy HH:mm")</li>
-                                    <li>End Date: @eventItem.EndDate?.ToString("dd/MM/yyyy HH:mm")</li>
-                                    <li>Location: @eventItem.Hall?.HallName</li>
-                                </ul>
-                                <a href="/EventDetails?EventId=@eventItem.EventId" class="btn btn-lg btn-block btn-outline-primary">View Details</a>
-                                <a href="/Events/Join?EventId=@eventItem.EventId" class="btn btn-lg btn-block btn-primary">Join Now!</a>
-                            </div>
+                    <div class="col-sm-4 d-flex align-items-stretch">
+                        <div class="card bg-dark text-white shadow-lg p-3 mb-5 w-100 d-flex flex-column">
+                            <a href="/EventDetails?EventId=@eventItem.EventId" class="h4 text-decoration-none my-0 font-weight-normal text-white fw-5 flex-grow-1 d-flex flex-column justify-content-between">
+                                <div>
+                                    <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="img-fluid mb-3 border rounded-3 border-0" alt="Event Image">
+                                    <div class="mt-0 mb-4 text-start">
+                                        <div class="d-flex flex-row justify-content-between">
+                                            <h4 class="fs-4 mb-4">@eventItem.EventName</h4>
+                                            <h5 class="pricing-card-title">
+                                                @if (eventItem.Fee > 0)
+                                                {
+                                                    <span class="badge bg-primary">@string.Format("{0:N0}", @eventItem.Fee) VND</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-success">FREE</span>
+                                                }
+                                            </h5>
+                                        </div>
+                                        <ul class="list-unstyled mt-0 mb-4 text-start text-white fs-6">
+                                            <li><i class="bi bi-calendar-minus"></i><span class="text-white mx-2">@eventItem.StartDate?.ToString("dd/MM/yyyy HH:mm")</span></li>
+                                            <li><i class="bi bi-geo-alt"></i><span class="text-white mx-2">@eventItem.Hall?.HallName</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 }
@@ -78,60 +80,6 @@
     </div>
 </section>
 
-<section class="showcase">
-    <div class="container-fluid p-0">
-        <div class="row g-0">
-            <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('./assets/img/bg-showcase-1.jpg')"></div>
-            <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-                <h2>Engaging Speakers</h2>
-                <p class="lead mb-0">Our seminars feature industry leaders who share their valuable insights and experiences.</p>
-            </div>
-        </div>
-        <div class="row g-0">
-            <div class="col-lg-6 text-white showcase-img" style="background-image: url('./assets/img/bg-showcase-2.jpg')"></div>
-            <div class="col-lg-6 my-auto showcase-text">
-                <h2>Interactive Sessions</h2>
-                <p class="lead mb-0">Participate in interactive Q&A sessions and network with professionals.</p>
-            </div>
-        </div>
-        <div class="row g-0">
-            <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('./assets/img/bg-showcase-3.jpg')"></div>
-            <div class="col-lg-6 order-lg-1 my-auto showcase-text">
-                <h2>Networking Opportunities</h2>
-                <p class="lead mb-0">Expand your professional network and connect with peers in your field.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="testimonials text-center bg-light">
-    <div class="container">
-        <h2 class="mb-5">What Our Attendees Say...</h2>
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                    <img class="img-fluid rounded-circle mb-3" src="~/assets/img/testimonials-1.jpg" alt="Attendee 1" />
-                    <h5>Margaret E.</h5>
-                    <p class="font-weight-light mb-0">"This seminar was enlightening! Highly recommend."</p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                    <img class="img-fluid rounded-circle mb-3" src="~/assets/img/testimonials-2.jpg" alt="Attendee 2" />
-                    <h5>Fred S.</h5>
-                    <p class="font-weight-light mb-0">"The speakers were amazing and the content was very relevant."</p>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="testimonial-item mx-auto mb-5 mb-lg-0">
-                    <img class="img-fluid rounded-circle mb-3" src="~/assets/img/testimonials-3.jpg" alt="Attendee 3" />
-                    <h5>Sarah W.</h5>
-                    <p class="font-weight-light mb-0">"Great opportunity to network and learn from the best."</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 @section Scripts {
     <script>

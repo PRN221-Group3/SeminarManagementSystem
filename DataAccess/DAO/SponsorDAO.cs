@@ -12,7 +12,7 @@ namespace DataAccess.DAO
     public class SponsorDAO : BaseDAO<Sponsor>
     {
         public SponsorDAO(SeminarManagementDbContext context) : base(context) { }
-        public async Task<List<Sponsor>> GetAllWithUserAsync()
+        public async Task<List<Sponsor>> GetSponsorsWithUserAsync()
         {
             return await _context.Sponsors
                 .Include(s => s.SponsorNavigation)

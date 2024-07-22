@@ -41,5 +41,12 @@ namespace DataAccess.DAO
                         };
             return await query.Distinct().OrderByDescending(x => x.CreatedDate).ToListAsync();
         }
+        public async Task<IEnumerable<Booking>> GetBookingsByEventId(Guid eventId)
+        {
+            return await _context.Bookings
+                .Include(b => b.Tickets)
+                .Where(b => b.Tickets.Any(t => t.EventId == eventId))
+                .ToListAsync();
+        }
     }
 }

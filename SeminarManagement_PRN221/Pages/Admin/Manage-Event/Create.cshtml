@@ -1,214 +1,246 @@
 ﻿@page
 @model SeminarManagement_PRN221.Pages.Admin.Manage_Event.CreateModel
 @{
-    Layout = "_AdminLayout";
+Layout = "_AdminLayout";
 }
 
-<h2 class="text-center mb-5">New Event</h2>
-@if (!string.IsNullOrEmpty(Model.ErrorMessage))
-{
-    <div class='alert alert-danger alert-dismissible fade show' role='alert'>
-        <strong>@Model.ErrorMessage</strong>
-        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-    </div>
-}
-else if (!string.IsNullOrEmpty(Model.SuccessMessage))
-{
-    <div class='alert alert-success alert-dismissible fade show' role='alert'>
-        <strong>@Model.SuccessMessage</strong>
-        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-    </div>
-}
+<section class="bg-dark vh-100">
+    <div class="container text-white text-center pt-4">
+        <h2 class="text-maingreeen">New Event</h2>
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+        <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+            <strong>@Model.ErrorMessage</strong>
+            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>
+        }
+        else if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+        <div class='alert alert-success alert-dismissible fade show' role='alert'>
+            <strong>@Model.SuccessMessage</strong>
+            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+        </div>
+        }
 
-<div class="row justify-content-center">
-    <div class="col-md-6 mx-auto rounded border p-4 bg-light shadow-sm">
-        <form method="post" onsubmit="return validateForm()">
-            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+        <div class="row justify-content-center">
+            <div class="col-md-6 mx-auto rounded border p-4 bg-light shadow-sm">
+                <form method="post" onsubmit="return validateForm()">
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-            <div class="row mb-3">
-                <div class="col-sm-6">
-                    <label class="col-form-label">Event Name</label>
-                    <input class="form-control" asp-for="EventDto.EventName">
-                    <span asp-validation-for="EventDto.EventName" class="text-danger"></span>
-                </div>
-                <div class="col-sm-6">
-                    <label class="col-form-label">Event Code</label>
-                    <input class="form-control" asp-for="EventDto.EventCode" placeholder="Format: Exxxx" id="eventCode">
-                    <span asp-validation-for="EventDto.EventCode" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-sm-6">
-                    <label class="col-form-label">Start Date</label>
-                    <input type="datetime-local" class="form-control" asp-for="EventDto.StartDate" id="startDate">
-                    <span asp-validation-for="EventDto.StartDate" class="text-danger"></span>
-                </div>
-                <div class="col-sm-6">
-                    <label class="col-form-label">End Date</label>
-                    <input type="datetime-local" class="form-control" asp-for="EventDto.EndDate" id="endDate">
-                    <span asp-validation-for="EventDto.EndDate" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <label class="col-form-label">Description</label>
-                <textarea class="form-control" asp-for="EventDto.Description"></textarea>
-                <span asp-validation-for="EventDto.Description" class="text-danger"></span>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-sm-12">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="freeEventCheckbox" onchange="toggleFee()">
-                        <label class="form-check-label" for="freeEventCheckbox">
-                            Free Event
-                        </label>
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label class="col-form-label text-dark">Event Name</label>
+                            <input class="form-control" asp-for="EventDto.EventName">
+                            <span asp-validation-for="EventDto.EventName" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-form-label text-dark">Event Code</label>
+                            <input class="form-control" asp-for="EventDto.EventCode" placeholder="Format: Exxxx" id="eventCode">
+                            <span asp-validation-for="EventDto.EventCode" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="row mb-3">
-                <div class="col-sm-6">
-                    <label class="col-form-label">Fee</label>
-                    <div class="input-group">
-                        <span class="input-group-text">$</span>
-                        <input type="number" step="0.01" class="form-control" asp-for="EventDto.Fee" id="fee">
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label class="col-form-label text-dark">Start Date</label>
+                            <input type="datetime-local" class="form-control" asp-for="EventDto.StartDate" id="startDate">
+                            <span asp-validation-for="EventDto.StartDate" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-form-label text-dark">End Date</label>
+                            <input type="datetime-local" class="form-control" asp-for="EventDto.EndDate" id="endDate">
+                            <span asp-validation-for="EventDto.EndDate" class="text-danger"></span>
+                        </div>
                     </div>
-                    <span asp-validation-for="EventDto.Fee" class="text-danger"></span>
-                </div>
-                <div class="col-sm-6">
-                    <label class="col-form-label">Hall</label>
-                    <select class="form-select" asp-for="EventDto.HallId" id="hallSelect">
-                        <option value="">Select Hall</option>
-                        @foreach (var hall in Model.Halls)
-                        {
-                            <option value="@hall.HallId" data-capacity="@hall.Capacity" data-status="@hall.Status">
-                                @hall.HallName (Capacity: @hall.Capacity, Status: @hall.Status)
-                            </option>
-                        }
-                    </select>
-                    <span asp-validation-for="EventDto.HallId" class="text-danger"></span>
-                </div>
+
+                    <div class="row mb-3">
+                        <label class="col-form-label text-dark">Description</label>
+                        <textarea class="form-control" asp-for="EventDto.Description"></textarea>
+                        <span asp-validation-for="EventDto.Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="freeEventCheckbox" onchange="toggleFee()">
+                                <label class="form-check-label text-dark" for="freeEventCheckbox">
+                                    Free Event
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label class="col-form-label text-dark">Fee</label>
+                            <div class="input-group">
+                                <span class="input-group-text">VND</span>
+                                <input type="number" step="0.01" class="form-control" asp-for="EventDto.Fee" id="fee">
+                            </div>
+                            <span asp-validation-for="EventDto.Fee" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-form-label text-dark">Hall</label>
+                            <select class="form-select" asp-for="EventDto.HallId" id="hallSelect">
+                                <option value="">Select Hall</option>
+                                @foreach (var hall in Model.Halls)
+                                {
+                                <option value="@hall.HallId" data-capacity="@hall.Capacity" data-status="@hall.Status">
+                                    @hall.HallName (Capacity: @hall.Capacity, Status: @hall.Status)
+                                </option>
+                                }
+                            </select>
+                            <span asp-validation-for="EventDto.HallId" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <label class="col-form-label text-dark">Number of Tickets</label>
+                            <input type="number" class="form-control" asp-for="EventDto.NumberOfTickets" id="numberOfTickets">
+                            <span asp-validation-for="EventDto.NumberOfTickets" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-12">
+                            <label class="col-form-label text-dark">Invite Sponsors</label>
+                            <select class="form-select" asp-for="SelectedSponsors" multiple>
+                                @foreach (var sponsor in Model.AvailableSponsors)
+                                {
+                                <option value="@sponsor.SponsorId">@sponsor.SponsorName (@sponsor.SponsorNavigation?.Email)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-6 d-grid">
+                            <button type="submit" class="btn btn-button"><i class="fas fa-check"></i> Submit</button>
+                        </div>
+                        <div class="col-sm-6 d-grid">
+                            <a class="btn btn-outline-primary" href="/Admin/Manage-Event/Manage" role="button"><i class="fas fa-times"></i> Cancel</a>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="feeHidden" asp-for="EventDto.Fee">
+                </form>
             </div>
-
-            <div class="row mb-3">
-                <div class="col-sm-6">
-                    <label class="col-form-label">Number of Tickets</label>
-                    <input type="number" class="form-control" asp-for="EventDto.NumberOfTickets" id="numberOfTickets">
-                    <span asp-validation-for="EventDto.NumberOfTickets" class="text-danger"></span>
-                </div>
-                <div class="col-sm-6">
-                    <label class="col-form-label">Hall Capacity</label>
-                    <input readonly type="number" class="form-control" id="hallCapacity">
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-sm-6 d-grid">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-                <div class="col-sm-6 d-grid">
-                    <a class="btn btn-outline-primary" href="/Admin/Manage-Event/Manage" role="button">Cancel</a>
-                </div>
-            </div>
-
-            <input type="hidden" id="feeHidden" asp-for="EventDto.Fee">
-
-        </form>
+        </div>
     </div>
-</div>
+</section>
 
 @section Scripts {
-    <script>
-        document.getElementById("startDate").addEventListener("change", updateStatus);
-        document.getElementById("endDate").addEventListener("change", updateStatus);
-        document.getElementById("hallSelect").addEventListener("change", updateHallDetails);
+<script>
+    document.getElementById("startDate").addEventListener("change", updateStatus);
+    document.getElementById("endDate").addEventListener("change", updateStatus);
+    document.getElementById("hallSelect").addEventListener("change", updateHallDetails);
 
-        function updateStatus() {
-            var startDate = new Date(document.getElementById("startDate").value);
-            var endDate = new Date(document.getElementById("endDate").value);
-            var currentDate = new Date();
-            var status = document.getElementById("status");
+    function updateStatus() {
+        var startDate = new Date(document.getElementById("startDate").value);
+        var endDate = new Date(document.getElementById("endDate").value);
+        var currentDate = new Date();
+        var status = document.getElementById("status");
 
-            if (currentDate < startDate) {
-                status.value = "Future";
-            } else if (currentDate >= startDate && currentDate <= endDate) {
-                status.value = "Open";
-            } else {
-                status.value = "Closed";
-            }
+        if (currentDate < startDate) {
+            status.value = "Future";
+        } else if (currentDate >= startDate && currentDate <= endDate) {
+            status.value = "Open";
+        } else {
+            status.value = "Closed";
+        }
+    }
+
+    function updateHallDetails() {
+        var hallSelect = document.getElementById("hallSelect");
+        var selectedOption = hallSelect.options[hallSelect.selectedIndex];
+        var capacity = selectedOption.getAttribute("data-capacity");
+        var status = selectedOption.getAttribute("data-status");
+
+        document.getElementById("hallCapacity").value = capacity;
+    }
+
+    async function validateForm() {
+        var fee = document.getElementById("fee").value;
+        if (fee < 0) {
+            alert("Fee cannot be a negative number.");
+            return false;
         }
 
-        function updateHallDetails() {
-            var hallSelect = document.getElementById("hallSelect");
-            var selectedOption = hallSelect.options[hallSelect.selectedIndex];
-            var capacity = selectedOption.getAttribute("data-capacity");
-            var status = selectedOption.getAttribute("data-status");
-
-            document.getElementById("hallCapacity").value = capacity;
-            document.getElementById("hallStatus").value = status;
+        var startDate = new Date(document.getElementById("startDate").value);
+        var endDate = new Date(document.getElementById("endDate").value);
+        if (endDate <= startDate) {
+            alert("End Date must be greater than Start Date.");
+            return false;
         }
 
-        async function validateForm() {
-            var fee = document.getElementById("fee").value;
-            if (fee < 0) {
-                alert("Fee cannot be a negative number.");
-                return false;
-            }
-
-            var startDate = new Date(document.getElementById("startDate").value);
-            var endDate = new Date(document.getElementById("endDate").value);
-            if (endDate <= startDate) {
-                alert("End Date must be greater than Start Date.");
-                return false;
-            }
-
-            var eventCode = document.getElementById("eventCode").value;
-            var eventCodePattern = /^E\d{4}$/;
-            if (!eventCodePattern.test(eventCode)) {
-                alert("Event Code must be in the format Exxxx where x is a number.");
-                return false;
-            }
-
-            // Check for duplicate Event Code
-            var initialEventCode = document.getElementById("initialEventCode").value;
-            if (eventCode !== initialEventCode) {
-                var response = await fetch(`/Admin/Manage-Event/CheckDuplicateEventCode?eventCode=${eventCode}`);
-                var isDuplicate = await response.json();
-                if (isDuplicate) {
-                    alert("Event Code already exists. Please use a different code.");
-                    return false;
-                }
-            }
-
-            return true;
+        var eventCode = document.getElementById("eventCode").value;
+        var eventCodePattern = /^E\d{4}$/;
+        if (!eventCodePattern.test(eventCode)) {
+            alert("Event Code must be in the format Exxxx where x is a number.");
+            return false;
         }
 
-        function toggleFee() {
-            var checkbox = document.getElementById('freeEventCheckbox');
-            var feeInput = document.getElementById('fee');
-            var feeHidden = document.getElementById('feeHidden');
-
-            if (checkbox.checked) {
-                feeInput.dataset.originalValue = feeInput.value;
-                feeInput.value = '';
-                feeInput.disabled = true;
-                feeHidden.value = 0;
-            } else {
-                feeInput.disabled = false;
-                feeInput.value = feeInput.dataset.originalValue || '';
-                feeHidden.value = feeInput.value;
-            }
+        // Check for duplicate Event Code
+        var response = await fetch(`/Admin/Manage-Event/CheckDuplicateEventCode?eventCode=${eventCode}`);
+        var isDuplicate = await response.json();
+        if (isDuplicate) {
+            alert("Event Code already exists. Please use a different code.");
+            return false;
         }
 
-        document.getElementById('fee').addEventListener('input', function () {
-            document.getElementById('feeHidden').value = this.value;
-        });
-    </script>
+        var numberOfTickets = parseInt(document.getElementById("numberOfTickets").value, 10);
+        var hallCapacity = parseInt(document.getElementById("hallCapacity").value, 10);
+        if (numberOfTickets > hallCapacity) {
+            alert("Number of tickets cannot exceed hall capacity.");
+            return false;
+        }
+
+        return true;
+    }
+
+    function toggleFee() {
+        var checkbox = document.getElementById('freeEventCheckbox');
+        var feeInput = document.getElementById('fee');
+        var feeHidden = document.getElementById('feeHidden');
+
+        if (checkbox.checked) {
+            feeInput.dataset.originalValue = feeInput.value;
+            feeInput.value = '';
+            feeInput.disabled = true;
+            feeHidden.value = 0;
+        } else {
+            feeInput.disabled = false;
+            feeInput.value = feeInput.dataset.originalValue || '';
+            feeHidden.value = feeInput.value;
+        }
+    }
+
+    document.getElementById('fee').addEventListener('input', function () {
+        document.getElementById('feeHidden').value = this.value;
+    });
+</script>
 }
 
 <style>
+    .bg-dark {
+        background-color: #343a40 !important;
+    }
+
+    .text-maingreeen {
+        color: #28a745 !important;
+    }
+
+    .btn-button {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-button:hover {
+        background-color: #218838;
+        color: white;
+    }
+
     .bg-light {
         background-color: #f8f9fa !important;
     }
@@ -219,5 +251,9 @@ else if (!string.IsNullOrEmpty(Model.SuccessMessage))
 
     .shadow-sm {
         box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+    }
+
+    .text-dark {
+        color: #343a40 !important;
     }
 </style>

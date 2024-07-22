@@ -4,67 +4,86 @@
     ViewData["Title"] = "InvitationForSponsor";
 }
 
-<h1>All Events</h1>
+<section class="bg-dark vh-100">
+    <div class="container text-white text-center pt-4">
+        <h1 class="text-maingreeen">All Events</h1>
 
-@if (Model.InvitedEvents != null && Model.InvitedEvents.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Event Name</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var eventItem in Model.InvitedEvents)
-            {
-                <tr>
-                    <td>@eventItem.EventName</td>
-                    <td>@(eventItem.StartDate.HasValue ? eventItem.StartDate.Value.ToShortDateString() : "-")</td>
-                    <td>@(eventItem.EndDate.HasValue ? eventItem.EndDate.Value.ToShortDateString() : "-")</td>
-                    <td>
-                        <a asp-page-handler="Details" asp-route-eventId="@eventItem.EventId" class="btn btn-info">Details</a>
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sponsorshipModal"
-                                data-event-id="@eventItem.EventId" data-sponsor-id="@Model.SponsorId">
-                            Accept
-                        </button>
-                        <button type="button" class="btn btn-danger reject-btn"
-                                data-event-id="@eventItem.EventId.ToString()"
-                                data-sponsor-id="@Model.SponsorId.ToString()">
-                            Reject
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No events found.</p>
-}
+        @if (Model.InvitedEvents != null && Model.InvitedEvents.Any())
+        {
+            <table class="table mt-5">
+                <thead class="bg-banner text-white text-center align-middle">
+                    <tr>
+                        <th scope="col" class="align-middle">Event Name</th>
+                        <th scope="col" class="align-middle">Start Date</th>
+                        <th scope="col" class="align-middle">End Date</th>
+                        <th scope="col" class="align-middle">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="table-light text-black">
+                    @foreach (var eventItem in Model.InvitedEvents)
+                    {
+                        <tr>
+                            <td class="align-middle text-success fw-bold">@eventItem.EventName</td>
+                            <td class="align-middle">@(eventItem.StartDate.HasValue ? eventItem.StartDate.Value.ToShortDateString() : "-")</td>
+                            <td class="align-middle">@(eventItem.EndDate.HasValue ? eventItem.EndDate.Value.ToShortDateString() : "-")</td>
+                            <td class="align-middle">
+                                <a href="/EventDetails?EventId=@eventItem.EventId" class="btn btn-info btn-sm">Details</a>
+                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#sponsorshipModal"
+                                        data-event-id="@eventItem.EventId" data-sponsor-id="@Model.SponsorId">
+                                    Accept
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm reject-btn"
+                                        data-event-id="@eventItem.EventId.ToString()"
+                                        data-sponsor-id="@Model.SponsorId.ToString()">
+                                    Reject
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No events found.</p>
+        }
+    </div>
+</section>
 
 <!-- Sponsorship Modal -->
 <div class="modal fade" id="sponsorshipModal" tabindex="-1" aria-labelledby="sponsorshipModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="sponsorshipModalLabel">Sponsorship Details</h1>
+                <h1 class="modal-title fs-5 text-maingreeen" id="sponsorshipModalLabel">Sponsorship Details</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="sponsorshipForm" method="post">
                     @Html.AntiForgeryToken()
                     <div class="mb-3">
+                        <label for="sponsorshipType" class="form-label">Sponsorship Type</label>
+                        <div>
+                            <input type="checkbox" id="moneyCheckbox" name="sponsorshipType" value="Money">
+                            <label for="moneyCheckbox">Money</label>
+                            <input type="checkbox" id="productCheckbox" name="sponsorshipType" value="Products">
+                            <label for="productCheckbox">Products</label>
+                        </div>
+                    </div>
+                    <div class="mb-3" id="moneyInput" style="display:none;">
+                        <label for="sponsorshipMoney" class="form-label">Amount (VND)</label>
+                        <input type="number" class="form-control" id="sponsorshipMoney" name="sponsorshipMoney">
+                    </div>
+                    <div class="mb-3" id="productInput" style="display:none;">
                         <label for="sponsorshipProduct" class="form-label">Sponsorship Product</label>
-                        <textarea class="form-control" id="sponsorshipProduct" name="sponsorshipProduct" rows="3" required></textarea>
+                        <textarea class="form-control" id="sponsorshipProduct" name="sponsorshipProduct" rows="3"></textarea>
                     </div>
                     <input type="hidden" id="eventId" name="eventId">
                     <input type="hidden" id="sponsorId" name="sponsorId" value="@Model.SponsorId">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-button">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
@@ -74,7 +93,109 @@ else
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Event listener for Reject button clicks
+            // Toggle input fields based on checkbox selection
+            document.getElementById('moneyCheckbox').addEventListener('change', function () {
+                var moneyInput = document.getElementById('moneyInput');
+                var productInput = document.getElementById('productInput');
+                if (this.checked) {
+                    moneyInput.style.display = 'block';
+                    productInput.style.display = 'none';
+                    document.getElementById('productCheckbox').checked = false;
+                } else {
+                    moneyInput.style.display = 'none';
+                }
+            });
+
+            document.getElementById('productCheckbox').addEventListener('change', function () {
+                var productInput = document.getElementById('productInput');
+                var moneyInput = document.getElementById('moneyInput');
+                if (this.checked) {
+                    productInput.style.display = 'block';
+                    moneyInput.style.display = 'none';
+                    document.getElementById('moneyCheckbox').checked = false;
+                } else {
+                    productInput.style.display = 'none';
+                }
+            });
+
+            var sponsorshipModal = document.getElementById('sponsorshipModal');
+            sponsorshipModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var eventId = button.getAttribute('data-event-id');
+                var sponsorId = button.getAttribute('data-sponsor-id');
+                var modal = this;
+                modal.querySelector('#eventId').value = eventId;
+                modal.querySelector('#sponsorId').value = sponsorId;
+            });
+
+            document.getElementById('sponsorshipForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                var moneyCheckbox = document.getElementById('moneyCheckbox').checked;
+                var productCheckbox = document.getElementById('productCheckbox').checked;
+
+                if (!moneyCheckbox && !productCheckbox) {
+                    alert('Please select a sponsorship type.');
+                    return;
+                }
+
+                if (moneyCheckbox) {
+                    var moneyInput = document.getElementById('sponsorshipMoney').value.trim();
+                    if (moneyInput === "" || isNaN(moneyInput) || Number(moneyInput) <= 0) {
+                        alert('Please enter a valid amount for money sponsorship.');
+                        return;
+                    }
+                }
+
+                if (productCheckbox) {
+                    var productInput = document.getElementById('sponsorshipProduct').value.trim();
+                    if (productInput.length < 20) {
+                        alert('Product description must be at least 20 characters long.');
+                        return;
+                    }
+                }
+
+                var antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                var formData = new FormData();
+                formData.append('eventId', document.getElementById('eventId').value);
+                formData.append('sponsorId', document.getElementById('sponsorId').value);
+                if (moneyCheckbox) {
+                    formData.append('sponsorshipProduct', 'Money: ' + moneyInput);
+                } else {
+                    formData.append('sponsorshipProduct', document.getElementById('sponsorshipProduct').value.trim());
+                }
+                formData.append('__RequestVerificationToken', antiForgeryToken);
+
+                fetch('/UserRole/InvitationForSponsor?handler=Accept', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            var sponsorshipModalInstance = bootstrap.Modal.getInstance(sponsorshipModal);
+                            sponsorshipModalInstance.hide();
+                            alert(data.message);
+                            location.reload();
+                        } else {
+                            throw new Error(data.error || 'Unknown error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error submitting sponsorship details:', error);
+                        alert('Error submitting sponsorship details: ' + error.message);
+                    });
+            });
+
             document.querySelectorAll('.reject-btn').forEach(function (button) {
                 button.addEventListener('click', function () {
                     var eventId = this.getAttribute('data-event-id');
@@ -97,14 +218,13 @@ else
                         })
                             .then(response => {
                                 if (!response.ok) {
-                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                    throw new Error('HTTP error! Status: ' + response.status);
                                 }
                                 return response.json();
                             })
                             .then(data => {
                                 if (data.success) {
                                     alert('Event rejected successfully.');
-                                    // Optionally refresh the event list or update UI
                                     location.reload();
                                 } else {
                                     throw new Error(data.error || 'Unknown error');
@@ -115,58 +235,6 @@ else
                                 alert('Error rejecting event: ' + error.message);
                             });
                     }
-                });
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var sponsorshipModal = document.getElementById('sponsorshipModal');
-            sponsorshipModal.addEventListener('show.bs.modal', function (event) {
-                var button = event.relatedTarget;
-                var eventId = button.getAttribute('data-event-id');
-                var sponsorId = button.getAttribute('data-sponsor-id');
-                var modal = this;
-                modal.querySelector('#eventId').value = eventId;
-                modal.querySelector('#sponsorId').value = sponsorId;
-            });
-
-            document.getElementById('sponsorshipForm').addEventListener('submit', function (event) {
-                event.preventDefault();
-
-                var antiForgeryToken = document.querySelector('input[name="__RequestVerificationToken"]').value;
-
-                var formData = new FormData();
-                formData.append('eventId', document.getElementById('eventId').value);
-                formData.append('sponsorId', document.getElementById('sponsorId').value);
-                formData.append('sponsorshipProduct', document.getElementById('sponsorshipProduct').value.trim());
-                formData.append('__RequestVerificationToken', antiForgeryToken);
-
-                fetch('/UserRole/InvitationForSponsor?handler=Accept', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        var sponsorshipModalInstance = bootstrap.Modal.getInstance(sponsorshipModal);
-                        sponsorshipModalInstance.hide();
-                        alert(data.message);
-                        location.reload();
-                    } else {
-                        throw new Error(data.error || 'Unknown error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error submitting sponsorship details:', error);
-                    alert('Error submitting sponsorship details: ' + error.message);
                 });
             });
         });

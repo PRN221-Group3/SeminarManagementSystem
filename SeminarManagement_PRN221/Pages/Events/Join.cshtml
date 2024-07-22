@@ -2,57 +2,52 @@
 @model SeminarManagement_PRN221.Pages.Events.JoinModel
 @{
 }
-<div class="container-fluid mt-5">
+<section class="bg-dark py-5 px-4">
     <div class="row">
         <!-- Image column -->
-        <div class="col-md-4">
+        <div class="col-md-7">
             <img src="https://img.freepik.com/premium-photo/speaker-giving-talk-scientific-conference-audience-conference-hall-business-entrepreneurship-concept_561846-238.jpg" class="img-fluid rounded-start" alt="Event Image">
         </div>
         <!-- Event details and form column -->
-        <div class="col-md-8">
-            <div class="px-4">
-                <h2>Event Details</h2>
-                <div class="row">
-                    <div class="col-md-6">
-                        <p>
-                            <strong>Event Name:</strong> @Model.Event.EventName
-                        </p>
-                        <p><strong>Date:</strong> @Model.Event.StartDate?.ToString("dd/MM/yyyy HH:mm") - @Model.Event.EndDate?.ToString("dd/MM/yyyy HH:mm")</p>
-                        <p>
-                            <strong>Description:</strong> @Model.Event.Description
-                        </p>
+        <div class="col-md-5">
+            <div class="px-4 text-white">
+                <div class="mb-2">
+                    @if (DateTime.Now < Model.Event.StartDate)
+                    {
+                        <span class="badge bg-primary">Future</span>
+                    }
+                    else if (DateTime.Now >= Model.Event.StartDate && DateTime.Now <= Model.Event.EndDate)
+                    {
+                        <span class="badge bg-success">Open</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Closed</span>
+                    }
+                </div>
+                <h2 class="mb-4">@Model.Event.EventName</h2>
+                <div class="d-flex flex-row mb-2">
+                    <i class="bi bi-calendar-minus-fill text-maingreeen"></i>
+                    <div class="ms-2">
+                        @Model.Event.StartDate?.ToString("dd/MM/yyyy HH:mm") - @Model.Event.EndDate?.ToString("dd/MM/yyyy HH:mm")
                     </div>
-                    <div class="col-md-6">
-                        <p>
-                            <strong>Event Code:</strong> @Model.Event.EventCode
-                        </p>
-                        <p>
-                            <strong>Fee:</strong>
-                            @if (Model.Event.Fee > 0)
-                            {
-                                <text>$@Model.Event.Fee</text>
-                            }
-                            else
-                            {
-                                <text>FREE</text>
-                            }
-                        </p>
-                        <p>
-                            <strong>Status:</strong>
-                            @if (DateTime.Now < Model.Event.StartDate)
-                            {
-                                <span class="badge bg-primary">Future</span>
-                            }
-                            else if (DateTime.Now >= Model.Event.StartDate && DateTime.Now <= Model.Event.EndDate)
-                            {
-                                <span class="badge bg-success">Open</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">Closed</span>
-                            }
-                        </p>
-                    </div>
+                </div>
+                <div class="text-maingreeen fw-bold d-flex flex-row mb-2">Event Code:<span class="text-white ms-2">@Model.Event.EventCode</span></div>
+                <div class="text-maingreeen fw-bold d-flex flex-row mb-2">
+                    Fee:
+                    @if (Model.Event.Fee > 0)
+                    {
+                        <span class="text-white ms-2">@string.Format("{0:N0}", @Model.Event.Fee) VND</span>
+                    }
+                    else
+                    {
+                        <span class="text-white ms-2">FREE</span>
+                    }
+                </div>
+
+                <div class="text-maingreeen fw-bold d-flex flex-row mb-2">
+                    Tickets Remaining:
+                    <span class="text-white ms-2">@Model.Event.NumberOfTickets</span>
                 </div>
 
                 <!-- Form for payment -->
@@ -63,43 +58,43 @@
                             <div class="mb-3 d-flex justify-content-between">
                                 <div class="input-group">
                                     <button type="button" class="btn btn-warning" onclick="changeQuantity(-1)">-</button>
-                                    <input id="quantity" type="text" name="quantity" value="@Model.Quantity" min="1" 
-                                    max="@Model.MaxQuantity" width="80" class="text-md-center" onchange="setQuantityText()" />
+                                    <input id="quantity" type="text" name="quantity" value="@Model.Quantity" min="1" max="@Model.MaxQuantity" class="text-md-center form-control" onchange="setQuantityText()" />
                                     <button type="button" class="btn btn-warning" onclick="changeQuantity(1)">+</button>
                                 </div>
                             </div>
                             <hr class="my-4">
                             <div class="mb-3 d-flex justify-content-between">
-                                <label for="fee" class="form-label">Subtotal</label>
-                                <span>$@Model.Event.Fee</span>
+                                <label for="fee" class="form-label text-maingreeen fw-bold">Subtotal</label>
+                                <span>@string.Format("{0:N0}", @Model.Event.Fee) VND</span>
                                 <input type="hidden" id="fee" name="fee" value="@Model.Event.Fee">
                             </div>
-
+                            <div class="mb-3">
+                                @if (Model.Wallet != null)
+                                {
+                                    <input type="hidden" name="walletId" value="@Model.Wallet.WalletId" />
+                                    <input type="hidden" name="balance" value="@Model.Wallet.Balance" />
+                                    @if (Model.TransactionExist != null)
+                                    {
+                                        <button type="submit" class="btn btn-button w-100" disabled>Next</button>
+                                        <span class="text-danger">You have already joined this event.</span>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" class="btn btn-button w-100" id="btnNext">Next</button>
+                                    }
+                                }
+                                else
+                                {
+                                    <a class="btn btn-button w-100" asp-area="Identity" asp-page="/Account/Login">Next</a>
+                                }
+                            </div>
                         </div>
                     </div>
-                    @if (Model.Wallet != null)
-                    {
-                        <input type="hidden" name="walletId" value="@Model.Wallet.WalletId" />
-                        <input type="hidden" name="balance" value="@Model.Wallet.Balance" />
-                        @if (Model.TransactionExist != null)
-                        {
-                            <button type="submit" class="btn btn-lg btn-primary" disabled>Next</button>
-                            <span class="text-danger">You have already joined this event.</span>
-                        }
-                        else
-                        {
-                            <button type="submit" class="btn btn-lg btn-primary" id="btnNExt">Next</button>
-                        }
-                    }
-                    else
-                    {
-                        <a class="btn btn-lg btn-primary" asp-area="Identity" asp-page="/Account/Login">Next</a>
-                    }
                 </form>
             </div>
         </div>
     </div>
-</div>
+</section>
 @section Scripts {
     <script>
         function changeQuantity(change) {

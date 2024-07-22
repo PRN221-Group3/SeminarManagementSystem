@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Repositories;
 using Repositories.Interfaces;
-using System.Security.Claims;
-using BusinessObject.Models;
+using SeminarManagement_PRN221;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,18 +23,20 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
-	options.Conventions.AuthorizeFolder("/Index");
-	options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute()); 
+    options.Conventions.AuthorizeFolder("/Index");
+    options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
 });
+
+builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
-	options.AddDefaultPolicy(builder =>
-	{
-		builder.AllowAnyOrigin()
-			   .AllowAnyMethod()
-			   .AllowAnyHeader();
-	});
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
 });
 
 // Add Authentication
@@ -70,7 +72,9 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddDbContext<SeminarManagementDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
+
 builder.Services.AddMemoryCache();
+
 // Add Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
@@ -100,9 +104,9 @@ builder.Services.AddScoped<TransactionDAO>();
 builder.Services.AddScoped<WalletDAO>();
 builder.Services.AddScoped<SponsorDAO>();
 builder.Services.AddScoped<EventSponsorDAO>();
-builder.Services.AddScoped<EventSponsorDAO>();
 builder.Services.AddScoped<IVnPayRepository, VnPayRepository>();
 builder.Services.AddHttpContextAccessor();
+
 // Configure AutoMapper
 var mapperConfig = new MapperConfiguration(mc =>
 {
@@ -124,13 +128,14 @@ else
     app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/NotFound");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseCookiePolicy(new CookiePolicyOptions()
 {
     MinimumSameSitePolicy = SameSiteMode.Strict,
-	HttpOnly = HttpOnlyPolicy.Always
+    HttpOnly = HttpOnlyPolicy.Always
 });
 
 app.UseRouting();
@@ -140,12 +145,15 @@ app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSession();
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
     endpoints.MapRazorPages();
+    endpoints.MapHub<SeminarHub>("/seminarHub");
 });
 
 app.Run();
