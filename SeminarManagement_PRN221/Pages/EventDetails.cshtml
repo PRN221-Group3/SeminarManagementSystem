@@ -76,11 +76,16 @@
             <strong style="font-weight: bold; color: rgb(45, 194, 117);">Capacity:</strong> @Model.Event.Hall?.Capacity
         </p>
     </div>
-    @if (Model.Event.EventSponsors != null)
+    @if (Model.Event.EventSponsors != null && Model.Event.EventSponsors.Any())
     {
         <div class="mt-4 text-start">
-            <h2 style="font-weight: bold; color: rgb(45, 194, 117);">Sponsor</h2>
-            
+            <h2 style="font-weight: bold; color: rgb(45, 194, 117);">Sponsors</h2>
+            <ul>
+                @foreach (var sponsor in Model.Event.EventSponsors)
+                {
+                    <li>@sponsor.Sponsor.SponsorName</li>
+                }
+            </ul>
         </div>
     }
 </section>

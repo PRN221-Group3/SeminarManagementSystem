@@ -52,7 +52,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             if (!ModelState.IsValid)
             {
                 Halls = await _hallRepository.GetAllAsync();
-                AvailableSponsors = (List<Sponsor>)await _sponsorRepository.GetAllQueryableAsync();
+                AvailableSponsors = await _sponsorRepository.GetSponsorsWithUserAsync();
                 return Page();
             }
 
@@ -91,7 +91,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 ModelState.AddModelError(string.Empty, "The selected hall is already booked for the chosen dates.");
                 Halls = await _hallRepository.GetAllAsync();
                 AvailableSponsors = await _sponsorRepository.GetSponsorsWithUserAsync();
-                return Page();  
+                return Page();
             }
 
             // Check for valid start date
@@ -119,7 +119,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
                 ModelState.AddModelError(string.Empty, "Event Fee must be between 10,000 VND and 500,000 VND.");
                 Halls = await _hallRepository.GetAllAsync();
                 AvailableSponsors = await _sponsorRepository.GetSponsorsWithUserAsync();
-                return Page();  
+                return Page();
             }
 
             var newEvent = new Event
@@ -169,7 +169,7 @@ namespace SeminarManagement_PRN221.Pages.Admin.Manage_Event
             {
                 ErrorMessage = $"Error creating event: {ex.Message}";
                 Halls = await _hallRepository.GetAllAsync();
-                AvailableSponsors = await _sponsorRepository.GetSponsorsWithUserAsync();
+                AvailableSponsors = await _sponsorRepository.GetAllQueryableAsync().Result.ToListAsync(); // Convert to List
                 return Page();
             }
         }
